@@ -16,5 +16,5 @@ const UserSchema = new Schema({
   },
 });
 
-const User = mongoose.models.Category || mongoose.model("Category", CategorySchema);
+const User = mongoose.models.Category || mongoose.model("Category", UserSchema);
 export default User;
