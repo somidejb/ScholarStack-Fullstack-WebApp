@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const { Schema } = mongoose;
+const { Schema, model, models } = mongoose;
 
 const OrderSchema = new Schema({
   orderId: {
@@ -8,24 +8,24 @@ const OrderSchema = new Schema({
     required: true,
     unique: true,
   },
-  sellerId: {
-    type: String,
+  seller: {
+    type: Schema.Types.ObjectId, // Reference to a User schema
+    ref: "User",
     required: true,
-    unique: true,
   },
-  buyerId: {
-    type: String,
+  buyer: {
+    type: Schema.Types.ObjectId, // Reference to a User schema
+    ref: "User",
     required: true,
-    unique: true,
   },
-  bookId: {
-    type: String,
+  book: {
+    type: Schema.Types.ObjectId, // Reference to a Book schema
+    ref: "book",
     required: true,
-    unique: true,
   },
   price: {
     type: Number,
-    require: true,
+    required: false,
   },
   orderDate: {
     type: Date,

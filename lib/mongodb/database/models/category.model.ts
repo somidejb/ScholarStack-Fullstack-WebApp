@@ -1,19 +1,19 @@
 import mongoose from "mongoose";
 
-
-const { Schema } = mongoose;
+const { Schema, model, models } = mongoose;
 
 const CategorySchema = new Schema({
-  CategoryId: {
+  categoryId: { 
     type: String,
     required: true,
     unique: true,
   },
-  Name: {
+  name: {
     type: String,
     required: true,
     unique: true
   },
+
 });
 
 const Category = mongoose.models.Category || mongoose.model("Category", CategorySchema);

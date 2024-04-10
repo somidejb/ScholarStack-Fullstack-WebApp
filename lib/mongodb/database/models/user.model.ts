@@ -1,20 +1,36 @@
 import mongoose from "mongoose";
 
-
-const { Schema } = mongoose;
+const { Schema, model, models } = mongoose;
 
 const UserSchema = new Schema({
-  loginId: {
+  clerkId: {
     type: String,
     required: true,
     unique: true,
   },
-  password: {
+  email: {
     type: String,
     required: true,
-    unique: true
+    unique: true,
+  },
+  userName: {
+    type: String,
+    required: true,
+    unique: true,
+  },
+  firstName: {
+    type: String,
+    required: true,
+  },
+  lastName: {
+    type: String,
+    required: true,
+  },
+  image: {
+    type: String,
+    required: false,
   },
 });
 
-const User = mongoose.models.Category || mongoose.model("Category", UserSchema);
+const User = models.User || model("User", UserSchema);
 export default User;

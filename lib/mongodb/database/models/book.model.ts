@@ -1,6 +1,25 @@
 import mongoose from "mongoose";
 
-const { Schema } = mongoose;
+const { Schema, model, models } = mongoose;
+
+
+const sellerSchema = new Schema({
+  sellerId: {
+    type: String,
+    required: true,
+    unique: true,
+  },
+  name: {
+    type: String,
+    required: true
+  },
+  contactInfo: {
+    email: { type: String, required: true },
+    phone: String,
+  },
+});
+
+const Owner = mongoose.models.Owner || mongoose.model("Seller", sellerSchema);
 
 const BookSchema = new Schema({
   bookId: {
@@ -12,28 +31,29 @@ const BookSchema = new Schema({
     type: String,
     required: true,
   },
-  price: {
-    type: Number,
-    require: true,
-  },
   isBookFree: {
     type: Boolean,
+    default: false,
   },
   bookDescription: {
-    type: String
+    type: String,
   },
   postedAt: {
-    type: Date
+    type: Date,
+    default: Date.now, 
   },
-  imageURl: {
-    type: Image
+  imageURL: {
+    type: String,
   },
   category: {
-    type: String
+    type: Schema.Types.ObjectId,
+    ref: 'Category',
   },
-  bookOwner:{
-    type:String
-  }
+  bookOwner: {
+    type: Schema.Types.ObjectId,
+    ref: 'Seller',
+    required: true
+  },
 });
 
 const Book = mongoose.models.Book || mongoose.model("book", BookSchema);
