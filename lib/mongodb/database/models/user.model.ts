@@ -3,7 +3,7 @@ import mongoose from "mongoose";
 const { Schema, model, models } = mongoose;
 
 const UserSchema = new Schema({
-  clerkId: {
+  clerk: { 
     type: String,
     required: true,
     unique: true,
@@ -31,6 +31,4 @@ const UserSchema = new Schema({
     required: false,
   },
 });
-
 const User = models.User || model("User", UserSchema);
-export default User;

@@ -2,34 +2,11 @@ import mongoose from "mongoose";
 
 const { Schema, model, models } = mongoose;
 
-
-const sellerSchema = new Schema({
-  sellerId: {
-    type: String,
-    required: true,
-    unique: true,
-  },
-  name: {
-    type: String,
-    required: true
-  },
-  contactInfo: {
-    email: { type: String, required: true },
-    phone: String,
-  },
-});
-
-const Owner = mongoose.models.Owner || mongoose.model("Seller", sellerSchema);
-
 const BookSchema = new Schema({
-  bookId: {
-    type: String,
-    required: true,
-    unique: true,
-  },
   bookName: {
     type: String,
     required: true,
+    unique: true,
   },
   isBookFree: {
     type: Boolean,
@@ -44,17 +21,17 @@ const BookSchema = new Schema({
   },
   imageURL: {
     type: String,
+    required: true,
   },
   category: {
     type: Schema.Types.ObjectId,
     ref: 'Category',
+    required: true,
   },
-  bookOwner: {
+  bookOwner: { // Assuming 'User' represents both sellers and owners
     type: Schema.Types.ObjectId,
-    ref: 'Seller',
-    required: true
+    ref: 'User',
+    required: true,
   },
 });
-
-const Book = mongoose.models.Book || mongoose.model("book", BookSchema);
-export default Book;
+const Book = models.Book || model("Book", BookSchema);

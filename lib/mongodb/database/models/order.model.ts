@@ -1,37 +1,33 @@
 import mongoose from "mongoose";
 
 const { Schema, model, models } = mongoose;
-
 const OrderSchema = new Schema({
-  orderId: {
+  order: {
     type: String,
     required: true,
     unique: true,
   },
-  seller: {
-    type: Schema.Types.ObjectId, // Reference to a User schema
+  seller: { // Reference to 'User'
+    type: Schema.Types.ObjectId,
     ref: "User",
     required: true,
   },
-  buyer: {
-    type: Schema.Types.ObjectId, // Reference to a User schema
+  buyer: { // Reference to 'User'
+    type: Schema.Types.ObjectId,
     ref: "User",
     required: true,
   },
-  book: {
-    type: Schema.Types.ObjectId, // Reference to a Book schema
-    ref: "book",
+  book: { // Reference to 'Book'
+    type: Schema.Types.ObjectId,
+    ref: "Book",
     required: true,
   },
   price: {
     type: Number,
-    required: false,
   },
   orderDate: {
     type: Date,
     default: Date.now,
   },
 });
-
-const Order = mongoose.models.Order || mongoose.model("Order", OrderSchema);
-export default Order;
+const Order = models.Order || model("Order", OrderSchema);
