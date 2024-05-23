@@ -37,3 +37,6 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/deploym
 
 ## Due Friday May 24, 2024
 - [ ] Design different screen sizes for figma (Diya, Kruti, Ekom)
+- [ ] Coding Navigation Bar (Daniel)
+- [ ] Project Requirement Documentation (Ekom)
+- [ ] Explanation of file structure (Jubril)
