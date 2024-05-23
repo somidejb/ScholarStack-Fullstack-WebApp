@@ -44,3 +44,4 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/deploym
 
 Documentation:
  Completed low fidelity of design - Monday May 20
+- [ ] Finalize design of different screen sizes
