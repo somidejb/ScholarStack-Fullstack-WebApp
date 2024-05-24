@@ -75,9 +75,15 @@
   }
 }
 
-.cl-card{
-  @apply pt-4;
+@layer utilities {
+  .h1-gradient {
+    @apply bg-gradient-to-45 from-[#D6DAEA] to-[#A6A9CE] bg-clip-text text-transparent text-right;
+  }
+  .flex-center{
+    @apply flex justify-center items-center;
+  }
 }
+
 
 .cl-logoBox{
   @apply flex justify-center items-center;
