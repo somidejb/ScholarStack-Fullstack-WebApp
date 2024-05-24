@@ -4,10 +4,14 @@ import React from 'react'
 
 const NavItems = () => {
   return (
-    <ul className="md:flex-between flex w-full items-center gap-5 md:flex-row">
-        <li>
-            hey
+    <ul className="flex gap-8">
+      {headerLinks.map((link) => (
+        <li key={link.route}>
+          <Link href={link.route} className="text-lg font-medium text-white">
+            {link.label}
+          </Link>
         </li>
+      ))}
     </ul>
   )
 }
