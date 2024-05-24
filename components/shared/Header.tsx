@@ -34,7 +34,6 @@ const Header = () => {
           <div className="flex items-center mt-1 gap-3">
             <Link href="/sign-in">
             <Button
-                asChild
                 className="rounded-[15px] w-[113px] h-[55px] bg-white"
               >
                 <h2 className="text-black">Login</h2>
@@ -42,7 +41,6 @@ const Header = () => {
             </Link>
             <Link href="/sign-up">
             <Button
-                asChild
                 className="rounded-[15px] w-[113px] h-[55px] bg-[#007bff]"
               >
                 <h2 className="text-white">Sign Up</h2>
