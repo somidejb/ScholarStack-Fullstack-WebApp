@@ -5,11 +5,14 @@ import React from 'react'
 
 const Home = () => {
   return (
-    <div>
-      <main className="container mx-auto px-4 py-8">
-        <BookCard />
-      </main>
-    </div>
+    <main className="mx-auto px-4 py-8">
+      <BookCard  
+        title={books[0].title}
+        imageUrl={books[0].image}
+        author={books[0].author}
+        price={books[0].price}
+      />
+    </main>
   )
 }
 

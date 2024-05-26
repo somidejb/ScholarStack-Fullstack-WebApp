@@ -1,24 +1,34 @@
+import { books } from '@/constants';
 import Image from 'next/image';
+import Link from 'next/link';
 import React from 'react'
 
-const BookCard = () => {
+type BookCardProps = {
+  title: string,
+  imageUrl: string,
+  author: string,
+  price: string,
+}
+const BookCard = ({title, imageUrl, author, price}: BookCardProps) => {
   return (
-    <div className = "container relative rounded-[15px] lg:rounded-[30px] flex min-h-[135px] max-w-[104px] w-full flex-col overflow-hidden lg:min-h-[394px] lg:max-h-[258px] card-shadow">
-        <div className = "p-[7px]">
-            <Image 
-                src="/assets/images/book1.png" 
-                alt="book" 
-                width={90} 
-                height={90} 
-                className="drop-shadow-lg object-contain rounded-[10px] lg:rounded-[20px] filter drop-shadow-[0px 4px 4px rgba(0, 0, 0, 0.25)]"    
-            />
-        </div>
+    <div className = "relative rounded-[15px] lg:rounded-[30px] flex h-[135px] md:h-[180px] lg:h-[394px] lg:w-[258px] w-[104px] md:w-[130px] flex-col card-shadow">
+      <div className="flex flex-col items-start justify-center w-full h-full px-[7px] md:px-[9px] lg:px-[15px] pt-[10px] md:pt-[13px]">
+          <Link href={`books/id`} className = "rounded-[10px] w-full h-[90px] md:h-[120px] lg:h-[300px] overflow-hidden flex-center book-shadow">
+              <Image src={imageUrl} alt={title} width={216} height={301} className="object-contain"/>
+          </Link>
+          
+          <p className="pt-[3px] font-bold p-card overflow-hidden line-clamp-1">{title}</p>
+          
+          <p className="font-normal p-card line-clamp-1">{author}</p>
+          
+          <div className="flex justify-between w-full">
+            <p className="font-normal p-card">{`$ ${price}`}</p>
+            <Image src="/assets/icons/favorite.svg" alt="heart" width={19} height={11} className="object-contain w-[12px] md:w-[20px] lg:w-[24px] h-full"/>
+          </div>
+      </div>
     </div>
   )
-}/* Rectangle 135 */
-
-
-
+}
 
 export default BookCard
 
