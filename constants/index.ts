@@ -8,13 +8,17 @@ export const headerLinks = [
         route: '/books'
       },
       {
-        label: 'UploadBooks',
+        label: 'UploadBook',
         route: '/upload'
       },
       {
         label: 'Community',
         route: '/community'
       },
+      {
+        label: 'Chats',
+        route: '/chats'
+      }
 ]
 
 export const books = [
