@@ -1,9 +1,13 @@
-import React from 'react'
 
+import React from "react";
+import NavItems from "@/components/shared/nav";
+ 
 const Home = () => {
   return (
-    <div>Home</div>
-  )
-}
-
-export default Home
+    <>
+      <NavItems/>
+    </>
+  );
+};
+ 
+export default Home;
