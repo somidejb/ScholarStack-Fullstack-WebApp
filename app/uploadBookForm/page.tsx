@@ -6,6 +6,8 @@ import {
     SelectTrigger,
     SelectValue,
   } from "@/components/ui/select";
+import Image from 'next/image';
+//import Location from '../assets/images/Location.jpg'
 
 const UpdateBookForm = () => {
     return (
@@ -155,12 +157,15 @@ const UpdateBookForm = () => {
                     * Add location
                   </label>
                   <div className="relative mt-1">
-                    <input
-                      className="block w-full px-3 py-2 bg-indigo-50 border border-gray-300 rounded-md shadow-sm focus:outline-none sm:text-sm"
-                      type="text"
+                  <input
+                      className="block w-full px-3 py-2 bg-indigo-50 border border-gray-300 rounded-md shadow-sm focus:outline-none sm:text-sm pr-10"
+                       type="text"
                       placeholder="Add location"
                     />
-                  </div>
+                        <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+                        <Image src='/assets/images/Location.jpg' width={18} height={15} alt="Location" />
+                        </div>
+                    </div>
                 </div>
               </div>
     
