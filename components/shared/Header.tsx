@@ -38,7 +38,7 @@ const Header = () => {
       {/* Mobile menu backdrop is used to close the mobile menu when clicked */}
       {isMobileMenuOpen && <div className="mobile-menu-backdrop" onClick={toggleMobileMenu}></div>}
       <div className="px-4 sm:px-6 md:px-8 lg:px-10 h-full w-full flex justify-between items-center relative z-50">
-        <div className="flex items-center text-nowrap">
+        <div className="flex items-center">
           <Link href="/" className="flex items-center gap-2">
             {/* The Scholar Stack logo is displayed */}
             <Image
