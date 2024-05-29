@@ -6,14 +6,15 @@ import {
     SelectTrigger,
     SelectValue,
   } from "@/components/ui/select";
-import Image from 'next/image';
-//import Location from '../assets/images/Location.jpg'
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {  faLocationDot } from "@fortawesome/free-solid-svg-icons";
+
 
 const UpdateBookForm = () => {
     return (
         <div className="min-h-screen bg-gray-50 flex items-center justify-center py-8 px-4 sm:px-6 lg:px-8 xl:px-12">
           <div className="max-w-md w-full space-y-8 md:max-w-xl lg:max-w-2xl xl:max-w-3xl rounded-xl">
-            <form className="bg-white p-6 lg:p-10 xl:p-15 rounded-lg shadow-lg shadow-indigo-100 space-y-6">
+            <form className="bg-white p-6 lg:p-10 xl:p-15 rounded-2xl shadow-lg shadow-indigo-100 space-y-6">
               <h2 className="text-2xl font-bold mb-6 text-center text-blue-900">
                 Upload Book
               </h2>
@@ -74,8 +75,8 @@ const UpdateBookForm = () => {
                   * Category
                 </label>
                 <div>
-                  <Select>
-                    <SelectTrigger className="bg-indigo-50 focus-visible:ring-0 focus-visible:ring-transparent">
+                  <Select >
+                    <SelectTrigger className="bg-indigo-50 focus-visible:ring-0 focus-visible:ring-transparent focus-visible:ring-offset-0 border-gray-300">
                       <div className="text-gray-400">
                         <SelectValue placeholder="select category" />
                       </div>
@@ -148,7 +149,7 @@ const UpdateBookForm = () => {
                   </label>
                   <input
                     className="mt-1 block w-full px-3 py-2 bg-indigo-50 border border-gray-300 rounded-md shadow-sm focus:outline-none sm:text-sm"
-                    type="datetime-local"
+                    type="datetime-local"                   
                   />
                 </div>
     
@@ -163,7 +164,13 @@ const UpdateBookForm = () => {
                       placeholder="Add location"
                     />
                         <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
-                        <Image src='/assets/images/Location.jpg' width={18} height={15} alt="Location" />
+                        <FontAwesomeIcon
+                            icon={faLocationDot}
+                            height={17}
+                            width={15}
+                            style={{ color: "#000000" }}
+                        />
+                       
                         </div>
                     </div>
                 </div>
@@ -181,7 +188,7 @@ const UpdateBookForm = () => {
     
               <div>
                 <button
-                  className="w-full bg-indigo-800 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline"
+                  className="w-full bg-indigo-900 text-white font-bold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline"
                   type="submit"
                 >
                   Submit
