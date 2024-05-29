@@ -3,6 +3,7 @@ import { books } from '@/constants'
 import { useState, useEffect } from 'react'
 import BookCard from './BookCard';
 import Image from 'next/image';
+import Link from 'next/link';
 
 
 type collectionProps = {
@@ -52,8 +53,8 @@ export const Collection = ({collection_type} : collectionProps) => {
   return (
     <section className="mt-[60px] lg:mt-[88px] items-center flex flex-col">
       <h2 className="text-center leading-[27px] md:leading-[36px] lg:leading-[73px] text-[22px] md:text-[30px] lg:text-[42px] tracking-widest font-normal">{collection_type}</h2>
-      <div className="w-full px-[17px] md:px-[85px] lg:px-[105px] xl:px-[124px] flex items-center mt-[8px] md:mt-[38px] lg:mt-[50px] relative">
-        <div onClick={handlePrevClick} className="absolute z-10 left-[12px] md:left-[30px] cursor-pointer">
+      <div className="w-full card-center flex items-center mt-[8px] md:mt-[38px] lg:mt-[50px] relative">
+        <div onClick={handlePrevClick} className="absolute z-10 left-[12px] md:left-[30px] lg:left-[45px] cursor-pointer">
           <Image src="/assets/icons/left-icon.png" alt="Left Arrow" width={24} height={24} />
         </div>
         <div className="flex overflow-hidden w-full">
@@ -73,15 +74,17 @@ export const Collection = ({collection_type} : collectionProps) => {
             ))}
           </div>
         </div>
-        <div onClick={handleNextClick} className="absolute right-[12px] md:right-[30px] z-10 cursor-pointer">
+        <div onClick={handleNextClick} className="absolute right-[12px] md:right-[30px] lg:right-[45px] z-10 cursor-pointer">
           <Image src="/assets/icons/right-icon.png" alt="Right Arrow" width={24} height={24} />
         </div>
       </div>
-      <div className="flex w-full items-center mt-[24px] md:mt-[30px] px-[17px] md:px-[85px]">
+      <div className="flex w-full items-center mt-[24px] md:mt-[30px] card-center">
         <div className="flex justify-center flex-grow">
           {renderDots()}
         </div>
-        <p className="cursor-pointer ml-auto text-normal leading-[16px] md:leading-[23px] lg:leading-[32px] text-[11px] md:text-[16px] lg:text-[23px] tracking-widest text-[#2F27CE]">See more</p>
+        <Link href="">
+          <p className="cursor-pointer text-normal leading-[16px] md:leading-[23px] lg:leading-[32px] text-[11px] md:text-[16px] lg:text-[23px] tracking-widest text-[#2F27CE]">See more</p>
+        </Link>
       </div>
     </section>
   );

@@ -94,7 +94,12 @@ p{
   .p-card{
     @apply pl-[3px] text-[8px] md:text-[12px] lg:text-[14px] xl:text-[16px] tracking-widest leading-[12px] md:leading-[16px] lg:leading-[18px] xl:leading-[23px];
   }
+  .card-center{
+    @apply px-[17px] md:px-[85px] lg:px-[105px] xl:px-[124px];
+  }
 }
+
+export default BookCard
 
 
 .cl-logoBox{
