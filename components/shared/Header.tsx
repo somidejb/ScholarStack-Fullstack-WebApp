@@ -35,7 +35,7 @@ const Header = () => {
 
   return (
     <header className="w-full border-b h-[87px] bg-[#31457b] relative">
-      {/* Mobile menu backdrop is used to close the mobile menu when clicked */}
+      {/* Mobile menu backdrop is used to close the mobile menu when clicked */} 
       {isMobileMenuOpen && <div className="mobile-menu-backdrop" onClick={toggleMobileMenu}></div>}
       <div className="px-4 sm:px-6 md:px-8 lg:px-10 h-full w-full flex justify-between items-center relative z-50">
         <div className="flex items-center">
@@ -133,7 +133,9 @@ const Header = () => {
                 Scholar Stack
               </h2>
             </div>
+
             <MobileNav />
+            
           </div>
           <div className="flex flex-col gap-3 border-t pt-4">
             <SignedOut>
