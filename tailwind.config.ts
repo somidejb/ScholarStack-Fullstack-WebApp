@@ -7,7 +7,7 @@ const config = {
     './components/**/*.{ts,tsx}',
     './app/**/*.{ts,tsx}',
     './src/**/*.{ts,tsx}',
-	],
+  ],
   prefix: "",
   theme: {
     container: {
@@ -18,6 +18,12 @@ const config = {
       },
     },
     extend: {
+      screens: {
+        
+        'xs': {'max': '600px'}, // 0 to 600px
+        'md': {'min': '600px', 'max': '1399px'},  // 600px to 1499px
+
+      },
       colors: {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
