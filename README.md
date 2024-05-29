@@ -36,7 +36,7 @@ The easiest way to deploy your Next.js app is to use the [Vercel Platform](https
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
 
 ## Due Friday May 24, 2024
-- [ ] Design different screen sizes for figma (Diya, Kruti, Ekom)
-- [ ] Coding Navigation Bar (Daniel)
-- [ ] Project Requirement Documentation (Ekom)
-- [ ] Explanation of file structure (Jubril)
+- [x] Design different screen sizes for figma (Diya, Kruti, Ekom)
+- [x] Coding Navigation Bar (Daniel)
+- [x] Project Requirement Documentation (Ekom)
+- [x] Explanation of file structure (Jubril)
