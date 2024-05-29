@@ -1,16 +1,17 @@
 import BookCard from '@/components/shared/BookCard'
-import { books } from '@/constants'
-import Image from 'next/image'
-import React from 'react'
+import { Collection } from '@/components/shared/Collection'
 
 const Home = () => {
   return (
-    <main className="mx-auto px-4 py-8">
-      <BookCard  
-        title={books[0].title}
-        imageUrl={books[0].image}
-        author={books[0].author}
-        price={books[0].price}
+    <main className="">
+      <Collection 
+        collection_type='Recently Uploaded'
+      />
+      <Collection 
+        collection_type='Books on Sale'
+      />
+      <Collection 
+        collection_type='Free Books'
       />
     </main>
   )

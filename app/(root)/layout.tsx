@@ -4,9 +4,9 @@ import React from 'react'
 
 const RootLayout = ({children}: Readonly<{children: React.ReactNode}>) => {
   return (
-    <div className = "flex h-screen flex-col">
+    <div className = "flex w-full h-screen flex-col">
       <Header />
-        <main className = "flex-1">{children}</main>
+        <main className = "flex-1 w-full">{children}</main>
       <Footer />
     </div>
   )
