@@ -11,10 +11,6 @@ export const headerLinks = [
         label: 'UploadBook',
         route: '/upload'
       },
-      // {
-      //   label: 'Community',
-      //   route: '/community'
-      // },
       {
         label: 'Chats',
         route: '/chats'
