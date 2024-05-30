@@ -6,7 +6,7 @@ const Banner = () => {
     <div className="min-h-screen flex items-center justify-center">
      <main className="w-full md:w-[100%] lg:w-[100%] xl:w-[100%] px-4 py-8 mx-auto W-[100%] -[100%]:">
 
-        <div className="bg-[linear-gradient(108.56deg,#FFFFFF_2.22%,#D6DAEA_95.84%)] p-8 rounded-[50px] md:rounded-[50px] shadow-lg flex flex-row md:flex-row items-center space-x-2 relative min-[100%]">
+        <div className="bg-[linear-gradient(108.56deg,#FFFFFF_2.22%,#D6DAEA_95.84%)] p-8 rounded-[50px] md:rounded-[50px] shadow-lg flex flex-row md:flex-row items-center space-x-1 relative min-[100%]">
           <div className="text-left flex-1 relative">
             <Image
               src="/assets/images/Ellipse3.png"
@@ -16,7 +16,7 @@ const Banner = () => {
               className="left-1 absolute bottom-1/2 transform -translate-x-1/2 translate-y-1/5 md:w-24 md:h-24 md:left-4 top-[30px] align-middle"
             />
             <h1
-              className="font-inter text-xl md:text-2xl leading-7 tracking-wider font-extrabold text-[22px] whitespace-nowrap relative text-left"
+              className="font-inter md:text-2xl leading-7 tracking-wider font-extrabold text-[22px] whitespace-nowrap relative text-left"
               style={{ textShadow: "0px 4px 4px rgba(0, 0, 0, 0.25)", zIndex: "1" }}
             >
               Get your new book
@@ -33,7 +33,7 @@ const Banner = () => {
                 style={{ zIndex: "-1" }}
               />
             </h1>
-            <p className="text-gray-600 mt-4 whitespace-nowrap bottom-1/2 left-1/2 transform -translate-x-1/2 translate-y-1/2 relative md:text-[18px] text-left">
+            <p className="text-gray-600 mt-4 whitespace-nowrap bottom-1/2 left-1/2 transform -translate-x-1/2 translate-y-1/2 relative md:text-[18px] text-left mb-[150px]">
               Turning pages, sharing stories
               <Image
                 src="/assets/images/Ellipse5.png"
