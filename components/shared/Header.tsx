@@ -20,8 +20,8 @@ const Header = () => {
               width={37.38}
               height={35}
             />
-            <h2 className="text-[24px] text-white font-semibold font-['PT_Serif']">
-              Scholar Stack
+            <h2 className="text-[12px] md:text-[15px] lg:text-[24px] text-white font-semibold font-['PT_Serif']">
+              ScholarStack
             </h2>
           </Link>
         </div>
@@ -29,25 +29,30 @@ const Header = () => {
         {/* The navigation items are displayed for medium and larger devices */}
         <SignedIn>
           <nav className="hidden md:flex items-center gap-4 lg:gap-6">
-            <NavItems />
+            <NavItems pathname={""} />
           </nav>
         </SignedIn>
-        <div className="flex w-32 justify-end gap-3">
+
+        <div className="flex items-center">
           <SignedIn>
-            <UserButton afterSignOutUrl="/" />
-            <MobileNav />
+            <div className="flex items-center gap-3">
+              <UserButton afterSignOutUrl="/" />
+              <MobileNav />
+            </div>
           </SignedIn>
           <SignedOut>
+            <div className="flex items-center gap-3">
               <Button asChild className="rounded-full bg-white" size="lg">
-              <Link href="/sign-in">
-                <h2 className="text-black text-sm">Login</h2>
-            </Link>
-            </Button>
-              <Button asChild className="rounded-full bg-[#007bff]" size="lg">
-              <Link href="/sign-up">
-                <h2 className="text-white text-sm">Sign Up</h2>
-              </Link>
+                <Link href="/sign-in">
+                  <h2 className="text-black text-sm">Login</h2>
+                </Link>
               </Button>
+              <Button asChild className="rounded-full bg-[#007bff]" size="lg">
+                <Link href="/sign-up">
+                  <h2 className="text-white text-sm">Sign Up</h2>
+                </Link>
+              </Button>
+            </div>
           </SignedOut>
         </div>
       </div>
