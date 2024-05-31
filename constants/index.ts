@@ -12,13 +12,14 @@ export const headerLinks = [
         route: '/upload'
       },
       {
-        label: 'Community',
-        route: '/community'
+        label: 'Profile',
+        route: '/profile'
       },
       {
         label: 'Chats',
         route: '/chats'
       }
+
 ]
 
 export const books = [
