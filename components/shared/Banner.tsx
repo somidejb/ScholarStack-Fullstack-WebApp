@@ -4,7 +4,7 @@ import React from "react";
 
 const Banner = () => {
   return (
-    <section className="w-full px-[8px] md:px-[15px] lg:px-[20px] mt-[26px] md:mt-[34px] lg:mt-[40px] h-[262px] md:h-[660px] lg:h-[741px] xl:h-[821px]">
+    <section className="w-full px-[8px] md:px-[15px] lg:px-[40px] xl:px-[66px] mt-[26px] md:mt-[34px] lg:mt-[40px] h-[262px] md:h-[660px] lg:h-[741px] xl:h-[821px]">
       <div className="relative h-full banner-gradient w-full rounded-[50px] md:rounded-[70px] lg:rounded-[80px] banner-shadow">
         <div className="absolute xl:w-[147px] xl:h-[155px] w-[74px] h-[52px] md:h-[71px] lg:w-[110px] lg:h-[110px] left-[2%] top-[34%] lg:top-[30%]">
           <Image
