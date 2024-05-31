@@ -1,5 +1,5 @@
 import React from 'react';
-import { FaEnvelope, FaTwitter } from 'react-icons/fa';
+import { FaEnvelope, FaTwitterSquare , FaFacebookSquare, FaInstagramSquare} from 'react-icons/fa';
 
 const Footer = () => {
   return (
@@ -15,12 +15,30 @@ const Footer = () => {
         </div>
         <div className="p-2 mr-1 font-inter font-semibold text-white text-base leading-24">
           <h2>Help & Contacts </h2>
-          <div className="flex items-center hover:cursor-pointer">
+          <div className="flex items-center">
+            <span className='hover:cursor-pointer'>
+
             <FaEnvelope />
+
+            </span>
+           
             <p className="ml-2 font-inter font-normal text-white text-xs leading-24">scholarstack@gmail.com</p>
           </div>
-          <div className="flex item-end mt-2 hover:cursor-pointer"> 
-            <FaTwitter />
+          <div className="flex mt-10 justify-end space-x-3 ">
+            <span className='hover:cursor-pointer'>
+            <FaFacebookSquare />  
+            </span>
+            <span className='hover:cursor-pointer'>
+            <FaInstagramSquare />  
+            </span>
+            <span className='hover:cursor-pointer'>
+            <FaTwitterSquare />
+            </span>
+           
+           
+           
+
+           
           </div>
         </div>
       </div>
