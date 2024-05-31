@@ -6,15 +6,17 @@ const Home = () => {
   return (
     <>
       <Banner />
-      <Collection 
-        collection_type='Recently Uploaded'
-      />
-      <Collection 
-        collection_type='Books on Sale'
-      />
-      <Collection 
-        collection_type='Free Books'
-      />
+      <div className="mb-[80px]">
+        <Collection 
+          collection_type='Recently Uploaded'
+        />
+        <Collection 
+          collection_type='Books on Sale'
+        />
+        <Collection 
+          collection_type='Free Books'
+        />
+      </div>
     </>
   )
 }
