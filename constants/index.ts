@@ -31,6 +31,7 @@ export const books = [
         image: "/assets/images/book1.png",
         condition: "Good",
         description: "A comprehensive introduction to computer science concepts and programming.",
+        category: "Recently Uploaded"
     },
     {
         id: 2,
@@ -49,6 +50,7 @@ export const books = [
         image: "/assets/images/book3.jpg",
         condition: "Acceptable",
         description: "An essential textbook covering the core principles of chemistry for students.",
+        category: "free"
     },
     {
         id: 4,
