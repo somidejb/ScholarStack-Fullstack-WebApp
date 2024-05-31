@@ -3,10 +3,9 @@ import React from "react";
 
 const Banner = () => {
   return (
-    <div className="min-h-screen flex items-center justify-center">
-     <main className="w-full md:w-[100%] lg:w-[100%] xl:w-[100%] px-4 py-8 mx-auto W-[100%] -[100%]:">
-
-        <div className="bg-[linear-gradient(108.56deg,#FFFFFF_2.22%,#D6DAEA_95.84%)] p-8 rounded-[50px] md:rounded-[50px] shadow-lg flex flex-row md:flex-row items-center space-x-1 relative min-[100%]">
+   <div className="min-h-screen flex items-center justify-center">
+      <main className="w-full md:w-[100%] lg:w-[100%] xl:w-[100%] px-4 py-8 mx-auto W-[100%] -[100%]">
+        <div className="bg-[linear-gradient(108.56deg,#FFFFFF_2.22%,#D6DAEA_95.84%)] p-8 rounded-[50px] md:rounded-[50px] shadow-lg flex flex-row md:flex-row items-center space-x-1 relative lg:h-[821px] md:h-[660px]">
           <div className="text-left flex-1 relative">
             <Image
               src="/assets/images/Ellipse3.png"
@@ -33,7 +32,7 @@ const Banner = () => {
                 style={{ zIndex: "-1" }}
               />
             </h1>
-            <p className="text-gray-600 mt-4 whitespace-nowrap bottom-1/2 left-1/2 transform -translate-x-1/2 translate-y-1/2 relative md:text-[18px] text-left mb-[150px]">
+            <p className="text-gray-600 mt-4 whitespace-nowrap bottom-1/2 left-1/2 transform -translate-x-1/2 translate-y-1/2 relative md:text-[18px] text-left mb-[150px] lg:text-left">
               Turning pages, sharing stories
               <Image
                 src="/assets/images/Ellipse5.png"
@@ -50,20 +49,22 @@ const Banner = () => {
               Start Browsing
             </button> 
           </div>
-          <div className="relative flex-1">
-            <Image
-              src="/assets/images/black.png"
-              alt="Book"
-              width={300}
-              height={300}
-              className="md:rounded-[100px] md:right-3 md:absolute md:p-[55px] md:top-[-190px] top-[-30px]"
-            />
+          <div className="relative flex-1 items-center justify-center md:justify-start">
+            <div className="flex items-center justify-center h">
+              <Image
+                src="/assets/images/black.png"
+                alt="Book"
+                width={300}
+                height={300}
+                className="md:rounded-[100px]  h-auto w-auto md:w-[400px] md:h-[400px]"
+              />
+            </div>
             <Image
               src="/assets/images/Ellipse4.png"
               alt="Eclipse"
               width={29.75}
               height={31.55}
-              className="absolute bottom-0 md:right-10 right-2 transform translate-x-1/4 -translate-y-3/5 md:w-24 md:h-24 md:top-[45px]"
+              className="absolute bottom-0 md:right-10 right-2 transform translate-x-1/4 -translate-y-3/5 md:w-24 md:h-24 md:top-[300px]"
             />
           </div>
         </div>
