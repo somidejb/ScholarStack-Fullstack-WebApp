@@ -3,7 +3,7 @@ import React from "react";
 
 const Banner = () => {
   return (
-   <div className="min-h-screen flex items-center justify-center">
+    <div className="min-h-screen flex items-center justify-center">
       <main className="w-full md:w-[100%] lg:w-[100%] xl:w-[100%] px-4 py-8 mx-auto W-[100%] -[100%]">
         <div className="bg-[linear-gradient(108.56deg,#FFFFFF_2.22%,#D6DAEA_95.84%)] p-8 rounded-[50px] md:rounded-[50px] shadow-lg flex flex-row md:flex-row items-center space-x-1 relative lg:h-[650px] md:h-[500px]">
           <div className="text-left flex-1 relative">
@@ -16,13 +16,15 @@ const Banner = () => {
             />
             <h1
               className="font-inter md:text-[40px] leading-7 tracking-wider font-extrabold text-[22px] whitespace-nowrap relative text-left lg:text-[70px]"
-              style={{ textShadow: "0px 4px 4px rgba(0, 0, 0, 0.25)", zIndex: "1" }}
+              style={{
+                textShadow: "0px 4px 4px rgba(0, 0, 0, 0.25)",
+                zIndex: "1",
+              }}
             >
               Get your new book
-              <span className="block text-left md:mt-6 lg:mt-12"> 
+              <span className="block text-left md:mt-6 lg:mt-12">
                 at the best price
               </span>
-             
               <Image
                 src="/assets/images/Ellipse4.png"
                 alt="Eclipse"
@@ -40,14 +42,16 @@ const Banner = () => {
                 width={40}
                 height={34.04}
                 className="absolute transform -translate-x-1/4 -translate-y-1/5 md:w-40 md:h-34 md:left-[250px] md:top-[2px] left-[180px]"
-                style={{ zIndex: "-1" }} 
+                style={{ zIndex: "-1" }}
               />
             </p>
 
-            <button className="mt-[100px] px-6 py-2 bg-[#2F457F] rounded-xl text-white font-normal text-left bg-opacity-80 text-[11px] md:[22px] lg:text-[24px]"
-              style={{ zIndex: "1" }}>
+            <button
+              className="mt-[100px] px-6 py-2 bg-[#2F457F] rounded-xl text-white font-normal text-left bg-opacity-80 text-[11px] md:[22px] lg:text-[24px]"
+              style={{ zIndex: "1" }}
+            >
               Start Browsing
-            </button> 
+            </button>
           </div>
           <div className="relative flex-1 items-center justify-center md:justify-start">
             <div className="flex items-center justify-center h">
@@ -56,7 +60,7 @@ const Banner = () => {
                 alt="Book"
                 width={300}
                 height={300}
-                className="object-fill  h-auto w-auto md:w-[400px] md:h-[400px] md:object-fil lg:object-fill"
+                className="object-fill h-auto w-auto md:w-[400px] md:h-[400px] md:object-fil lg:object-fill"
               />
             </div>
             <Image
