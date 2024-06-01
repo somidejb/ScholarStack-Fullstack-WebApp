@@ -9,7 +9,7 @@ export const headerLinks = [
       },
       {
         label: 'UploadBook',
-        route: '/upload'
+        route: '/books/upload'
       },
       {
         label: 'Profile',

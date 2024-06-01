@@ -3,7 +3,7 @@ import { FaEnvelope, FaTwitter } from 'react-icons/fa';
 
 const Footer = () => {
   return (
-    <footer className=" text-white py-4  bg-blue-800 bg-opacity-80 rounded-sm">
+    <footer className=" text-white py-4 bg-[#31457b] rounded-sm">
       <div className="flex justify-between ">
         <div className="p-1 ml-1">
           <h2 className=" font-inter font-bold text-white text-base leading-7 lg:text-[40px] lg:mb-3">ScholarStack</h2>
