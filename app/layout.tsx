@@ -1,11 +1,16 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Inter, Jost } from "next/font/google";
 import "./globals.css";
 import { ClerkProvider } from "@clerk/nextjs"; 
 
 const inter = Inter({ subsets: ["latin"],
   weight: ['100', '200', '300', '400', '500', '600', '700', '800', '900'],
   variable: '--font-inter'
+ });
+
+ const jost = Jost({ subsets: ["latin"],
+  weight: ['100', '200', '300', '400', '500', '600', '700', '800', '900'],
+  variable: '--font-jost'
  });
 
 export const metadata: Metadata = {
@@ -21,7 +26,7 @@ export default function RootLayout({
   return (
     <ClerkProvider>
       <html lang="en">
-        <body className={`${inter.variable}`}>{children}</body>
+        <body className={`${inter.variable} ${jost.variable}`}>{children}</body>
       </html>
     </ClerkProvider>
   )
