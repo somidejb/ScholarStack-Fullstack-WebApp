@@ -1,5 +1,3 @@
-<<<<<<< HEAD
-=======
 "use client";
 import React, { useState } from 'react'
 import {
@@ -212,4 +210,3 @@ import { FiChevronDown, FiMapPin, FiCloud, FiDownload } from 'react-icons/fi';
 }
 
 export default EditBookForm;
->>>>>>> 3eecc9f5b17e5d3b03236bab8f09c62091a9eadf
