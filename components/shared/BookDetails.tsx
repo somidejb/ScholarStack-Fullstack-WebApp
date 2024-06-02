@@ -1,13 +1,11 @@
 "use client";
 import React from 'react';
-import Nav from './nav';
 import Image from 'next/image';
 import { Collection } from './Collection';
 
 const BookDetails = () => {
   return (
     <div className="flex font-sans">
-      <Nav />
       <div className="flex-1 p-5">
         <div className="flex mb-10">
           <div className="mr-5">
