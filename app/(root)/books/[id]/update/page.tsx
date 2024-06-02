@@ -10,11 +10,11 @@ import {
 import { FiChevronDown, FiMapPin, FiCloud, FiDownload } from 'react-icons/fi';
 
   const EditBookForm = () => {
-    const [selectedFiles, setSelectedFiles] = useState([]);
+    const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
 
-    const handleFileChange = (e) => {
+    const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const files = e.target.files;
-        if (files.length > 0) {
+        if (files && files.length > 0) {
             setSelectedFiles(Array.from(files));
         } else {
             setSelectedFiles([]);
