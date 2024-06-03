@@ -3,7 +3,7 @@
 import Image from 'next/image';
 import React, { useState } from 'react';
 
-const NavItems = () => {
+const Books = () => {
   const [showMoreCategories, setShowMoreCategories] = useState(false);
   const [showMoreLanguages, setShowMoreLanguages] = useState(false);
   const [showMorePrices, setShowMorePrices] = useState(false);
@@ -214,4 +214,4 @@ const NavItems = () => {
   );
 };
 
-export default NavItems;
+export default Books;

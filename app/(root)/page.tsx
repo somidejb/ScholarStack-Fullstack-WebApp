@@ -1,13 +1,24 @@
+import Banner from '@/components/shared/Banner'
+import BookCard from '@/components/shared/BookCard'
+import { Collection } from '@/components/shared/Collection'
 
-import React from "react";
-import NavItems from "@/components/shared/nav";
- 
 const Home = () => {
   return (
     <>
-      <NavItems/>
+      <Banner />
+      <div className="mb-[80px]">
+        <Collection 
+          collection_type='Recently Uploaded'
+        />
+        <Collection 
+          collection_type='Books on Sale'
+        />
+        <Collection 
+          collection_type='Free Books'
+        />
+      </div>
     </>
-  );
-};
- 
-export default Home;
+  )
+}
+
+export default Home
