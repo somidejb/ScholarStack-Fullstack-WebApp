@@ -45,3 +45,9 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/deploym
 Documentation:
  Completed low fidelity of design - Monday May 20
 - [ ] Finalize design of different screen sizes
+
+## Due Friday May 24, 2024
+- [x] Design different screen sizes for figma (Diya, Kruti, Ekom)
+- [x] Coding Navigation Bar (Daniel)
+- [x] Project Requirement Documentation (Ekom)
+- [x] Explanation of file structure (Jubril)
