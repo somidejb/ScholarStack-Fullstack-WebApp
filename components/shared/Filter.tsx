@@ -35,3 +35,4 @@ const Filter = ({ title, items }: { title: string, items: any[] }) => {
 };
 
 export default Filter;
+
