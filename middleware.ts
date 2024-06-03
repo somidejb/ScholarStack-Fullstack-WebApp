@@ -1,16 +1,9 @@
-import { authMiddleware } from "@clerk/nextjs";
- 
-export default authMiddleware({
-    publicRoutes: [
-        '/',
-        '/books/:id',
-        '/api/webhook/(.*)',
-    ],
-    ignoredRoutes: [
-        '/api/webhook/(.*)',
-    ]
-});
- 
+import { clerkMiddleware } from "@clerk/nextjs/server";
+
+export default clerkMiddleware()
+
 export const config = {
-    matcher: ['/((?!.*\\..*|_next).*)', '/', '/(api|trpc)(.*)'],
+  // The following matcher runs middleware on all routes
+  // except static assets.
+  matcher: [ '/((?!.*\\..*|_next).*)', '/', '/(api|trpc)(.*)'],
 };
