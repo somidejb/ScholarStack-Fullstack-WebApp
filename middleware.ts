@@ -1,14 +1,13 @@
 import { authMiddleware } from "@clerk/nextjs";
-import { clerkApi } from "@clerk/nextjs/edge-middlewarefiles";
  
 export default authMiddleware({
     publicRoutes: [
-        "/",
-        "/books/:id",
-        "/api/webhook/clerk",
+        '/',
+        '/books/:id',
+        '/api/webhook/(.*)',
     ],
     ignoredRoutes: [
-        "/api/webhook/clerk",
+        '/api/webhook/(.*)',
     ]
 });
  
