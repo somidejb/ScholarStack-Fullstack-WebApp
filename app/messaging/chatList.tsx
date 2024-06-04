@@ -16,6 +16,7 @@ interface ChatListProps {
 const ChatList: React.FC<ChatListProps> = ({ chats, onSelectChat }) => {
   return (
     <div className="lg:w-1/3 border-r border-gray-300 p-4 overflow-y-auto w-full md:w-1/3">
+      <div className='border-b p-0.5'>
       <div className="flex justify-between items-center mb-4">
       <button className="text-xl">
       
@@ -29,6 +30,8 @@ const ChatList: React.FC<ChatListProps> = ({ chats, onSelectChat }) => {
         <h2 className="text-xl font-bold">My conversations</h2>
         <button className="text-lg">+</button>
       </div>
+      </div>
+
       <div>
         {chats.map((chat, index) => (
           <div
