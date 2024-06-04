@@ -1,5 +1,5 @@
-
-import React from 'react';
+"use client";
+import React, { useState } from 'react'
 import {
     Select,
     SelectContent,
@@ -222,5 +222,5 @@ const Upload = () => {
         </div>
       );
 }
-   
-export default Upload;
+
+export default EditBookForm;

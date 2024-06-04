@@ -16,7 +16,7 @@ const Layout = ({children}: {children: React.ReactNode}) => {
             <h2 className="h1-gradient">a new home</h2>            
           </div>
           <div className="flex justify-center h-[280px] lg:h-[500px] sm:h-full">
-            <Image src="/assets/images/saly.png" alt="hero" width={750} height={750} className="object-contain" />
+            <Image src="/assets/images/saly.png" priority={true} alt="hero" width={750} height={750} className="object-contain" />
           </div>
         </div>
         <div>

@@ -1,15 +1,15 @@
-"use client";
-import { books } from '@/constants';
-import { useState, useEffect } from 'react';
+"use client"
+import { books } from '@/constants'
+import { useState, useEffect } from 'react'
 import BookCard from './BookCard';
 import Image from 'next/image';
 import Link from 'next/link';
 
-type CollectionProps = {
-  collection_type: string;
-};
 
-export const Collection = ({ collection_type }: CollectionProps) => {
+type collectionProps = {
+  collection_type: string
+}
+export const Collection = ({collection_type} : collectionProps) => {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [cardsPerSlide, setCardsPerSlide] = useState(3);
 
@@ -30,7 +30,7 @@ export const Collection = ({ collection_type }: CollectionProps) => {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  const totalSlides = Math.ceil(books.length / cardsPerSlide);
+  const totalSlides = Math.ceil(10 / cardsPerSlide);
 
   const handlePrevClick = () => {
     setCurrentSlide(currentSlide > 0 ? currentSlide - 1 : totalSlides - 1);
@@ -42,9 +42,9 @@ export const Collection = ({ collection_type }: CollectionProps) => {
 
   const renderDots = () => {
     return Array.from({ length: totalSlides }).map((_, index) => (
-      <span
-        key={index}
-        className={`h-2 w-2 md:h-3 md:w-3 rounded-full mx-1 cursor-pointer ${currentSlide === index ? 'bg-blue-500' : 'bg-gray-500'}`}
+      <span 
+        key={index} 
+        className={`h-2 w-2 md:h-3 md:w-3 rounded-full mx-1 cursor-pointer ${currentSlide === index ? 'bg-blue-500' : 'bg-gray-500'}`} 
         onClick={() => setCurrentSlide(index)}
       />
     ));
@@ -58,17 +58,17 @@ export const Collection = ({ collection_type }: CollectionProps) => {
           <Image src="/assets/icons/left-icon.png" alt="Left Arrow" width={24} height={24} />
         </div>
         <div className="flex overflow-hidden w-full">
-          <div
+          <div 
             className="flex gap-[22px] md:gap-[36px] transition-transform duration-500"
             style={{ transform: `translateX(-${currentSlide * 100 / totalSlides}%)` }}
           >
             {books.map((book, index) => (
-              <div key={index} className={`flex w-[${100 / cardsPerSlide}%]`}>
-                <BookCard
+              <div key={index} className={`flex  w-[${100 / cardsPerSlide}%]`}>
+                <BookCard 
                   title={book.title}
                   imageUrl={book.image}
                   author={book.author}
-                  price={book.price}
+                  price={book.price.toString()} // Convert the price to a string
                 />
               </div>
             ))}
@@ -82,10 +82,12 @@ export const Collection = ({ collection_type }: CollectionProps) => {
         <div className="flex justify-center flex-grow">
           {renderDots()}
         </div>
-        <Link href="/more-books">
+        <Link href="">
           <p className="cursor-pointer text-normal leading-[16px] md:leading-[23px] lg:leading-[32px] text-[11px] md:text-[16px] lg:text-[23px] tracking-widest text-[#2F27CE]">See more</p>
         </Link>
       </div>
     </section>
   );
 };
+
+
