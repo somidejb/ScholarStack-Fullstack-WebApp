@@ -4,10 +4,16 @@ import ChatBox from './chatBox';
 import ChatList from './chatList';
 import ChatWindow from './chatWindow';
 
-const MessagingPage = () => {
-  const [selectedChat, setSelectedChat] = useState(null);
+interface Chat {
+  name: string;
+  message: string;
+  time: string;
+}
 
-  const chats = [
+const MessagingPage: React.FC = () => {
+  const [selectedChat, setSelectedChat] = useState<Chat | null>(null);
+
+  const chats: Chat[] = [
     { name: 'David Carlson', message: 'Hey, How are you?', time: '3:20PM' },
     { name: 'Lily Bloom', message: 'You in Sunridge, right?', time: '9:20PM' },
     { name: 'Josh Seary', message: 'Hey, we meeting tmrw for book...', time: '3:29PM' },
@@ -17,7 +23,6 @@ const MessagingPage = () => {
 
   return (
     <div className="h-screen flex flex-col">
-      
       <div className="flex flex-grow overflow-hidden">
         <ChatList chats={chats} onSelectChat={setSelectedChat} />
         <div className="flex flex-col flex-grow">

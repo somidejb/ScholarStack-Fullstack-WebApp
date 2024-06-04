@@ -1,11 +1,33 @@
 import React from 'react';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {  faComment } from "@fortawesome/free-solid-svg-icons";
 
-const ChatList = ({ chats, onSelectChat }) => {
+interface Chat {
+  name: string;
+  message: string;
+  time: string;
+}
+
+interface ChatListProps {
+  chats: Chat[];
+  onSelectChat: (chat: Chat) => void;
+}
+
+const ChatList: React.FC<ChatListProps> = ({ chats, onSelectChat }) => {
   return (
     <div className="lg:w-1/3 border-r border-gray-300 p-4 overflow-y-auto w-full md:w-1/3">
       <div className="flex justify-between items-center mb-4">
+      <button className="text-xl">
+      
+      <FontAwesomeIcon
+          icon={faComment}
+          height={15}
+          width={15}
+          style={{ color: "#000000" }}
+        />
+      </button>
         <h2 className="text-xl font-bold">My conversations</h2>
-        <button className="text-xl">+</button>
+        <button className="text-lg">+</button>
       </div>
       <div>
         {chats.map((chat, index) => (
