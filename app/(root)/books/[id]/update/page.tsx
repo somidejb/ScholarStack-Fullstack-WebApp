@@ -11,7 +11,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {  faLocationDot, faCalendarDays } from "@fortawesome/free-solid-svg-icons";
 
 
-const Upload = () => {
+const EditBookForm = () => {
 
 
     return (
@@ -94,8 +94,8 @@ const Upload = () => {
                       <SelectItem value="health & Yoga">Health & Yoga</SelectItem>
                       <SelectItem value="sports">Sports</SelectItem>
                       <SelectItem value="literature">Literature</SelectItem>
-                      <SelectItem value="children's book">
-                        Children's book
+                      <SelectItem value="children&apos;s book">
+                        Children&apos;s book
                       </SelectItem>
                       <SelectItem value="history">History</SelectItem>
                       <SelectItem value="chemistry">Chemistry</SelectItem>
@@ -208,11 +208,11 @@ const Upload = () => {
                   Submit
                 </button>
               </div>
-              <div>
-                        <button type="button" className="inline-flex justify-center w-full py-2 px-4 border border-transparent  text-white font-bold rounded-md text-white bg-[#31457B] hover:bg-red-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
-                            Delete
-                        </button>
-                    </div>
+                <div>
+                    <button type="button" className="inline-flex justify-center w-full py-2 px-4 border border-transparent font-bold rounded-md text-white bg-[#31457B] hover:bg-red-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
+                      Delete
+                    </button>
+                  </div>
     
               <p className="text-center text-gray-500 text-xs mt-4">
                 Marked with * are important

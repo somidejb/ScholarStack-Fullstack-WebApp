@@ -105,7 +105,7 @@ import { FiChevronDown, FiMapPin, FiCloud, FiDownload } from 'react-icons/fi';
                                     <SelectItem value="health & Yoga">Health & Yoga</SelectItem>
                                     <SelectItem value="sports">Sports</SelectItem>
                                     <SelectItem value="literature">Literature</SelectItem>
-                                    <SelectItem value="children's book">Children's book</SelectItem>
+                                    <SelectItem value="children&apos;s book">Children&apos;s book</SelectItem>
                                     <SelectItem value="history">History</SelectItem> 
                                     <SelectItem value="chemistry">Chemistry</SelectItem>
                                     <SelectItem value="engineering">Engineering</SelectItem>
