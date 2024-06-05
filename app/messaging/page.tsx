@@ -22,13 +22,11 @@ const MessagingPage: React.FC = () => {
   ];
 
   return (
-    <div className="h-screen flex flex-col">
-      <div className="flex flex-grow overflow-hidden">
-        <ChatList chats={chats} onSelectChat={setSelectedChat} />
-        <div className="flex flex-col flex-grow">
-          <ChatWindow selectedChat={selectedChat} />
-          <ChatBox />
-        </div>
+    <div className="h-screen flex flex-col md:flex-row">
+      <ChatList chats={chats} onSelectChat={setSelectedChat} className="w-full md:w-1/3 border-r border-gray-300" />
+      <div className="flex flex-col flex-grow">
+        <ChatWindow selectedChat={selectedChat} className="flex-grow" />
+        <ChatBox  />
       </div>
     </div>
   );

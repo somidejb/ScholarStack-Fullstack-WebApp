@@ -1,6 +1,6 @@
 import React from 'react';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {  faComment } from "@fortawesome/free-solid-svg-icons";
+import { faComment } from "@fortawesome/free-solid-svg-icons";
 
 interface Chat {
   name: string;
@@ -11,27 +11,26 @@ interface Chat {
 interface ChatListProps {
   chats: Chat[];
   onSelectChat: (chat: Chat) => void;
+  className?: string;
 }
 
-const ChatList: React.FC<ChatListProps> = ({ chats, onSelectChat }) => {
+const ChatList: React.FC<ChatListProps> = ({ chats, onSelectChat, className }) => {
   return (
-    <div className="lg:w-1/3 border-r border-gray-300 p-4 overflow-y-auto w-full md:w-1/3">
-      <div className='border-b p-0.5'>
-      <div className="flex justify-between items-center mb-4">
-      <button className="text-xl">
-      
-      <FontAwesomeIcon
-          icon={faComment}
-          height={15}
-          width={15}
-          style={{ color: "#000000" }}
-        />
-      </button>
-        <h2 className="text-xl font-bold">My conversations</h2>
-        <button className="text-lg">+</button>
+    <div className={`p-4 overflow-y-auto ${className}`}>
+      <div className="border-b p-0.5">
+        <div className="flex justify-between items-center mb-4">
+          <button className="text-xl">
+            <FontAwesomeIcon
+              icon={faComment}
+              height={15}
+              width={15}
+              style={{ color: "#000000" }}
+            />
+          </button>
+          <h2 className="text-xl font-bold">My conversations</h2>
+          <button className="text-lg">+</button>
+        </div>
       </div>
-      </div>
-
       <div>
         {chats.map((chat, index) => (
           <div
