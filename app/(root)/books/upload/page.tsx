@@ -12,8 +12,6 @@ import {  faLocationDot, faCalendarDays } from "@fortawesome/free-solid-svg-icon
 
 
 const Upload = () => {
-
-
     return (
         <div className="min-h-screen bg-white flex items-center justify-center py-8 px-4 sm:px-6 lg:px-8 xl:px-12">
           <div className="max-w-md bg-white w-full space-y-8 md:max-w-md lg:max-w-lg xl:max-w-xl rounded-xl">

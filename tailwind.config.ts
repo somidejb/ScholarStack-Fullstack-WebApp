@@ -7,7 +7,7 @@ const config = {
     './components/**/*.{ts,tsx}',
     './app/**/*.{ts,tsx}',
     './src/**/*.{ts,tsx}',
-	],
+  ],
   prefix: "",
   theme: {
     container: {
@@ -17,7 +17,7 @@ const config = {
         "2xl": "1400px",
       },
     },
-    extend: {
+      extend: {
       colors: {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
