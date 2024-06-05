@@ -1,8 +1,16 @@
 import BookForm from '@/components/shared/BookForm'
+import { getBookById } from '@/lib/actions/book.actions';
 import { auth } from '@clerk/nextjs/server';
 import React from 'react'
 
-const UploadBook = () => {
+type UpdateBookProps = {
+  params: {
+    id: string
+  }
+}
+
+const EditBook = async ({params: {id}}: UpdateBookProps) => {
+  const book = await getBookById(id);
   const {sessionClaims} = auth();
   const userId = sessionClaims?.userId as string;
   return (
@@ -12,10 +20,10 @@ const UploadBook = () => {
       </section>
       <BookForm 
         userId = {userId}
-        type="Upload"  
+        type="Edit"  
       />
     </>
   )
 }
 
-export default UploadBook
+export default EditBook

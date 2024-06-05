@@ -116,3 +116,16 @@ export const books = [
         description: "Comprehensive coverage of deep learning techniques using Python.",
     }
 ];
+
+export const bookDefaultValues = {
+    title: "",
+    author: "",
+    description: "",
+    imageURLs: [],
+    categoryId: "",
+    languageId: "",
+    isFree: false,
+    price: "0",
+    salePrice: "",
+    location: "",
+}

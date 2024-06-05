@@ -1,27 +1,41 @@
-import mongoose from "mongoose";
+import { Document, Schema, model, models } from "mongoose";
 
-const { Schema, model, models } = mongoose;
-
+export interface IBook extends Document {
+  _id: string;
+  bookName: string;
+  author: string;
+  bookDescription: string;
+  postedAt: Date;
+  imageURLs: string[];
+  category: {_id: string, name: string};
+  language: {_id: string, name: string};
+  isBookFree: boolean;
+  price?: string;
+  salePrice?: string;
+  location: string;
+  bookOwner: {_id: string, firstName: string, lastName:string, photo: string};
+}
 
 const BookSchema = new Schema({
-  bookName: {
+  title: {
     type: String,
     required: true,
     unique: true,
   },
-  isBookFree: {
-    type: Boolean,
-    default: false,
-  },
-  bookDescription: {
+  author: {
     type: String,
+    required: true,
+  },
+  description: {
+    type: String,
+    required: true,
   },
   postedAt: {
     type: Date,
-    default: Date.now, 
+    default: Date.now,
   },
-  imageURL: {
-    type: String,
+  imageURLs: {
+    type: [String],
     required: true,
   },
   category: {
@@ -29,10 +43,33 @@ const BookSchema = new Schema({
     ref: 'Category',
     required: true,
   },
-  bookOwner: { // Assuming 'User' represents both sellers and owners
+  language: {
+    type: Schema.Types.ObjectId,
+    ref: 'Language',
+    required: true,
+  },
+  isBookFree: {
+    type: Boolean,
+    default: false,
+  },
+  price: {
+    type: String,
+    default: '0.00'
+  },
+  salePrice: {
+    type: String,
+  },
+  location: {
+    type: String,
+    required: true,
+  },
+  bookOwner: {
     type: Schema.Types.ObjectId,
     ref: 'User',
     required: true,
   },
 });
+
 const Book = models.Book || model("Book", BookSchema);
+
+export default Book;
