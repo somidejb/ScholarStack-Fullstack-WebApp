@@ -10,6 +10,7 @@ const Books = () => {
 
   return (
     <div>
+    
       {/* Side Navbar and Search Bar */}
       <div className="flex">
         <div className="rounded-3xl bg-white w-50 p-4 border flex-shrink-0 mt-3 mb-3 ml-2 shadow-lg" style={{ height: 'fit-content' }}>
