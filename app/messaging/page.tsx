@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import ChatBox from './chatBox';
 import ChatList from './chatList';
 import ChatWindow from './chatWindow';
+import Header from '@/components/shared/Header';
 
 interface Chat {
   name: string;
@@ -21,13 +22,18 @@ const MessagingPage: React.FC = () => {
     { name: 'Lei Wong', message: 'I would love to buy this book', time: '11:20AM' },
   ];
 
+
   return (
+    <div>
+    <Header />
     <div className="h-screen flex flex-col md:flex-row">
+     
       <ChatList chats={chats} onSelectChat={setSelectedChat} className="w-full md:w-1/3 border-r border-gray-300" />
       <div className="flex flex-col flex-grow">
         <ChatWindow selectedChat={selectedChat} className="flex-grow" />
         <ChatBox  />
       </div>
+    </div>
     </div>
   );
 };
