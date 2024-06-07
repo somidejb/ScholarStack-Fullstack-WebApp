@@ -1,9 +1,21 @@
-import mongoose from "mongoose";
+import { Document, Schema, model, models } from "mongoose";
 
-const { Schema, model, models } = mongoose;
+
+export interface IUser extends Document{
+  clerkId: string;
+  email: string;
+  username: string;
+  firstName: string;
+  lastName: string;
+  bio?: string;
+  location?: string;
+  photo: string;
+  favorites: Schema.Types.ObjectId[];
+  joinedAt: Date;
+}
 
 const UserSchema = new Schema({
-  clerk: { 
+  clerkId: {
     type: String,
     required: true,
     unique: true,
@@ -13,7 +25,7 @@ const UserSchema = new Schema({
     required: true,
     unique: true,
   },
-  userName: {
+  username: {
     type: String,
     required: true,
     unique: true,
@@ -26,9 +38,28 @@ const UserSchema = new Schema({
     type: String,
     required: true,
   },
-  image: {
+  bio: {
     type: String,
-    required: false,
   },
+  location: {
+    type: String,
+  },
+  joinedAt: {
+    type: Date,
+    default: Date.now,
+  },
+  photo: {
+    type: String,
+    required: true,
+  },
+  favorites: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: 'Book',
+    },
+  ],
 });
+
 const User = models.User || model("User", UserSchema);
+
+export default User;

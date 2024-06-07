@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 const Filter = ({ title, items }: { title: string, items: any[] }) => {
   const [showMore, setShowMore] = useState(false);
 
-  const handleShowMore = (e) => {
+  const handleShowMore = (e : React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
     e.preventDefault();
     setShowMore(!showMore);
   };
@@ -35,3 +35,4 @@ const Filter = ({ title, items }: { title: string, items: any[] }) => {
 };
 
 export default Filter;
+

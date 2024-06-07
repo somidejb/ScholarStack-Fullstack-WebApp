@@ -68,7 +68,7 @@ export const Collection = ({collection_type} : collectionProps) => {
                   title={book.title}
                   imageUrl={book.image}
                   author={book.author}
-                  price={book.price}
+                  price={book.price.toString()} // Convert the price to a string
                 />
               </div>
             ))}
@@ -82,7 +82,7 @@ export const Collection = ({collection_type} : collectionProps) => {
         <div className="flex justify-center flex-grow">
           {renderDots()}
         </div>
-        <Link href="">
+        <Link href="/books">
           <p className="cursor-pointer text-normal leading-[16px] md:leading-[23px] lg:leading-[32px] text-[11px] md:text-[16px] lg:text-[23px] tracking-widest text-[#2F27CE]">See more</p>
         </Link>
       </div>

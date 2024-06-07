@@ -1,17 +1,16 @@
-import { authMiddleware } from "@clerk/nextjs";
-import { clerkApi } from "@clerk/nextjs/edge-middlewarefiles";
- 
-export default authMiddleware({
-    publicRoutes: [
-        "/",
-        "/books/:id",
-        "/api/webhook/clerk",
-    ],
-    ignoredRoutes: [
-        "/api/webhook/clerk",
-    ]
-});
- 
+import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server";
+
+
+const isProtectedRoute = createRouteMatcher([
+    '/books(.*)',
+    '/profile(.*)',
+])
+
+export default clerkMiddleware((auth, req) => {
+    if (isProtectedRoute(req)) auth().protect();
+})
 export const config = {
-    matcher: ['/((?!.*\\..*|_next).*)', '/', '/(api|trpc)(.*)'],
+  // The following matcher runs middleware on all routes
+  // except static assets.
+  matcher: [ '/((?!.*\\..*|_next).*)', '/', '/(api|trpc)(.*)'],
 };
