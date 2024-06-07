@@ -203,15 +203,15 @@ const Books = () => {
             </button>
           </div>
         </div>
-        <div className="flex-1 p-4">
-          <div className="flex justify-center relative mb-4">
+        <div className="flex-1 p-4 ml-20">
+          <div className="flex justify-center relative mb-12">
             <input type="text" placeholder="Search here..." className="border p-2 w-full max-w-lg rounded-3xl pr-12 bg-D9D9D9 shadow-md" />
             <svg className="w-6 h-6 text-gray-500 absolute right-4 top-1/2 transform -translate-y-1/2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-4.35-4.35M17 11A6 6 0 1111 5a6 6 0 016 6z"></path>
             </svg>
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 gap-4">
-            {books.map(book => (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 mr-20 mb-6">
+            {books.slice(0, 8).map(book => (
               <BookCard 
                 key={book.id}
                 title={book.title}
