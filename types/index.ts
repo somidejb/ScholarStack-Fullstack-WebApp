@@ -27,7 +27,7 @@ export type CreateUserParams = {
       categoryId: string;
       languageId: string;
       isFree?: boolean;
-      price: string;
+      price?: string;
       salePrice?: string;
       location: string;
     }
@@ -46,7 +46,7 @@ export type CreateUserParams = {
       categoryId: string;
       languageId: string;
       isFree?: boolean;
-      price: string;
+      price?: string;
       salePrice?: string;
       location: string;
     }

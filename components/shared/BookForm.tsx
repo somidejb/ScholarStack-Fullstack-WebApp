@@ -35,6 +35,12 @@ type BookFormProps = {
 }
 
 const BookForm = ({userId, type, book, bookId} : BookFormProps) => {
+    const [isFree, setIsFree] = useState(false);
+
+    const handleCheckboxChange = (checked: boolean) => {
+        setIsFree(checked);
+        form.setValue('isFree', checked);
+      };
     const [files, setFiles] = useState<File[]>([]);
     const initialValues = book && type === 'Edit' 
     ? {...book}
@@ -146,7 +152,7 @@ const BookForm = ({userId, type, book, bookId} : BookFormProps) => {
                 name="description"
                 render={({ field }) => (
                     <FormItem className = "w-full">
-                        <FormLabel className="input-label">Book Description</FormLabel>
+                        <FormLabel className="input-label">*Book Description</FormLabel>
                         <FormControl className = "h-[250px]">
                             <Textarea {...field} className = "textarea"/>
                         </FormControl>
@@ -200,39 +206,47 @@ const BookForm = ({userId, type, book, bookId} : BookFormProps) => {
                     )}
                 />
             </div>
-            <div className= "field-div mb-5">
+            <div className="field-div mb-5">
                 <FormField
                     control={form.control}
                     name="price"
                     render={({ field }) => (
-                    <FormItem className = "w-full">
-                        <FormLabel className="input-label">*Price</FormLabel>
+                    <FormItem className="w-full">
+                        <FormLabel className={`input-label ${isFree ? 'invisible' : ''}`}>*Price</FormLabel>
                         <FormControl>
-                            <div className = "flex-center w-full rounded-full">
-                               <Input type="number" placeholder="$" {...field}
-                                className = "input-field outline-offset-0"
-                                />
-                                <FormField
-                                    control={form.control}
-                                    name="isFree"
-                                    render={({ field }) => (
-                                    <FormItem>
-                                        <FormControl>
-                                            <div className = "flex items-center">
-                                            <label htmlFor="isFree" className="whitespace-nowrap pl-1 pr-3 leading-none peer-disabled:cursor-not-allowed
-                                            peer-disabled:opacity-70 input-label">Free Book</label>
-                                            <Checkbox 
-                                                onCheckedChange={field.onChange} 
-                                                checked={field.value}
-                                                id="isFree" 
-                                                className="mr-2 h-5 w-5 border-2 border-primary-500"/>
-                                            </div>
-                                        </FormControl>
-                                        <FormMessage />
-                                    </FormItem>
-                                    )}
-                                />
-                            </div>
+                        <div className="flex-center w-full rounded-full">
+                            <Input
+                            type="number"
+                            placeholder="$"
+                            {...field}
+                            className={`input-field outline-offset-0 ${isFree ? 'invisible' : ''}`}
+                            />
+                            <FormField
+                            control={form.control}
+                            name="isFree"
+                            render={({ field }) => (
+                                <FormItem>
+                                <FormControl>
+                                    <div className="flex items-center">
+                                    <label
+                                        htmlFor="isFree"
+                                        className="whitespace-nowrap pl-1 pr-3 leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 input-label"
+                                    >
+                                        Free Book
+                                    </label>
+                                    <Checkbox
+                                        onCheckedChange={(checked) => handleCheckboxChange(checked as boolean)}
+                                        checked={field.value}
+                                        id="isFree"
+                                        className="mr-2 h-5 w-5 border-2 border-primary-500"
+                                    />
+                                    </div>
+                                </FormControl>
+                                <FormMessage />
+                                </FormItem>
+                            )}
+                            />
+                        </div>
                         </FormControl>
                         <FormMessage />
                     </FormItem>
@@ -243,18 +257,20 @@ const BookForm = ({userId, type, book, bookId} : BookFormProps) => {
                     control={form.control}
                     name="salePrice"
                     render={({ field }) => (
-                    <FormItem className = "w-full">
-                        <FormLabel className="input-label">Sale Price</FormLabel>
+                    <FormItem className="w-full">
+                        <FormLabel className={`input-label ${isFree ? 'invisible' : ''}`}>Sale Price</FormLabel>
                         <FormControl>
-                            <Input type="number" placeholder="$" {...field}
-                            className = "input-field outline-offset-0"
-                            />
+                        <Input
+                            type="number"
+                            placeholder="$"
+                            {...field}
+                            className={`input-field outline-offset-0 ${isFree ? 'invisible' : ''}`}
+                        />
                         </FormControl>
                         <FormMessage />
                     </FormItem>
                     )}
                 />
-                
             </div>
             <FormField
                     control={form.control}

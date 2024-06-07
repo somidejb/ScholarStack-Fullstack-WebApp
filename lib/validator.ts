@@ -8,12 +8,12 @@ export const bookFormSchema = z.object({
     categoryId: z.string(),
     languageId: z.string(),
     isFree: z.boolean().optional(),
-    price: z.string().refine((value) => {
+    price: z.string().optional().refine((value) => {
         if (!value) return true; // Allow empty price if the field is optional
         const price = parseFloat(value);
-        return !isNaN(price) && price > 0;
+        return !isNaN(price) && price >= 0; // Allow price to be zero or positive
     }, {
-        message: 'Price must be a valid positive number',
+        message: 'Price must be a valid non-negative number',
     }),
     salePrice: z.string().optional(),
     location: z.string().min(3, 'Location must be at least 3 characters.').max(50, 'Location must be less than 50 characters.'),

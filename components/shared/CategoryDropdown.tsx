@@ -25,7 +25,6 @@ const CategoryDropdown = ({ value, onChangeHandler }: DropdownProps) => {
   useEffect(() => {
       const getCategories = async () => {
           const categoryList = await getAllCategories();
-          console.log(categoryList);
 
           if (categoryList) {
               // Convert category names to title case
