@@ -68,7 +68,7 @@ export const Collection = ({collection_type} : collectionProps) => {
                   title={book.title}
                   imageUrl={book.image}
                   author={book.author}
-                  price={book.price}
+                  price={book.price.toString()} // Convert the price to a string
                 />
               </div>
             ))}

@@ -1,9 +1,9 @@
 import React from 'react'
 
-const UploadBook = () => {
+const Books = () => {
   return (
-    <div>UploadBook</div>
+    <div>Books</div>
   )
 }
 
-export default UploadBook
+export default Books
