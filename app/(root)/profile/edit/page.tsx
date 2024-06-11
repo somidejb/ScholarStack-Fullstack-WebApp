@@ -1,8 +1,9 @@
 // edit-profile.tsx
 
 import React from 'react';
+import link from 'next/link';
 
-const EditProfilePage = () => {
+const EditProfile= () => {
   return (
     <div>
       <h1>Edit Profile</h1>
@@ -11,4 +12,4 @@ const EditProfilePage = () => {
   );
 };
 
-export default EditProfilePage;
+export default EditProfile;

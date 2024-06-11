@@ -22,8 +22,8 @@ const ProfilePage = () => {
                         <h2 className="text-xl font-semibold mt-4 text-nowrap">Naleen Khan</h2>
                     </div>
                     <div className="flex flex-col space-y-2">
-                        <Link href="profile/editprofile">
-                            <button className="bg-[#081F5C] text-white px-12 py-3 rounded-md">
+                        <Link href="/profile/edit">
+                            <button className="bg-[#081F5C] text-white px-12 py-3 rounded-md" >
                                 Edit Profile
                             </button>
                         </Link>
@@ -54,29 +54,29 @@ const ProfilePage = () => {
                 </div>
             </div>
             {/* Listings section */}
-            <div className="px-4 py-4">
+            <div className="px-20 py-20">
                 <h3 className="text-lg font-bold mb-4">My Listings</h3>
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                     {/* Replace these divs with dynamic content as needed */}
-                    <div className="bg-gray-100 p-2 rounded-lg shadow-md">
+                    <div className="bg-gray-100 rounded-lg shadow-md">
                         <Image src="/assets/images/book1.png" alt="Book 1" width={120} height={160} />
                         <p className="mt-2 font-semibold text-sm">Author Your Life</p>
                         <p className="text-gray-600 text-sm">David McCrae</p>
                         <p className="text-gray-800 text-sm">$14.50</p>
                     </div>
-                    <div className="bg-gray-100 p-2 rounded-lg shadow-md">
+                    <div className="bg-gray-100 rounded-lg shadow-md">
                         <Image src="/assets/images/book2.png" alt="Book 2" width={120} height={160} />
                         <p className="mt-2 font-semibold text-sm">Technology Programming</p>
                         <p className="text-gray-600 text-sm">David Lesiw</p>
                         <p className="text-gray-800 text-sm">$10.00</p>
                     </div>
-                    <div className="bg-gray-100 p-2 rounded-lg shadow-md">
+                    <div className="bg-gray-100 rounded-lg shadow-md">
                         <Image src="/assets/images/book3.png" alt="Book 3" width={120} height={160} />
                         <p className="mt-2 font-semibold text-sm">Prisoner</p>
                         <p className="text-gray-600 text-sm">Arthur Miller</p>
                         <p className="text-gray-800 text-sm">$15.49</p>
                     </div>
-                    <div className="bg-gray-100 p-2 rounded-lg shadow-md">
+                    <div className="bg-gray-100 rounded-lg shadow-md">
                         <Image src="/assets/images/book4.png" alt="Book 4" width={120} height={160} />
                         <p className="mt-2 font-semibold text-sm">Prisoner</p>
                         <p className="text-gray-600 text-sm">Arthur Miller</p>
