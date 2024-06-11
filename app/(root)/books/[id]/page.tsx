@@ -1,9 +1,94 @@
-import React from 'react'
+"use client";
+import React, { useState } from 'react';
+import Image from 'next/image';
+import { useRouter } from 'next/router';
+import { Collection } from '@/components/shared/Collection';
 
 const BookDetails = () => {
-  return (
-    <div>BookDetails</div>
-  )
-}
+  const thumbnails = [
+    '/assets/images/bookd1.png',
+    '/assets/images/bookd3.png',
+    '/assets/images/bookd3.png',
+    '/assets/images/bookd4.png',
+  ];
 
-export default BookDetails
+  const [mainImage, setMainImage] = useState('/assets/images/bookd0.png');
+
+  const navigateBack = () => {
+    window.history.back(); // Navigate back using browser history
+  }
+
+  return (
+    <div className="p-5">
+      <div className="font-sans">
+        {/* Button to navigate back to the previous page */}
+        <button onClick={navigateBack} className= "flex items-center text-indigo-900  left-5 hover:underline">
+        <Image
+            src="/assets/icons/back.svg"
+            alt="Go Back"
+            width={15}
+            height={20}
+            className="mr-2"
+          />
+          Back to Search
+        </button>
+        <div className="flex flex-col lg:flex-row items-start justify-start mb-10">
+          <div className="w-full  lg:w-auto flex justify-center lg:justify-start mb-5 lg:mb-0">
+            <div className="relative mr-10 w-[180px] md:w-[290px] h-[182px] md:h-[455px] xl:w-[446px] xl:h-[632px] lg:w-[370px] lg:h-[540px]">
+              <Image  
+                src={mainImage}
+                alt="Main Book Image"
+                layout="responsive"
+                width={900}
+                height={500}
+                className="border border-gray-300 rounded"
+              />
+            </div>
+          </div>
+          <div className="flex flex-row lg:flex-col flex-wrap justify-start space-x-5 lg:space-x-0 lg:space-y-2 mt-5 lg:mt-0 lg:ml-5 ">
+            {thumbnails.map((thumbnail, index) => (
+              <div key={index} className="flex items-center justify-center border border-gray-300 rounded shadow-lg p-4  w-20 h-20  lg:w-30 lg:h-40 max-w-[120px] sm:max-w-[150px] md:max-w-[250px] md:max-h xl:max-w-[200px]">
+                <Image
+                  src={thumbnail}
+                  alt={`Thumbnail ${index + 1}`}
+                  width={80}
+                  height={80}
+                  className="cursor-pointer border border-gray-300 rounded"
+                  onClick={() => setMainImage(thumbnail)}
+                />
+              </div>
+            ))}
+          </div>
+          <div className="lg:order-last lg:mt-0 max-w-lg text-left lg:ml-5 mt-5">
+            <h1 className="text-xl md:text-3xl lg:text-4xl font-bold mb-5 lg:mb-10">Chain of Gold: The Last Hours</h1>
+            <p className="text-lg md:text-2xl lg:text-xl mb-2 lg:mb-4">Cassandra Clare</p>
+            <p className="text-xl md:text-2xl lg:text-4xl font-semibold mb-5 lg:mb-10">$12.49</p>
+            <p className= " text-lg text-indigo-900 md:text-2xl lg:text-xl mb-2 lg:mb-4"> Book Discription: </p>
+            <p className="text-base md:text-xl lg:text-xl mb-5 lg:mb-10 leading-[18px] md:leading-[18px] xl:leading-[32px]">
+              From #1 New York Times and USA TODAY bestselling author Cassandra Clare comes the first novel in a brand-new trilogy where evil hides in plain sight and love cuts deeper than any blade. Chain of Gold is a Shadowhunters novel.
+            </p>
+            <div className="flex space-x-20">
+              <button className="bg-indigo-900 text-sm lg:text-xl text-white px-5 py-2 lg:px-10 lg:py-2 rounded-lg shadow-md hover:shadow-lg">Message Seller</button>
+              <button className="border border-indigo-900 text-sm lg:text-xl text-indigo-900 px-7 py-2 lg:px-14 lg:py-2 relative rounded-lg shadow-md hover:shadow-lg">
+                Favorite
+                <Image
+                  src="/assets/icons/favorite.svg"
+                  alt="heart"
+                  width={19}
+                  height={11}
+                  className="absolute right-3 top-1/2 transform -translate-y-1/2 object-contain w-[12px] md:w-[20px] xl:w-[24px] h-full"
+                />
+              </button>
+            </div>
+    
+          </div>
+        </div>
+      </div>
+      <div className="text-lg text-gray-600 mt-10">
+        <Collection collection_type="Similar to this..." />
+      </div>
+    </div>
+  );
+};
+
+export default BookDetails;
