@@ -1,13 +1,24 @@
-// components/shared/Collection.tsx
+"use client";
+
+import { useState, useEffect } from 'react';
+import BookCard from './BookCard';
+import Image from 'next/image';
+import Link from 'next/link';
+
 type Book = {
-  id: string;
-  title: string;
+  _id: string;
+  bookName: string;
   author: string;
-  price: string;
-  imageUrl: string; // Ensure this matches the field name in your API response
-  condition: string;
-  description: string;
-  category: string;
+  bookDescription: string;
+  postedAt: Date;
+  imageURLs: string[];
+  category: {_id: string, name: string};
+  language: {_id: string, name: string};
+  isBookFree: boolean;
+  price?: string;
+  salePrice?: string;
+  location: string;
+  bookOwner: {_id: string, firstName: string, lastName: string, photo: string};
 };
 
 type CollectionProps = {
@@ -16,6 +27,40 @@ type CollectionProps = {
 };
 
 export const Collection = ({ collection_type, books }: CollectionProps) => {
+  const [currentSlide, setCurrentSlide] = useState(0);
+  const [cardsPerSlide, setCardsPerSlide] = useState(3);
+
+  useEffect(() => {
+    const handleResize = () => {
+      const width = window.innerWidth;
+      setCardsPerSlide(Math.max(3, Math.floor((width - 1024) / 140) + 1));
+    };
+
+    window.addEventListener('resize', handleResize);
+    handleResize();
+
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  const totalSlides = Math.ceil(books.length / cardsPerSlide);
+
+  const handlePrevClick = () => {
+    setCurrentSlide(currentSlide > 0 ? currentSlide - 1 : totalSlides - 1);
+  };
+
+  const handleNextClick = () => setCurrentSlide((currentSlide + 1) % totalSlides);
+
+  const renderDots = () => {
+    return Array.from({ length: totalSlides }).map((_, index) => (
+      <span
+        key={index}
+        className={`h-2 w-2 md:h-3 md:w-3 rounded-full mx-1 cursor-pointer ${currentSlide === index ? 'bg-blue-500' : 'bg-gray-500'}`}
+        onClick={() => setCurrentSlide(index)}
+      />
+    ));
+  };
+
+
   return (
     <section className="mt-[60px] lg:mt-[88px] items-center flex flex-col">
       <h2 className="text-center leading-[27px] md:leading-[36px] lg:leading-[73px] text-[22px] md:text-[30px] lg:text-[42px] tracking-widest font-normal">{collection_type}</h2>
@@ -24,17 +69,17 @@ export const Collection = ({ collection_type, books }: CollectionProps) => {
           <Image src="/assets/icons/left-icon.png" alt="Left Arrow" width={24} height={24} />
         </div>
         <div className="flex overflow-hidden w-full">
-          <div 
+          <div
             className="flex gap-[22px] md:gap-[36px] transition-transform duration-500"
-            style={{ transform: `translateX(-${currentSlide * 100 / totalSlides}%)` }}
+            style={{ transform: `translateX(-${currentSlide * (100 / totalSlides)}%)` }}
           >
-            {books.map((book, index) => (
-              <div key={index} className={`flex  w-[${100 / cardsPerSlide}%]`}>
-                <BookCard 
-                  title={book.title}
-                  imageUrl={book.image}
+            {books.map((book) => (
+              <div key={book._id} className={`flex w-[${100 / cardsPerSlide}%]`}>
+                <BookCard
+                  title={book.bookName}
+                  imageUrl={book.imageURLs[1]}
                   author={book.author}
-                  price={book.price}
+                  price={book.price ? book.price : book.salePrice ? book.salePrice : 'Free'}
                 />
               </div>
             ))}
@@ -55,5 +100,3 @@ export const Collection = ({ collection_type, books }: CollectionProps) => {
     </section>
   );
 };
-
-

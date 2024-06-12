@@ -1,63 +1,64 @@
-// app/(root)/page.tsx
+import { fetchAllBooks } from '@/lib/actions/book.actions';
 import Banner from '@/components/shared/Banner';
 import { Collection } from '@/components/shared/Collection';
 
 type Book = {
-  id: string;
-  title: string;
-  imageUrl: string;
+  _id: string;
+  bookName: string;
   author: string;
-  price: string;
-  condition: string;
-  description: string;
-  category: string;
+  bookDescription: string;
+  postedAt: Date;
+  imageURLs: string[];
+  category: {_id: string, name: string};
+  language: {_id: string, name: string};
+  isBookFree: boolean;
+  price?: string;
+  salePrice?: string;
+  location: string;
+  bookOwner: {_id: string, firstName: string, lastName: string, photo: string};
 };
 
-async function fetchBooks(): Promise<Book[]> {
-  console.log('NEXT_PUBLIC_API_URL:', process.env.NEXT_PUBLIC_API_URL);
-
-  const apiUrl = process.env.NEXT_PUBLIC_API_URL;
-  if (!apiUrl) {
-    console.error('NEXT_PUBLIC_API_URL is not defined');
-    return [];
-  }
-
-  try {
-    const res = await fetch(`${apiUrl}/api/books`);
-    console.log('Fetch response:', res);
-
-    if (!res.ok) {
-      const errorText = await res.text();
-      console.error('Error fetching books:', res.status, errorText);
-      return [];
-    }
-
-    const books = await res.json();
-    console.log('Books fetched:', books);
-    return books;
-  } catch (error) {
-    console.error('Fetch error:', error);
-    return [];
-  }
-}
-
 const Home = async () => {
-  const books = await fetchBooks();
+  let books: Book[] = [];
+  try {
+    books = await fetchAllBooks();
 
-  const recentlyUploaded = books.filter(book => book.category === 'Recently Uploaded');
-  const booksOnSale = books.filter(book => book.category === 'Books on Sale');
-  const freeBooks = books.filter(book => book.category === 'Free Books');
+  } catch (error) {
+
+  }
+
+
+  // Filter books based on collection types
+  const recentlyUploaded = books.filter(book => {
+    const postedDate = new Date(book.postedAt);
+    const now = new Date();
+    const timeDifference = now.getTime() - postedDate.getTime();
+    const daysDifference = timeDifference / (1000 * 3600 * 24);
+    return daysDifference <= 30; // e.g., books uploaded in the last 30 days
+  });
+  const booksOnSale = books.filter(book => book.salePrice !== undefined && book.salePrice !== "");
+  const freeBooks = books.filter(book => book.isBookFree);
+
 
   return (
     <>
       <Banner />
       <div className="mb-[80px]">
-        <Collection collection_type='Recently Uploaded' books={recentlyUploaded} />
-        <Collection collection_type='Books on Sale' books={booksOnSale} />
-        <Collection collection_type='Free Books' books={freeBooks} />
+        <Collection
+          collection_type='Recently Uploaded'
+          books={recentlyUploaded}
+        />
+        <Collection
+          collection_type='Books on Sale'
+          books={booksOnSale}
+        />
+        <Collection
+          collection_type='Free Books'
+          books={freeBooks}
+        />
       </div>
     </>
   );
-};
+}
 
 export default Home;

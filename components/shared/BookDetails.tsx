@@ -58,7 +58,7 @@ const BookDetails = () => {
             <button className="border border-blue-500 text-blue-500 px-4 py-2">Favorite</button>
           </div>
         </div>
-        <Collection collection_type="Similar to this.." />
+        <Collection collection_type="Similar to this.." books={[]} />
       </div>
     </div>
   );

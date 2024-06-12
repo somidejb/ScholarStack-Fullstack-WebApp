@@ -82,3 +82,16 @@ export async function deleteBook({ bookId, path }: DeleteBookParams) {
       handleError(error)
     }
   }
+
+
+  export async function fetchAllBooks() {
+    try {
+        await connectToDatabase()
+        
+        const books = await populateBook(Book.find({})).lean()
+        return JSON.parse(JSON.stringify(books))
+    } catch (error) {
+        handleError(error)
+        return []
+    }
+}
