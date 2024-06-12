@@ -3,10 +3,11 @@ import React, { useState } from 'react';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { Collection } from '@/components/shared/Collection';
+import { FaMapMarkerAlt } from 'react-icons/fa';
 
 const BookDetails = () => {
   const thumbnails = [
-    '/assets/images/bookd1.png',
+    '/assets/images/bookd3.png',
     '/assets/images/bookd3.png',
     '/assets/images/bookd3.png',
     '/assets/images/bookd4.png',
@@ -59,23 +60,28 @@ const BookDetails = () => {
             ))}
           </div>
           <div className="lg:order-last lg:mt-0 max-w-lg text-left lg:ml-5 mt-5">
-            <h1 className="text-xl md:text-3xl lg:text-4xl font-bold mb-5 lg:mb-10">Chain of Gold: The Last Hours</h1>
-            <p className="text-lg md:text-2xl lg:text-xl mb-2 lg:mb-4">Cassandra Clare</p>
+            <h1 className="text-xl md:text-3xl lg:text-4xl font-bold mb- lg:mb-2">Chain of Gold: The Last Hours</h1>
+            <p className="text-lg md:text-2xl lg:text-xl mb-5 lg:mb-4">Cassandra Clare</p>
             <p className="text-xl md:text-2xl lg:text-4xl font-semibold mb-5 lg:mb-10">$12.49</p>
+            
             <p className="text-lg text-indigo-900 md:text-2xl lg:text-xl mb-2 lg:mb-4">Book Description:</p>
             <p className="text-base md:text-xl lg:text-xl mb-5 lg:mb-10 leading-[18px] md:leading-[18px] xl:leading-[32px]">
               From #1 New York Times and USA TODAY bestselling author Cassandra Clare comes the first novel in a brand-new trilogy where evil hides in plain sight and love cuts deeper than any blade. Chain of Gold is a Shadowhunters novel.
             </p>
+            <div className="flex items-center mb-6 lg:mb-10">
+              <FaMapMarkerAlt className="mr-2 text-indigo-900" size={20} />
+              <span className="text-base md:text-xl lg:text-xl">University Dr, calagry</span>
+            </div>
             <div className="flex space-x-5 md:space-x-10">
               <button className="bg-indigo-900 text-sm lg:text-xl text-white px-5 py-2 lg:px-10 lg:py-2 rounded-lg shadow-md hover:shadow-lg">Message Seller</button>
-              <button className="border border-indigo-900 text-sm lg:text-xl text-indigo-900 px-7 py-2 lg:px-14 lg:py-2 relative rounded-lg shadow-md hover:shadow-lg">
+              <button className="border border-indigo-900 text-sm lg:text-xl text-indigo-900 px-10 py-2 lg:px-14 lg:py-2 relative rounded-lg shadow-md hover:shadow-lg">
                 Favorite
                 <Image
                   src="/assets/icons/favorite.svg"
                   alt="heart"
                   width={19}
                   height={11}
-                  className="absolute right-3 top-1/2 transform -translate-y-1/2 object-contain w-[12px] md:w-[20px] xl:w-[24px] h-full"
+                  className="absolute right-6 top-1/2 transform -translate-y-1/2 object-contain w-[12px] md:w-[20px] xl:w-[24px] h-full"
                 />
               </button>
             </div>
