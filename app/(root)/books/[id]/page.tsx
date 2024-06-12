@@ -22,8 +22,8 @@ const BookDetails = () => {
     <div className="p-5">
       <div className="font-sans">
         {/* Button to navigate back to the previous page */}
-        <button onClick={navigateBack} className= "flex items-center text-indigo-900  left-5 hover:underline">
-        <Image
+        <button onClick={navigateBack} className="flex items-center text-indigo-900 left-5 hover:underline mb-4">
+          <Image
             src="/assets/icons/back.svg"
             alt="Go Back"
             width={15}
@@ -33,26 +33,25 @@ const BookDetails = () => {
           Back to Search
         </button>
         <div className="flex flex-col lg:flex-row items-start justify-start mb-10">
-          <div className="w-full  lg:w-auto flex justify-center lg:justify-start mb-5 lg:mb-0">
-            <div className="relative mr-10 w-[180px] md:w-[290px] h-[182px] md:h-[455px] xl:w-[446px] xl:h-[632px] lg:w-[370px] lg:h-[540px]">
+          <div className="w-full lg:w-auto flex justify-center lg:justify-start mb-5 lg:mb-0">
+            <div className="relative w-[150px] h-[200px] sm:w-[180px] sm:h-[240px] md:w-[290px] md:h-[400px] lg:w-[370px] lg:h-[540px] xl:w-[446px] xl:h-[632px]">
               <Image  
                 src={mainImage}
                 alt="Main Book Image"
-                layout="responsive"
-                width={900}
-                height={500}
+                layout="fill"
+                objectFit="cover"
                 className="border border-gray-300 rounded"
               />
             </div>
           </div>
-          <div className="flex flex-row lg:flex-col flex-wrap justify-start space-x-5 lg:space-x-0 lg:space-y-2 mt-5 lg:mt-0 lg:ml-5 ">
+          <div className="flex flex-row flex-wrap lg:flex-col justify-start space-x-2 lg:space-x-0 lg:space-y-2 mt-5 lg:mt-0 lg:ml-5">
             {thumbnails.map((thumbnail, index) => (
-              <div key={index} className="flex items-center justify-center border border-gray-300 rounded shadow-lg p-4  w-20 h-20  lg:w-30 lg:h-40 max-w-[120px] sm:max-w-[150px] md:max-w-[250px] md:max-h xl:max-w-[200px]">
+              <div key={index} className="flex items-center justify-center border border-gray-300 rounded shadow-lg w-[60px] h-[60px] sm:w-[80px] sm:h-[80px] md:w-[100px] md:h-[100px] lg:w-[120px] lg:h-[150px] p-1">
                 <Image
                   src={thumbnail}
                   alt={`Thumbnail ${index + 1}`}
-                  width={80}
-                  height={80}
+                  width={100}
+                  height={100}
                   className="cursor-pointer border border-gray-300 rounded"
                   onClick={() => setMainImage(thumbnail)}
                 />
@@ -63,11 +62,11 @@ const BookDetails = () => {
             <h1 className="text-xl md:text-3xl lg:text-4xl font-bold mb-5 lg:mb-10">Chain of Gold: The Last Hours</h1>
             <p className="text-lg md:text-2xl lg:text-xl mb-2 lg:mb-4">Cassandra Clare</p>
             <p className="text-xl md:text-2xl lg:text-4xl font-semibold mb-5 lg:mb-10">$12.49</p>
-            <p className= " text-lg text-indigo-900 md:text-2xl lg:text-xl mb-2 lg:mb-4"> Book Discription: </p>
+            <p className="text-lg text-indigo-900 md:text-2xl lg:text-xl mb-2 lg:mb-4">Book Description:</p>
             <p className="text-base md:text-xl lg:text-xl mb-5 lg:mb-10 leading-[18px] md:leading-[18px] xl:leading-[32px]">
               From #1 New York Times and USA TODAY bestselling author Cassandra Clare comes the first novel in a brand-new trilogy where evil hides in plain sight and love cuts deeper than any blade. Chain of Gold is a Shadowhunters novel.
             </p>
-            <div className="flex space-x-20">
+            <div className="flex space-x-5 md:space-x-10">
               <button className="bg-indigo-900 text-sm lg:text-xl text-white px-5 py-2 lg:px-10 lg:py-2 rounded-lg shadow-md hover:shadow-lg">Message Seller</button>
               <button className="border border-indigo-900 text-sm lg:text-xl text-indigo-900 px-7 py-2 lg:px-14 lg:py-2 relative rounded-lg shadow-md hover:shadow-lg">
                 Favorite
@@ -80,7 +79,6 @@ const BookDetails = () => {
                 />
               </button>
             </div>
-    
           </div>
         </div>
       </div>
