@@ -10,7 +10,7 @@ const SearchBar = () => {
     const pathname = usePathname();
     const searchParams = useSearchParams();
 
-    const query = searchParams.get('query');
+    const query = searchParams?.get('query');
 
     const [search, setSearch] = useState(query || '');
 
@@ -18,7 +18,7 @@ const SearchBar = () => {
         const delayDebounceFn = setTimeout(() => {
             if (search) {
                 const newUrl = formUrlQuery({
-                    params: searchParams.toString(),
+                    params: searchParams?.toString(),
                     key: 'query',
                     value: search
                 });
@@ -26,7 +26,7 @@ const SearchBar = () => {
             } else {
                 if (pathname === '/books') {
                     const newUrl = removeKeysFromQuery({
-                        params: searchParams.toString(),
+                        params: searchParams?.toString(),
                         keysToRemove: ['query']
                     });
                     router.push(newUrl, { scroll: false });

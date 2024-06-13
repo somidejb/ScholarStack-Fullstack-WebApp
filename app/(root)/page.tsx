@@ -1,4 +1,4 @@
-import { fetchAllBooks } from '@/lib/actions/book.actions';
+import { getAllBooks } from '@/lib/actions/book.actions';
 import Banner from '@/components/shared/Banner';
 import { Collection } from '@/components/shared/Collection';
 
@@ -21,7 +21,7 @@ type Book = {
 const Home = async () => {
   let books: Book[] = [];
   try {
-    books = await fetchAllBooks();
+    books = await getAllBooks();
 
   } catch (error) {
 
