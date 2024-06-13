@@ -1,8 +1,7 @@
 "use client";
+import { Collection } from '@/components/shared/Collection';
 import React, { useState } from 'react';
 import Image from 'next/image';
-import { useRouter } from 'next/router';
-import { Collection } from '@/components/shared/Collection';
 import { FaMapMarkerAlt } from 'react-icons/fa';
 
 const BookDetails = () => {
@@ -20,10 +19,10 @@ const BookDetails = () => {
   }
 
   return (
-    <div className="p-5">
+    <div className="p-2 lg:p-10 lg:mt-2 lg:ml-20">
       <div className="font-sans">
         {/* Button to navigate back to the previous page */}
-        <button onClick={navigateBack} className="flex items-center text-indigo-900 left-5 hover:underline mb-4">
+        <button onClick={navigateBack} className="flex items-center text-indigo-900 left-5 hover:big mb-4">
           <Image
             src="/assets/icons/back.svg"
             alt="Go Back"
@@ -35,7 +34,7 @@ const BookDetails = () => {
         </button>
         <div className="flex flex-col lg:flex-row items-start justify-start mb-10">
           <div className="w-full lg:w-auto flex justify-center lg:justify-start mb-5 lg:mb-0">
-            <div className="relative w-[150px] h-[200px] sm:w-[180px] sm:h-[240px] md:w-[290px] md:h-[400px] lg:w-[370px] lg:h-[540px] xl:w-[446px] xl:h-[632px]">
+            <div className="relative transition-transform duration-300 ease-in-out transform hover:scale-110 w-[150px] h-[200px] sm:w-[180px] sm:h-[240px] md:w-[290px] md:h-[400px] lg:w-[370px] lg:h-[540px] xl:w-[446px] xl:h-[632px]">
               <Image  
                 src={mainImage}
                 alt="Main Book Image"
@@ -47,7 +46,7 @@ const BookDetails = () => {
           </div>
           <div className="flex flex-row flex-wrap lg:flex-col justify-start space-x-2 lg:space-x-0 lg:space-y-2 mt-5 lg:mt-0 lg:ml-5">
             {thumbnails.map((thumbnail, index) => (
-              <div key={index} className="flex items-center justify-center border border-gray-300 rounded shadow-lg w-[60px] h-[60px] sm:w-[80px] sm:h-[80px] md:w-[100px] md:h-[100px] lg:w-[120px] lg:h-[150px] p-1">
+              <div key={index} className="flex items-center justify-center  transition-transform duration-300 ease-in-out transform hover:scale-110 border border-gray-300 rounded shadow-lg w-[60px] h-[60px] sm:w-[80px] sm:h-[80px] md:w-[100px] md:h-[100px] lg:w-[120px] lg:h-[150px] p-1 ">
                 <Image
                   src={thumbnail}
                   alt={`Thumbnail ${index + 1}`}
@@ -70,11 +69,13 @@ const BookDetails = () => {
             </p>
             <div className="flex items-center mb-6 lg:mb-10">
               <FaMapMarkerAlt className="mr-2 text-indigo-900" size={20} />
-              <span className="text-base md:text-xl lg:text-xl">University Dr, calagry</span>
+              <span className="text-base md:text-xl lg:text-xl">University Dr, NW, Calgary</span>
             </div>
             <div className="flex space-x-5 md:space-x-10">
-              <button className="bg-indigo-900 text-sm lg:text-xl text-white px-5 py-2 lg:px-10 lg:py-2 rounded-lg shadow-md hover:shadow-lg">Message Seller</button>
-              <button className="border border-indigo-900 text-sm lg:text-xl text-indigo-900 px-10 py-2 lg:px-14 lg:py-2 relative rounded-lg shadow-md hover:shadow-lg">
+              <button className=" transition-transform duration-300 ease-in-out transform hover:scale-110 bg-indigo-900 text-sm  hover:bg-indigo-700 hover:text-gray-200 hover:shadow-lg lg:text-xl text-white px-5 py-2 lg:px-10 lg:py-2 rounded-lg shadow-md">
+                Message Seller
+              </button>
+              <button className=" transition-transform duration-300 ease-in-out transform hover:scale-110 border border-indigo-900 text-sm lg:text-xl text-indigo-900 px-10 py-2 lg:px-14 lg:py-2 relative rounded-lg shadow-md hover:bg-indigo-200 hover:text-indigo-900 hover:shadow-lg">
                 Favorite
                 <Image
                   src="/assets/icons/favorite.svg"
