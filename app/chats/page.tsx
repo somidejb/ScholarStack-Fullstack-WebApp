@@ -34,11 +34,9 @@ const MessagingPage: React.FC = () => {
           <ChatList chats={chats} onSelectChat={setSelectedChat} className="w-full h-full border-r border-gray-300" />
         </div>
         <div className={`flex flex-col flex-grow ${selectedChat ? 'block' : 'hidden'} md:block`}>
-          <div className="flex flex-col h-full border-l border-gray-300">
-            <ChatWindow selectedChat={selectedChat} onBack={handleBack} className="flex-grow h-full" />
-            <div className="border-t border-gray-300">
-              <ChatBox />
-            </div>
+          <div className="flex flex-col h-full">
+            <ChatWindow selectedChat={selectedChat} onBack={handleBack} className="flex-grow" />
+            <ChatBox />
           </div>
         </div>
       </div>
