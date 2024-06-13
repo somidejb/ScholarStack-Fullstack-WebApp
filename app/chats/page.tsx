@@ -1,8 +1,8 @@
 "use client";
 import React, { useState } from 'react';
-import ChatBox from './chatBox';
-import ChatList from './chatList';
-import ChatWindow from './chatWindow';
+import ChatBox from '@/components/shared/ChatBox';
+import ChatList from '@/components/shared/ChatList';
+import ChatWindow from '@/components/shared/ChatWindow';
 import Header from '@/components/shared/Header';
 
 interface Chat {
@@ -22,18 +22,24 @@ const MessagingPage: React.FC = () => {
     { name: 'Lei Wong', message: 'I would love to buy this book', time: '11:20AM' },
   ];
 
+  const handleBack = () => {
+    setSelectedChat(null);
+  };
 
   return (
     <div>
-    <Header />
-    <div className="h-screen flex flex-col md:flex-row">
-     
-      <ChatList chats={chats} onSelectChat={setSelectedChat} className="w-full md:w-1/3 border-r border-gray-300" />
-      <div className="flex flex-col flex-grow">
-        <ChatWindow selectedChat={selectedChat} className="flex-grow" />
-        <ChatBox  />
+      <Header />
+      <div className="h-screen flex flex-col md:flex-row">
+        <div className={`w-full ${selectedChat ? 'hidden' : 'block'} md:block md:w-1/3 border-r border-gray-300`}>
+          <ChatList chats={chats} onSelectChat={setSelectedChat} className="w-full h-full border-r border-gray-300" />
+        </div>
+        <div className={`flex flex-col flex-grow ${selectedChat ? 'block' : 'hidden'} md:block`}>
+          <div className="flex flex-col h-full">
+            <ChatWindow selectedChat={selectedChat} onBack={handleBack} className="flex-grow" />
+            <ChatBox />
+          </div>
+        </div>
       </div>
-    </div>
     </div>
   );
 };
