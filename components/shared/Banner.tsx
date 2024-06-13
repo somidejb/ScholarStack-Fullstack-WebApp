@@ -41,9 +41,10 @@ const Banner = () => {
         <div className="w-full h-full flex items-center justify-between pl-[7%]">
           <div className="flex flex-col gap-[30px] md:gap-[90px] lg:gap-[100px] xl:gap-[120px]">
             <h1
-              className="banner-h1-shadow md:text-[40px] xl:text-[70px] lg:text-[55px] leading-[54px] md:leading-[80px] xl:leading-[90px] lg:leading-[85px] tracking-widest font-bold text-[22px]"
+              className="banner-h1-shadow md:text-[40px] xl:text-[70px] lg:text-[55px] leading-[54px] md:leading-[80px] xl:leading-[90px] lg:leading-[85px] tracking-widest font-bold text-[22px] md:tex"
             >
-              Get your new book<br />at the best price
+              Get your new Books
+              <span><br />at the best price</span>
             </h1>
             <p className="text-gray-600 md:text-[18px] xl:text-[25px] lg:text-[22px] leading-[16px] md:leading-[18px] xl:leading-[32px] lg:leading-[28px]">
               Turning pages, sharing stories

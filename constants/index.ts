@@ -22,17 +22,6 @@ export const headerLinks = [
 
 ]
 
-export interface IBook {
-    id: number;
-    title: string;
-    author: string;
-    price: string;
-    image: string;
-    condition: string;
-    description: string;
-    category: string;
-  }
-
 export const books = [
     {
         id: 1,

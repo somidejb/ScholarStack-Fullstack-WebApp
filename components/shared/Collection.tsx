@@ -23,13 +23,8 @@ export const Collection = ({ data, collection_type, emptyTitle, emptyStateSubtex
 
   useEffect(() => {
     const handleResize = () => {
-      if (window.innerWidth >= 1280) {
-        setCardsPerSlide(5); // extra-large
-      } else if (window.innerWidth >= 1024) {
-        setCardsPerSlide(4); // large
-      } else {
-        setCardsPerSlide(3); // medium and small
-      }
+      const width = window.innerWidth;
+      setCardsPerSlide(Math.max(3, Math.floor((width - 1024) / 140) + 1));
     };
 
     window.addEventListener('resize', handleResize);
@@ -57,19 +52,18 @@ export const Collection = ({ data, collection_type, emptyTitle, emptyStateSubtex
     setCurrentSlide(currentSlide > 0 ? currentSlide - 1 : totalSlides - 1);
   };
 
-  const handleNextClick = () => {
-    setCurrentSlide(currentSlide < totalSlides - 1 ? currentSlide + 1 : 0);
-  };
+  const handleNextClick = () => setCurrentSlide((currentSlide + 1) % totalSlides);
 
   const renderDots = () => {
     return Array.from({ length: totalSlides }).map((_, index) => (
-      <span 
-        key={index} 
-        className={`h-2 w-2 md:h-3 md:w-3 rounded-full mx-1 cursor-pointer ${currentSlide === index ? 'bg-blue-500' : 'bg-gray-500'}`} 
+      <span
+        key={index}
+        className={`h-2 w-2 md:h-3 md:w-3 rounded-full mx-1 cursor-pointer ${currentSlide === index ? 'bg-blue-500' : 'bg-gray-500'}`}
         onClick={() => setCurrentSlide(index)}
       />
     ));
   };
+
 
   return (
     <>
