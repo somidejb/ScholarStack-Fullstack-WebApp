@@ -1,8 +1,17 @@
+"use client";
 import React from 'react';
+import {useUser} from "@clerk/nextjs";
 import Image from 'next/image';
 import Link from 'next/link';
 
 const ProfilePage = () => {
+
+    const {isSignedIn, user}= useUser();
+
+    if (!isSignedIn) {
+        return <p>Please sign in to view your profile.</p>;
+    }
+
     return (
         <div className="mx-auto bg-white shadow-md rounded-lg">
             {/* Profile and User Details section */}
@@ -19,7 +28,7 @@ const ProfilePage = () => {
                                 objectFit="cover"
                             />
                         </div>
-                        <h2 className="text-xl font-semibold mt-4 text-nowrap">Naleen Khan</h2>
+                        <h2 className="text-xl font-semibold mt-4 text-nowrap">{user?.fullName}</h2>
                     </div>
                     <div className="flex flex-col space-y-2">
                         <Link href="/profile/edit">
@@ -36,7 +45,7 @@ const ProfilePage = () => {
                 <div className="space-y-2 ml-10 mt-10">
                     <div>
                         <p className="text-gray-600">Username</p>
-                        <p className="font-semibold">NaleenKhan</p>
+                        <p className="font-semibold">{user?.username}</p>
                     </div>
                     <div>
                         <p className="text-gray-600">Bio</p>
