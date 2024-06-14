@@ -16,7 +16,7 @@ interface ChatWindowProps {
 const ChatWindow: React.FC<ChatWindowProps> = ({ selectedChat, onBack, className }) => {
   if (!selectedChat) {
     return (
-      <div className={`flex-grow p-4 overflow-y-auto ${className}`}>
+      <div className={`flex-grow flex items-center justify-center ${className}`}>
         Select a chat to start messaging
       </div>
     );

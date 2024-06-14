@@ -4,6 +4,7 @@ import ChatBox from '@/components/shared/ChatBox';
 import ChatList from '@/components/shared/ChatList';
 import ChatWindow from '@/components/shared/ChatWindow';
 import Header from '@/components/shared/Header';
+import Footer from '@/components/shared/Footer';
 
 interface Chat {
   name: string;
@@ -28,18 +29,22 @@ const MessagingPage: React.FC = () => {
 
   return (
     <div>
+    <div className="flex flex-col h-screen">
       <Header />
-      <div className="h-screen flex flex-col md:flex-row">
+      <div className="flex flex-grow overflow-hidden">
         <div className={`w-full ${selectedChat ? 'hidden' : 'block'} md:block md:w-1/3 border-r border-gray-300`}>
           <ChatList chats={chats} onSelectChat={setSelectedChat} className="w-full h-full border-r border-gray-300" />
         </div>
         <div className={`flex flex-col flex-grow ${selectedChat ? 'block' : 'hidden'} md:block`}>
           <div className="flex flex-col h-full">
-            <ChatWindow selectedChat={selectedChat} onBack={handleBack} className="flex-grow" />
-            <ChatBox />
+            <ChatWindow selectedChat={selectedChat} onBack={handleBack} className="flex-grow overflow-y-auto" />
+            <ChatBox className="w-full" />
           </div>
         </div>
       </div>
+      
+    </div>
+    <Footer/>
     </div>
   );
 };
