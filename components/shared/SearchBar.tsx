@@ -5,6 +5,7 @@ import { Input } from '../ui/input'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { formUrlQuery, removeKeysFromQuery } from '@/lib/utils';
 
+
 const SearchBar = () => {
     const router = useRouter();
     const pathname = usePathname();

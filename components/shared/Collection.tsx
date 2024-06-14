@@ -4,6 +4,8 @@ import { useState, useEffect } from "react";
 import BookCard from "./BookCard";
 import Image from "next/image";
 import Link from "next/link";
+import { IBook } from "@/lib/mongodb/database/models/book.model";
+import { getFavorites} from '@/lib/actions/book.actions'
 
 type Book = {
   _id: string;
@@ -28,12 +30,14 @@ type Book = {
 
 type CollectionProps = {
   collection_type: string;
-  books: Book[];
+  books: IBook[];
+  userId: string;
 };
 
-export const Collection = ({ collection_type, books }: CollectionProps) => {
+export const Collection = ({ collection_type, books, userId }: CollectionProps) => {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [cardsPerSlide, setCardsPerSlide] = useState(3);
+  const [favorites, setFavorites] = useState<string[]>([]);
 
   useEffect(() => {
     const handleResize = () => {
@@ -46,6 +50,20 @@ export const Collection = ({ collection_type, books }: CollectionProps) => {
 
     return () => window.removeEventListener("resize", handleResize);
   }, []);
+
+
+  useEffect(() => {
+    const fetchFavorites = async () => {
+      try {
+        const favorites: IBook[] = await getFavorites(userId);
+        setFavorites(favorites.map(favorite => favorite._id)); // Map to array of strings (book IDs)
+      } catch (error) {
+        console.error('Failed to fetch favorites:', error);
+      }
+    };
+
+    fetchFavorites();
+  }, [userId]);
 
   const totalSlides = Math.ceil(books.length / cardsPerSlide);
 
@@ -98,14 +116,15 @@ export const Collection = ({ collection_type, books }: CollectionProps) => {
                 className={`flex w-[${100 / cardsPerSlide}%]`}
               >
                 <BookCard
-                  title={book.bookName}
+                  title={book.title}
                   imageUrl={book.imageURLs[1]}
                   author={book.author}
                   price={book.price}
-                  userId={""}
-                  bookId={""}
+                  userId={userId}
+                  bookId={book._id}
                   key={book._id}
                   salePrice={book.salePrice}
+                  favorites={favorites}
                 />
               </div>
             ))}
