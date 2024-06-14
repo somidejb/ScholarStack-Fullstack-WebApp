@@ -90,11 +90,11 @@ const BookDetails = () => {
         </div>
       </div>
       <div className="text-lg text-gray-600 mt-10">
-        <Collection 
+        {/* <Collection 
           collection_type='Similar to this'
-          books={booksOnSale}
+          books={Similar to this}
           userId={userId}
-         />
+         />*/}
       </div>
     </div>
   );
