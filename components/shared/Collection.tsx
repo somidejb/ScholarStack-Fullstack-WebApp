@@ -7,26 +7,6 @@ import Link from "next/link";
 import { IBook } from "@/lib/mongodb/database/models/book.model";
 import { getFavorites} from '@/lib/actions/book.actions'
 
-type Book = {
-  _id: string;
-  bookName: string;
-  author: string;
-  bookDescription: string;
-  postedAt: Date;
-  imageURLs: string[];
-  category: { _id: string; name: string };
-  language: { _id: string; name: string };
-  isBookFree: boolean;
-  price?: string;
-  salePrice?: string;
-  location: string;
-  bookOwner: {
-    _id: string;
-    firstName: string;
-    lastName: string;
-    photo: string;
-  };
-};
 
 type CollectionProps = {
   collection_type: string;

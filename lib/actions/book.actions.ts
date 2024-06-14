@@ -127,6 +127,7 @@ export async function getFavorites(userId: string) {
     if (!user) throw new Error('User not found');
 
     return JSON.parse(JSON.stringify(user.favorites));
+    console.log(user.favorites)
   } catch (error) {
     handleError(error);
   }
