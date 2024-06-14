@@ -1,27 +1,15 @@
-import { getAllBooks } from '@/lib/actions/book.actions';
+import { fetchAllBooks, getFavorites} from '@/lib/actions/book.actions';
 import Banner from '@/components/shared/Banner';
 import { Collection } from '@/components/shared/Collection';
-
-type Book = {
-  _id: string;
-  bookName: string;
-  author: string;
-  bookDescription: string;
-  postedAt: Date;
-  imageURLs: string[];
-  category: {_id: string, name: string};
-  language: {_id: string, name: string};
-  isBookFree: boolean;
-  price?: string;
-  salePrice?: string;
-  location: string;
-  bookOwner: {_id: string, firstName: string, lastName: string, photo: string};
-};
+import { auth } from '@clerk/nextjs/server';
+import { IBook } from '@/lib/mongodb/database/models/book.model';
 
 const Home = async () => {
-  let books: Book[] = [];
+  const {sessionClaims} = auth();
+  const userId = sessionClaims?.userId as string;
+  let books: IBook[] = [];
   try {
-    books = await getAllBooks();
+    books = await fetchAllBooks();
 
   } catch (error) {
 
@@ -47,14 +35,17 @@ const Home = async () => {
         <Collection
           collection_type='Recently Uploaded'
           books={recentlyUploaded}
+          userId={userId}
         />
         <Collection
           collection_type='Books on Sale'
           books={booksOnSale}
+          userId={userId}
         />
         <Collection
           collection_type='Free Books'
           books={freeBooks}
+          userId={userId}
         />
       </div>
     </>
