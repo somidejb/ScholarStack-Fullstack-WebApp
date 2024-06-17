@@ -64,7 +64,7 @@ const Filters = () => {
     };
 
     return (
-        <div className="flex flex-col rounded-[15px] w-[140px] md:w-[190px] text-nowrap xl:w-[211px] overflow-x-auto border py-[20px] card-shadow" style={{ height: 'fit-content' }}>
+        <div className="flex  z-10 fixed flex-col rounded-[15px] w-[140px] md:w-[190px] text-nowrap xl:w-[211px] overflow-x-auto border py-[20px] card-shadow mt-[100px] lg:mt-[150px]" style={{ height: 'fit-content' }}>
             <div className="flex-center gap-1 mb-4">
                 <div className="w-[15px] md:w-[30px]">
                     <Image 
