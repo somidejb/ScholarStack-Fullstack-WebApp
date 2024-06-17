@@ -47,13 +47,7 @@ const SearchBar = () => {
                 onChange={(e) => setSearch(e.target.value)}
                 className="h-full bg-[#F6F4F4] rounded-[20px] border-none focus-visible:ring-offset-0 focus-visible:ring-transparent focus:ring-transparent"
             />
-            <Image
-                src="/assets/icons/search.png"
-                alt="Search Icon"
-                width={20}
-                height={20}
-                className="object-contain cursor-pointer"
-            />
+
         </div>
     );
 };
