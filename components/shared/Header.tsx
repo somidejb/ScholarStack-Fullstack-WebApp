@@ -57,7 +57,7 @@ const Header = () => {
           </SignedOut>
         </div>
       </div>
-    {/* <SearchBar /> */}
+
 
     </header>
   );
