@@ -13,9 +13,7 @@ const ProfilePage = () => {
     useEffect(() => {
         if (isSignedIn) {
             const fetchUserDetails = async () => {
-                console.log('Fetching user details...');
                 const response = await getUserById(user.id);
-                console.log('User details fetched:', response);
                 setUserDetails({
                     Bio: response.bio || 'N/A',
                     Location: response.location || 'N/A',
@@ -27,7 +25,6 @@ const ProfilePage = () => {
     }, [isSignedIn, user]);
  
     if (!isSignedIn) {
-        console.log('User is not signed in. Displaying sign in message.');
         return <p>Please sign in to view your profile.</p>;
     }
  
