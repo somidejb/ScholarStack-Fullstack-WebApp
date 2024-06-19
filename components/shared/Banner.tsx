@@ -49,13 +49,13 @@ const Banner = () => {
               Turning pages, sharing stories
             </p>
 
-            <button className="md:mt-[100px] lg:mt-[120px] text-[11px] md:text-[22px] xl:text-[24px] lg:text-[23px] w-[85px] md:w-[210px] xl:w-[230px] lg:w-[220px] h-[30px] md:h-[74px] bg-[#2F457F] rounded-xl md:rounded-[20px] lg:rounded-[22px] text-white banner-btn-shadow font-normal bg-opacity-70">
+            <button className=" md:mt-[100px] lg:mt-[120px] text-[11px] md:text-[22px] xl:text-[24px] lg:text-[23px] w-[85px] md:w-[210px] xl:w-[230px] lg:w-[220px] h-[30px] md:h-[74px] bg-[#2F457F] rounded-xl md:rounded-[20px] lg:rounded-[22px] text-white banner-btn-shadow font-normal bg-opacity-70">
               Start Browsing
             </button>
           </div>
           <div className="w-[120px] md:w-[290px] h-[182px] md:h-[455px] xl:w-[446px] xl:h-[632px] lg:w-[370px] lg:h-[540px]">
             <Image
-              src="/assets/images/banner-hero.png"
+              src="/assets/icons/blackgirl.svg"
               alt="Book"
               width={446}
               height={632}
