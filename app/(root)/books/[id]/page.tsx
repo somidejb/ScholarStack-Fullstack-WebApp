@@ -43,11 +43,11 @@ const Page = async ({ params }: BookPageProps) => {
     );
   }
 
-  console.log("Book found:", book); // Log the found book
+  console.log("Book found:", book); 
 
   const bookDetails = {
     ...book,
-    images: book.imageURLs, // Convert imageURLs to images
+    images: book.imageURLs,
   };
 
   return (
