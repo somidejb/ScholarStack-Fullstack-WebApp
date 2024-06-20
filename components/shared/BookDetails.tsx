@@ -2,7 +2,6 @@
 import { Collection } from '@/components/shared/Collection';
 import React, { useState } from 'react';
 import Image from 'next/image';
-import { Collection } from './Collection';
 import { FaMapMarkerAlt } from 'react-icons/fa';
 
 type Book = {
