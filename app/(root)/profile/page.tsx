@@ -25,7 +25,7 @@ const ProfilePage = () => {
     }, [isSignedIn, user]);
  
     if (!isSignedIn) {
-        return <p>Please sign in to view your profile.</p>;
+        return <p>Please wait.....</p>;
     }
  
     console.log('Rendering profile page for user:', user);
