@@ -36,7 +36,7 @@ const Profile: React.FC<ProfileProps> = ({ user, userDetails, userBooks, userId 
   };
  
   return (
-    <div className="mx-auto bg-white shadow-md rounded-lg mt-[100px]">
+    <div className="mx-auto bg-white shadow-md rounded-lg mt-[85px]">
       {/* Profile and User Details section */}
       <div className="flex items-start">
         {/* Profile section */}
