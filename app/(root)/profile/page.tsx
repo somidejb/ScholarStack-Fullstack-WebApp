@@ -41,13 +41,15 @@ const ProfilePage: React.FC = async () => {
       fullName: `${userDetails.firstName} ${userDetails.lastName}`,
       imageUrl: userDetails.photo,
       joinedAt: userDetails.joinedAt,
+      bio: userDetails.bio || 'N/A',
+      location: userDetails.location || 'N/A',
     };
  
     const userProps = {
       user,
       userDetails: {
-        Bio: userDetails.bio,
-        Location: userDetails.location,
+        Bio: userDetails.bio|| 'N/A',
+        Location: userDetails.location || 'N/A',
       },
       userBooks,
       userId, // Pass userId to Profile component
