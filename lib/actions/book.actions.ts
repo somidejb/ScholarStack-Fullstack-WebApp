@@ -176,3 +176,17 @@ export async function fetchAllBooks() {
       return []
   }
 }
+export const fetchBookById = async (id: string) => {
+  try {
+    await connectToDatabase();
+    const book = await Book.findById(id).lean();
+    return JSON.parse(JSON.stringify(book));
+  } catch (error) {
+    handleError(error);
+    return null;
+  }
+};
+
+
+
+
