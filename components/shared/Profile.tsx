@@ -4,26 +4,26 @@ import Link from 'next/link';
 import { Collection } from './Collection';
 import NoActiveListings from './NoActiveListing';
 import { IBook } from '@/lib/mongodb/database/models/book.model';
-
+ 
 interface IUser {
   username: string;
   fullName: string;
   imageUrl: string;
   joinedAt: string;
 }
-
+ 
 interface IUserDetails {
   Bio: string;
   Location: string;
 }
-
+ 
 interface ProfileProps {
   user: IUser;
   userDetails: IUserDetails;
   userBooks: IBook[];
   userId: string;
 }
-
+ 
 const Profile: React.FC<ProfileProps> = ({ user, userDetails, userBooks, userId }) => {
   console.log('User:', user);
   const formatDate = (dateString: string) => {
@@ -34,7 +34,7 @@ const Profile: React.FC<ProfileProps> = ({ user, userDetails, userBooks, userId 
     };
     return new Date(dateString).toLocaleDateString(undefined, options);
   };
-
+ 
   return (
     <div className="mx-auto bg-white shadow-md rounded-lg mt-[100px]">
       {/* Profile and User Details section */}
@@ -85,7 +85,7 @@ const Profile: React.FC<ProfileProps> = ({ user, userDetails, userBooks, userId 
           </div>
         </div>
       </div>
-
+ 
       <div className="px-20 py-20">
         {userBooks.length > 0 ? (
           <Collection
@@ -97,7 +97,7 @@ const Profile: React.FC<ProfileProps> = ({ user, userDetails, userBooks, userId 
           <NoActiveListings />
         )}
       </div>
-
+ 
       {/* Stats section */}
       <div className="flex justify-between px-4 py-4 bg-[#081F5C] mb-[130px]">
         <div>
@@ -116,5 +116,5 @@ const Profile: React.FC<ProfileProps> = ({ user, userDetails, userBooks, userId 
     </div>
   );
 };
-
+ 
 export default Profile;

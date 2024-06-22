@@ -32,17 +32,15 @@ export async function updateUser(clerkId: string, user: UpdateUserParams, path: 
     }
   }
 
-
-  export async function getUserById(clerkId: string) {
+  export async function getUserById(userId: string) {
     try {
-      await connectToDatabase();
-  
-      const user = await User.findOne({ clerkId });
-  
-      if (!user) throw new Error('User not found');
-      return JSON.parse(JSON.stringify(user));
+      await connectToDatabase()
+   
+      const user = await User.findById(userId)
+   
+      if (!user) throw new Error('User not found')
+      return JSON.parse(JSON.stringify(user))
     } catch (error) {
-      handleError(error);
-      throw new Error("Failed to fetch user"); // Ensure an error is thrown for further handling
+      handleError(error)
     }
   }
