@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState } from 'react';
+import { ChangeEvent, ReactEventHandler, useEffect, useState } from 'react';
 import { getAllCategories } from '@/lib/actions/category.actions';
 import { ICategory } from '@/lib/mongodb/database/models/category.model';
 import { ILanguage } from '@/lib/mongodb/database/models/language.model';
@@ -8,12 +8,88 @@ import { getAllLanguages } from '@/lib/actions/language.actions';
 import Image from 'next/image';
 import { Checkbox } from '../ui/checkbox';
 import { prices } from '@/constants';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { formUrlQuery, removeKeysFromQuery } from '@/lib/utils';
+
 
 const toTitleCase = (str: string) => {
     return str.replace(/\w\S*/g, (txt) => txt.charAt(0).toUpperCase() + txt.substring(1).toLowerCase());
 }
 
 const Filters = () => {
+    const router = useRouter();
+    const pathname = usePathname();
+    const searchParams = useSearchParams();
+    const filterQuery = searchParams?.get('filterQuery');
+    const [checkedCategories, setCheckedCategories] = useState<string[]>([]);
+    const [checkedLanguages, setCheckedLanguages] = useState<string[]>([]);
+    const [checkedPrices, setCheckedPrices] = useState<string[]>([]);
+
+    const handleCheckboxChange = (checked: boolean, name: string, type: 'category' | 'language' | 'price') => {
+        if (type === 'category') {
+            setCheckedCategories(prev => {
+                if (checked) {
+                    return [...prev, name];
+                } else {
+                    return prev.filter(n => n !== name);
+                }
+            });
+        } else if (type === 'language') {
+            setCheckedLanguages(prev => {
+                if (checked) {
+                    return [...prev, name];
+                } else {
+                    return prev.filter(n => n !== name);
+                }
+            });
+        } else if (type === 'price') {
+            setCheckedPrices(prev => {
+                if (checked) {
+                    return [...prev, name];
+                } else {
+                    return prev.filter(n => n !== name);
+                }
+            });
+        }
+    };
+
+    useEffect(() => {
+        const delayDebounceFn = setTimeout(() => {
+            const filterValues = [];
+    
+            if (checkedCategories.length > 0) {
+                filterValues.push(`categories=${checkedCategories.join('_with_')}`);
+            }
+            if (checkedLanguages.length > 0) {
+                filterValues.push(`languages=${checkedLanguages.join('_with_')}`);
+            }
+            if (checkedPrices.length > 0) {
+                filterValues.push(`price=${checkedPrices.join('_with_')}`);
+            }
+    
+            const filters = filterValues.join('_AND_');
+    
+            if (filters) {
+                const newUrl = formUrlQuery({
+                    params: searchParams?.toString(),
+                    key: 'Filters',
+                    value: filters
+                });
+                router.push(newUrl, { scroll: false });
+            } else {
+                if (pathname === '/books') {
+                    const newUrl = removeKeysFromQuery({
+                        params: searchParams?.toString(),
+                        keysToRemove: ['Filters']
+                    });
+                    router.push(newUrl, { scroll: false });
+                }
+            }
+        }, 300);
+    
+        return () => clearTimeout(delayDebounceFn);
+    }, [checkedCategories, checkedLanguages, checkedPrices, pathname, router, searchParams]);
+    
     const [categories, setCategories] = useState<ICategory[]>([]);
     const [showMoreCategories, setShowMoreCategories] = useState<number>(5);
     const [languages, setLanguages] = useState<ILanguage[]>([]);
@@ -83,8 +159,12 @@ const Filters = () => {
                     {categories.slice(0, showMoreCategories).map((category) => (
                         <li key={category._id} className="mt-1 md:mt-0">
                             <div className="flex items-center">
-                                <Checkbox id={category.name} />
-                                <label className="ml-2 md:text-base text-xs">{category.name}</label>
+                            <Checkbox 
+                                id={category.name} 
+                                checked={checkedCategories.includes(category.name)}
+                                onCheckedChange={(checked) => handleCheckboxChange(checked as boolean, category.name, 'category')}    
+                            />
+                                <label htmlFor={category.name} className="ml-2 md:text-base text-xs">{category.name}</label>
                             </div>
                         </li>
                     ))}
@@ -105,7 +185,11 @@ const Filters = () => {
                     {languages.map((language) => (
                         <li key={language._id} className="mt-1 md:mt-0">
                             <div className="flex items-center">
-                                <Checkbox id={language.name} />
+                            <Checkbox 
+                                id={language.name} 
+                                checked={checkedLanguages.includes(language.name)}
+                                onCheckedChange={(checked) => handleCheckboxChange(checked as boolean, language.name, 'language')}     
+                            />
                                 <label className="ml-2 md:text-base text-xs">{language.name}</label>
                             </div>
                         </li>
@@ -118,7 +202,11 @@ const Filters = () => {
                     {prices.map((price) => (
                         <li key={price.label} className="mt-1 md:mt-0">
                             <div className="flex items-center">
-                                <Checkbox id={price.label} />
+                                <Checkbox 
+                                    id={price.label} 
+                                    checked={checkedPrices.includes(price.label)}
+                                    onCheckedChange={(checked) => handleCheckboxChange(checked as boolean, price.label, 'price')} 
+                                />
                                 <label className="ml-2 md:text-base text-xs">{price.label}</label>
                             </div>
                         </li>

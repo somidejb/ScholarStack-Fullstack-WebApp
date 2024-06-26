@@ -40,8 +40,8 @@ const populateBook = (query: any) => {
   return query
     .populate({ path: 'bookOwner', model: User, select: '_id firstName lastName' })
     .populate({ path: 'category', model: Category, select: '_id name' })
-    .populate({ path: 'language', model: Language, select: '_id name' })
-}
+    .populate({ path: 'language', model: Language, select: '_id name' });
+};
   
   export async function getBookById(bookId: string) {
     try {
@@ -90,17 +90,49 @@ export async function deleteBook({ bookId, path }: DeleteBookParams) {
     }
   }
 
-  export async function getAllBooks({ query, limit = 10, page = 1, category, language }: GetAllBooksParams) {
+  const priceMappings = {
+    'Free': { min: 0, max: 0 },
+    '$5 - $10': { min: 5, max: 10 },
+    '$10 - $25': { min: 10.01, max: 25 },
+    '$25 - $50': { min: 25.01, max: 50 },
+    'Above $50': { min: 50.01, max: Infinity }
+  };
+  export async function getAllBooks({ query, limit = 10, page = 1, category, language, price }: GetAllBooksParams) {
     try {
       await connectToDatabase();
   
       const titleCondition = query ? { title: { $regex: query, $options: 'i' } } : {};
-      const categoryCondition = category ? { category: (await getCategoryByName(category))?._id } : {};
-      const languageCondition = language ? { language: (await getLanguageByName(language))?._id } : {};
+      const filterConditions: any = {};
+  
+      if (category) {
+        const categories = category.split('_with_');
+        const categoryIds = await Promise.all(categories.map(cat => getCategoryByName(cat)));
+        filterConditions.category = { $in: categoryIds.map(cat => cat?._id) };
+      }
+  
+      if (language) {
+        const languages = language.split('_with_');
+        const languageIds = await Promise.all(languages.map(lang => getLanguageByName(lang)));
+        filterConditions.language = { $in: languageIds.map(lang => lang?._id) };
+      }
+  
+      if (price) {
+        const priceRanges = price.split('_with_').map(label => priceMappings[label as keyof typeof priceMappings]);
+  
+        const priceConditions = priceRanges.map(range => ({
+          $or: [
+            { salePrice: { $gte: range.min, $lte: range.max } },
+            { $and: [{ salePrice: '' }, { price: { $gte: range.min, $lte: range.max } }] }
+          ]
+        }));
+  
+        filterConditions.$and = [{ $or: priceConditions }];
+      }
   
       const conditions = {
-        $and: [titleCondition, categoryCondition, languageCondition],
+        $and: [titleCondition, filterConditions],
       };
+  
   
       const skipAmount = (Number(page) - 1) * limit;
       const booksQuery = Book.find(conditions)
@@ -110,15 +142,19 @@ export async function deleteBook({ bookId, path }: DeleteBookParams) {
   
       const books = await populateBook(booksQuery);
       const booksCount = await Book.countDocuments(conditions);
+      const isNext = (page * limit) < booksCount;
   
       return {
         data: JSON.parse(JSON.stringify(books)),
         totalPages: Math.ceil(booksCount / limit),
+        isNext,
       };
     } catch (error) {
       handleError(error);
     }
   }
+  
+  
   
 export async function getFavorites(userId: string) {
   try {
@@ -127,7 +163,6 @@ export async function getFavorites(userId: string) {
     if (!user) throw new Error('User not found');
 
     return JSON.parse(JSON.stringify(user.favorites));
-    console.log(user.favorites)
   } catch (error) {
     handleError(error);
   }

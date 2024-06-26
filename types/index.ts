@@ -86,4 +86,6 @@ export type CreateUserParams = {
     page: number
     category?: string
     language?: string
+    price?: string
+    salePrice?: string
   }

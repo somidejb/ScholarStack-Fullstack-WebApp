@@ -130,23 +130,25 @@ export const bookDefaultValues = {
     location: "",
 }
 
-export const prices=[{
-    label: 'Under $5',
-    value: '5'
+export const prices = [
+  {
+    label: 'Free',
+    value: 'free'
   },
   {
     label: '$5 - $10',
-    value: '10'
+    value: '5to10'
   },
   {
     label: '$10 - $25',
-    value: '25'
+    value: '10to25'
   },
   {
     label: '$25 - $50',
-    value: '50'
+    value: '25to50'
   },
   {
     label: 'Above $50',
-    value: '100'
-}]
+    value: 'above50'
+  }
+];

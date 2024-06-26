@@ -22,7 +22,7 @@ const Home = async () => {
     const now = new Date();
     const timeDifference = now.getTime() - postedDate.getTime();
     const daysDifference = timeDifference / (1000 * 3600 * 24);
-    return daysDifference <= 30; // e.g., books uploaded in the last 30 days
+    return  daysDifference <= 30; // e.g., books uploaded in the last 30 days
   });
   const booksOnSale = books.filter(book => book.salePrice !== undefined && book.salePrice !== "");
   const freeBooks = books.filter(book => book.isBookFree);
