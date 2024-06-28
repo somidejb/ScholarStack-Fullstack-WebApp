@@ -3,7 +3,7 @@ import { FaEnvelope, FaTwitter, FaFacebookSquare, FaInstagramSquare } from 'reac
 
 const Footer = () => {
   return (
-    <footer className="fixed bottom-0 w-full text-white bg-[#31457b] rounded-sm">
+    <footer className="relative bottom-0 w-full text-white bg-[#31457b] rounded-sm">
       <div className="flex justify-between p-0">
         <div className="p-1 ml-1">
           <h2 className="font-inter font-bold text-white text-base leading-7 lg:text-[40px] lg:mb-3">ScholarStack</h2>

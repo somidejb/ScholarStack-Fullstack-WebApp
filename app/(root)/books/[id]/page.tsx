@@ -2,7 +2,7 @@ import React from "react";
 import BookDetails from "@/components/shared/BookDetails";
 import { fetchBookById } from "@/lib/actions/book.actions";
 import { Metadata } from "next";
-
+ 
 type Book = {
   _id: string;
   title: string;
@@ -12,28 +12,28 @@ type Book = {
   price: string;
   salePrice?: string;
 };
-
+ 
 type BookPageProps = {
   params: { id: string };
 };
-
+ 
 export async function generateMetadata({ params }: BookPageProps): Promise<Metadata> {
   const book = await fetchBookById(params.id);
-
+ 
   if (!book) {
     return {
       title: "Book Not Found",
     };
   }
-
+ 
   return {
     title: book.title,
   };
 }
-
+ 
 const Page = async ({ params }: BookPageProps) => {
   const book = await fetchBookById(params.id);
-
+ 
   if (!book) {
     console.log("No book found with id:", params.id);
     return (
@@ -42,19 +42,19 @@ const Page = async ({ params }: BookPageProps) => {
       </div>
     );
   }
-
-  console.log("Book found:", book); 
-
+ 
+  console.log("Book found:", book);
+ 
   const bookDetails = {
     ...book,
     images: book.imageURLs,
   };
-
+ 
   return (
     <div className="mt-[100px]">
       <BookDetails book={bookDetails} />
     </div>
   );
 };
-
+ 
 export default Page;

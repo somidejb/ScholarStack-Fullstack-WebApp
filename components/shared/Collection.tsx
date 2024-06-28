@@ -1,12 +1,10 @@
 "use client";
-
 import { useState, useEffect } from "react";
 import BookCard from "./BookCard";
 import Image from "next/image";
 import Link from "next/link";
 import { IBook } from "@/lib/mongodb/database/models/book.model";
-import { getFavorites} from '@/lib/actions/book.actions'
-
+import { getFavorites } from '@/lib/actions/book.actions';
 
 type CollectionProps = {
   collection_type: string;
@@ -31,12 +29,11 @@ export const Collection = ({ collection_type, books, userId }: CollectionProps) 
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-
   useEffect(() => {
     const fetchFavorites = async () => {
       try {
         const favorites: IBook[] = await getFavorites(userId);
-        setFavorites(favorites.map(favorite => favorite._id)); // Map to array of strings (book IDs)
+        setFavorites(favorites.map(favorite => favorite._id));
       } catch (error) {
         console.error('Failed to fetch favorites:', error);
       }
@@ -105,6 +102,7 @@ export const Collection = ({ collection_type, books, userId }: CollectionProps) 
                   key={book._id}
                   salePrice={book.salePrice}
                   favorites={favorites}
+                  bookOwnerId={book.bookOwner._id} // Pass bookOwnerId to BookCard
                 />
               </div>
             ))}
