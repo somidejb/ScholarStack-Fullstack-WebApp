@@ -1,4 +1,4 @@
-import { Document, Schema, model, models } from "mongoose";
+import mongoose ,{ Document, Schema, model, models } from "mongoose";
 
 
 export interface IUser extends Document{
@@ -58,6 +58,10 @@ const UserSchema = new Schema({
       ref: 'Book',
     },
   ],
+  chats:{
+    type:[{type: mongoose.Schema.Types.ObjectId, ref: "Chat"}],
+    default:[],
+  }
 });
 
 const User = models.User || model("User", UserSchema);
