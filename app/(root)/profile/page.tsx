@@ -60,4 +60,4 @@ const ProfilePage: React.FC = async () => {
   );
 };
 
-export default ProfilePage;
+export default ProfilePage; 
