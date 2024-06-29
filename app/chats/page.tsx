@@ -11,6 +11,7 @@ interface Chat {
   message: string;
   time: string;
   avatar: string;
+  isOpened: boolean;
 }
 
 interface Message {
@@ -23,60 +24,84 @@ const MessagingPage: React.FC = () => {
   const [selectedChat, setSelectedChat] = useState<Chat | null>(null);
   const [messages, setMessages] = useState<{ [key: string]: Message[] }>({
     "David Carlson": [
-      { sender: "David Carlson", content: "Hey, How are you?", avatar:"/assets/images/p1.png" },
+      { sender: "David Carlson", content: "Hey, How are you?", avatar: "/assets/images/p1.png" },
     ],
     "Lily Bloom": [
-      { sender: "Lily Bloom", content: "You in Sunridge, right?", avatar:"/assets/images/p5.png" },
+      { sender: "Lily Bloom", content: "You in Sunridge, right?", avatar: "/assets/images/p5.png" },
     ],
     "Josh Seary": [
-      { sender: "Josh Seary", content: "Hey, we meeting tmrw for book...", avatar:"/assets/images/p2.png" },
+      { sender: "Josh Seary", content: "Hey, we meeting tmrw for book...", avatar: "/assets/images/p2.png" },
     ],
     "Chris Brown": [
-      { sender: "Chris Brown", content: "Hey, so when did u bought this...", avatar:"/assets/images/p3.png" },
+      { sender: "Chris Brown", content: "Hey, so when did u bought this...", avatar: "/assets/images/p3.png" },
     ],
     "Lei Wong": [
-      { sender: "Lei Wong", content: "I would love to buy this book", avatar:"/assets/images/p4.png" },
+      { sender: "Lei Wong", content: "I would love to buy this book", avatar: "/assets/images/p4.png" },
     ],
   });
 
-  const chats: Chat[] = [
-    { name: "David Carlson", message: "Hey, How are you?", time: "3:20PM", avatar: "assets/images/p1.png" },
-    { name: "Lily Bloom", message: "You in Sunridge, right?", time: "9:20PM", avatar: "assets/images/p5.png"  },
+  const [chats, setChats] = useState<Chat[]>([
+    { name: "David Carlson", message: "Hey, How are you?", time: "3:20PM", avatar: "assets/images/p1.png", isOpened: false },
+    { name: "Lily Bloom", message: "You in Sunridge, right?", time: "9:20PM", avatar: "assets/images/p5.png", isOpened: false },
     {
       name: "Josh Seary",
       message: "Hey, we meeting tmrw for book...",
       time: "3:29PM",
-      avatar: "assets/images/p2.png" ,
+      avatar: "assets/images/p2.png",
+      isOpened: false,
     },
     {
       name: "Chris Brown",
       message: "Hey, so when did u bought this...",
       time: "8:00PM",
-      avatar: "assets/images/p3.png" ,
+      avatar: "assets/images/p3.png",
+      isOpened: false,
     },
     {
       name: "Lei Wong",
       message: "I would love to buy this book",
       time: "11:20AM",
-      avatar: "assets/images/p4.png" ,
+      avatar: "assets/images/p4.png",
+      isOpened: false,
     },
-  ];
+  ]);
 
   const handleBack = () => {
     setSelectedChat(null);
+    setChats((prevChats) =>
+      prevChats.map((chat) =>
+        chat.isOpened ? { ...chat, isOpened: false } : chat
+      )
+    );
   };
 
   const handleSendMessage = (message: string) => {
     if (selectedChat) {
       const chatName = selectedChat.name;
+      const newMessage = { sender: "You", content: message, avatar: "" };
       setMessages((prevMessages) => ({
         ...prevMessages,
-        [chatName]: [
-          ...(prevMessages[chatName] || []),
-          { sender: "You", content: message, avatar:"" },
-        ],
+        [chatName]: [...(prevMessages[chatName] || []), newMessage],
       }));
+      setChats((prevChats) => {
+        const updatedChats = prevChats.map((chat) =>
+          chat.name === chatName
+            ? { ...chat, message: message, time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) }
+            : chat
+        );
+        return updatedChats;
+      });
     }
+  };
+
+  const handleSelectChat = (chat: Chat) => {
+    setChats((prevChats) => {
+      const updatedChats = prevChats.map((c) =>
+        c.name === chat.name ? { ...c, isOpened: true } : c
+      );
+      return updatedChats;
+    });
+    setSelectedChat(chat);
   };
 
   return (
@@ -91,7 +116,7 @@ const MessagingPage: React.FC = () => {
           >
             <ChatList
               chats={chats}
-              onSelectChat={setSelectedChat}
+              onSelectChat={handleSelectChat}
               className="w-full h-full shadow-lg rounded-lg bg-white"
             />
           </div>
@@ -100,15 +125,15 @@ const MessagingPage: React.FC = () => {
               selectedChat ? "block" : "hidden"
             } md:block`}
           >
-            <div className="flex flex-col h-full">
+            <div className="flex flex-col h-full shadow-lg rounded-lg bg-white">
               <ChatWindow
                 selectedChat={selectedChat}
                 messages={selectedChat ? messages[selectedChat.name] || [] : []}
                 onBack={handleBack}
+                className="flex-grow overflow-y-auto"
                 onSendMessage={handleSendMessage}
-                className="flex-grow overflow-y-auto shadow-lg rounded-lg bg-white"
               />
-              {/* <ChatBox onSendMessage={handleSendMessage} className="w-full" /> */}
+              
             </div>
           </div>
         </div>
@@ -119,6 +144,9 @@ const MessagingPage: React.FC = () => {
 };
 
 export default MessagingPage;
+
+
+
 
 
 

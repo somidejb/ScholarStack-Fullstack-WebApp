@@ -3,12 +3,12 @@ import { IoIosAddCircleOutline } from "react-icons/io";
 import { IoChatbubbleOutline } from "react-icons/io5";
 import Image from "next/image";
 
-
 interface Chat {
   name: string;
   message: string;
   time: string;
   avatar: string;
+  isOpened: boolean;
 }
 
 interface ChatListProps {
@@ -38,19 +38,17 @@ const ChatList: React.FC<ChatListProps> = ({
       />
       </div>
 
-   
-
       <div>
         {chats.map((chat, index) => (
           <div
             key={index}
-            className="flex justify-between items-center p-2 hover:bg-gray-100 cursor-pointer"
+            className={`flex justify-between items-center p-2 cursor-pointer`}
             onClick={() => onSelectChat(chat)}
           >
             <div className="flex items-center">
-            <img src={chat.avatar} alt={`${chat.name}'s avatar`} className="chat-avatar w-10 h-10 rounded-full mr-2" />
+              <img src={chat.avatar} alt={`${chat.name}'s avatar`} className="chat-avatar w-10 h-10 rounded-full mr-2" />
               <div>
-                <h3 className="text-sm font-semibold">{chat.name}</h3>
+                <h3 className="text-sm">{chat.name}</h3>
                 <p className="text-xs text-gray-500">{chat.message}</p>
               </div>
             </div>
@@ -63,6 +61,7 @@ const ChatList: React.FC<ChatListProps> = ({
 };
 
 export default ChatList;
+
 
 
 
