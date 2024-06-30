@@ -1,4 +1,4 @@
-import { Document, Schema, model, models } from "mongoose";
+import mongoose ,{ Document, Schema, model, models } from "mongoose";
 
 
 export interface IUser extends Document{
@@ -62,6 +62,7 @@ const UserSchema = new Schema({
     {
       type: Schema.Types.ObjectId,
       ref: 'Message',
+      default: [],
     }
   ]
 });
