@@ -6,6 +6,7 @@ import { handleError } from '@/lib/utils'
 import { CreateUserParams, UpdateUserParams} from '@/types'
 import User from '../mongodb/database/models/user.model'
 import { connectToDatabase } from '../mongodb/database'
+import Chat from '../mongodb/database/models/chat.model'
 
 export async function createUser(user: CreateUserParams) {
   try {
@@ -45,3 +46,22 @@ export async function getUserById(userId: string) {
   }
 }
 
+export async function getChatsById(userId: string) {
+  try {
+    await connectToDatabase();
+
+    const allChats = await Chat.find({ members: userId })
+    .sort({ lastMessageAt: -1 })
+    .populate({
+      path: "members",
+      model: User,
+    }).exec();
+
+    if (!allChats) throw new Error('Chats not found');
+
+    return JSON.parse(JSON.stringify(allChats));
+  }
+  catch(error){
+    handleError(error);
+  }
+}

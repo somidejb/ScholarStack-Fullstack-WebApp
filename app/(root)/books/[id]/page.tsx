@@ -3,8 +3,22 @@ import { Collection } from '@/components/shared/Collection';
 import React, { useState } from 'react';
 import Image from 'next/image';
 import { FaMapMarkerAlt } from 'react-icons/fa';
+import { getChat } from '@/lib/actions/chat.actions';
+import { auth } from '@clerk/nextjs/server';
+import { getBookById } from '@/lib/actions/book.actions';
 
-const BookDetails = () => {
+type BookDetailsProp = {
+  params: {
+    id: string
+  }
+}
+export default async function BookDetails({params: {id}}: BookDetailsProp){
+  const selectedBook = await getBookById(id);
+  const bookOwner = selectedBook.bookOwner;
+  console.log(bookOwner);
+  const { sessionClaims } = auth();
+  const userId = sessionClaims?.userId as string;
+  
   const thumbnails = [
     '/assets/images/bookd3.png',
     '/assets/images/bookd3.png',
@@ -100,4 +114,3 @@ const BookDetails = () => {
   );
 };
 
-export default BookDetails;

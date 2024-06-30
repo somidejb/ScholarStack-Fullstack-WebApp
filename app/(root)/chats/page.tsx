@@ -3,7 +3,6 @@ import React, { useState } from 'react';
 import ChatBox from '@/components/shared/ChatBox';
 import ChatList from '@/components/shared/ChatList';
 import ChatWindow from '@/components/shared/ChatWindow';
-import Header from '@/components/shared/Header';
 
 interface Chat {
   name: string;
@@ -28,7 +27,6 @@ const MessagingPage: React.FC = () => {
 
   return (
     <div>
-      <Header />
       <div className="h-screen flex flex-col md:flex-row">
         <div className={`w-full ${selectedChat ? 'hidden' : 'block'} md:block md:w-1/3 border-r border-gray-300`}>
           <ChatList chats={chats} onSelectChat={setSelectedChat} className="w-full h-full border-r border-gray-300" />

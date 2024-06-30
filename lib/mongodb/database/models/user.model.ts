@@ -58,6 +58,12 @@ const UserSchema = new Schema({
       ref: 'Book',
     },
   ],
+  chats: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: 'Message',
+    }
+  ]
 });
 
 const User = models.User || model("User", UserSchema);
