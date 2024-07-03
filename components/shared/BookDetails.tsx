@@ -93,7 +93,7 @@ const BookDetails: React.FC<BookDetailsProps> = ({ book }) => {
               <FaMapMarkerAlt className="mr-2 text-indigo-900" size={20} />
               <span className="text-base md:text-xl lg:text-xl">{book.location}</span>
             </div>
-            <div className="mt-10 flex space-x-5 md:space-x-10">
+            <div className="mt-10 flex space-x-5 md:space-x-10 text-nowrap">
               <button className="mt-20 transition-transform duration-300 ease-in-out transform hover:scale-110 bg-indigo-900 text-sm hover:bg-indigo-700 hover:text-gray-200 hover:shadow-lg lg:text-xl text-white px-5 py-2 lg:px-10 lg:py-2 rounded-lg shadow-md">
                 Message Seller
               </button>
@@ -106,6 +106,9 @@ const BookDetails: React.FC<BookDetailsProps> = ({ book }) => {
                   height={11}
                   className="absolute right-6 top-1/2 transform -translate-y-1/2 object-contain w-[12px] md:w-[20px] xl:w-[24px] h-full"
                 />
+              </button>
+              <button className="mt-20 transition-transform duration-300 ease-in-out transform hover:scale-110 bg-indigo-900 text-sm hover:bg-indigo-700 hover:text-gray-200 hover:shadow-lg lg:text-xl text-white px-5 py-2 lg:px-10 lg:py-2 rounded-lg shadow-md">
+                View Seller Profile
               </button>
             </div>
           </div>
