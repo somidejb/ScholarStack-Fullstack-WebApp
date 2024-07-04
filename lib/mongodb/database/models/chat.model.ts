@@ -3,8 +3,9 @@ import Document from "next/document";
 
 
 export interface IChat extends Document {
-    members: Schema.Types.ObjectId[];
-    messages: Schema.Types.ObjectId[];
+    _id: string;
+    members: { _id: string, username: string, photo: string }[];
+    messages: { _id: string, text: string, sender: { _id: string}, seenBy: {_id: string, username: string, photo: string} }[];
     createdAt: Date;
     lastMessageAt: Date;
 }

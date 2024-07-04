@@ -3,11 +3,12 @@ import Document from "next/document";
 import { send } from "process";
 
 
-export interface IChat extends Document {
-    members: Schema.Types.ObjectId[];
-    messages: Schema.Types.ObjectId[];
+export interface IMessage extends Document {
+    chat: { _id: string, members: { _id: string, username: string, photo: string }[],messages: { _id: string, text: string, sender: string }[], createdAt: Date, lastMessageAt: Date}[];
+    sender: { _id: string, username: string, photo: string };
+    text: string;
     createdAt: Date;
-    lastMessageAt: Date;
+    seenBy: {_id: string, username: string, photo: string};
 }
 const MessageSchema = new Schema({
     chat: {
@@ -27,6 +28,11 @@ const MessageSchema = new Schema({
     createdAt: {
         type: Date,
         default: Date.now,
+    },
+    seenBy: {
+        type: [Schema.Types.ObjectId],
+        ref: 'User',
+        default: [],
     },
 });
 

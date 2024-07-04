@@ -7,6 +7,7 @@ import { CreateUserParams, UpdateUserParams} from '@/types'
 import User from '../mongodb/database/models/user.model'
 import { connectToDatabase } from '../mongodb/database'
 import Chat from '../mongodb/database/models/chat.model'
+import Message from '../mongodb/database/models/message.model'
 
 export async function createUser(user: CreateUserParams) {
   try {
@@ -55,11 +56,15 @@ export async function getChatsById(userId: string) {
     .populate({
       path: "members",
       model: User,
-    }).exec();
+    }).populate({
+      path: "messages",
+      model: Message,
+      populate: {path: "sender seenBy", model: User}}).exec();
 
     if (!allChats) throw new Error('Chats not found');
-
+    console.log(allChats);
     return JSON.parse(JSON.stringify(allChats));
+
   }
   catch(error){
     handleError(error);

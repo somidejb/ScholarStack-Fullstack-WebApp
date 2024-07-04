@@ -1,6 +1,7 @@
 import { Document, Schema, model, models } from "mongoose";
 
 export interface IBook extends Document {
+  description: string;
   _id: string;
   title: string;
   author: string;
@@ -13,7 +14,9 @@ export interface IBook extends Document {
   price?: string;
   salePrice?: string;
   location: string;
-  bookOwner: {_id: string, firstName: string, lastName:string, photo: string};
+  bookOwner: {
+    clerkUserId: string;_id: string, firstName: string, lastName:string, photo: string
+};
   isFavorite?: boolean;
 }
 
