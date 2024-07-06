@@ -185,7 +185,19 @@ export const fetchBookById = async (id: string) => {
     handleError(error);
     return null;
   }
+  
+}
+export async function fetchBooksByCategory(categoryId: string) {
+  try {
+    await connectToDatabase();
+    const books = await populateBook(Book.find({ category: categoryId }));
+    return JSON.parse(JSON.stringify(books));
+  } catch (error) {
+    handleError(error);
+    return [];
+  }
 };
+
 
 
 

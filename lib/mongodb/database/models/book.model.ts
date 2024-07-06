@@ -1,7 +1,8 @@
 import { Document, Schema, model, models } from "mongoose";
 
 export interface IBook extends Document {
-  description: ReactNode;
+  images: any;
+  description: string;
   _id: string;
   title: string;
   author: string;

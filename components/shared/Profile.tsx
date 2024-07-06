@@ -21,10 +21,11 @@ interface ProfileProps {
   user: IUser;
   userDetails: IUserDetails;
   userBooks: IBook[];
+  userFavorites: IBook[]; // Add the favorite books prop
   userId: string;
 }
 
-const Profile: React.FC<ProfileProps> = ({ user, userDetails, userBooks, userId }) => {
+const Profile: React.FC<ProfileProps> = ({ user, userDetails, userBooks, userFavorites, userId }) => {
   console.log('User:', user);
   const formatDate = (dateString: string) => {
     const options: Intl.DateTimeFormatOptions = {
@@ -86,6 +87,7 @@ const Profile: React.FC<ProfileProps> = ({ user, userDetails, userBooks, userId 
         </div>
       </div>
 
+      {/* User Books Section */}
       <div className="px-20 py-20">
         {userBooks.length > 0 ? (
           <Collection
@@ -95,6 +97,19 @@ const Profile: React.FC<ProfileProps> = ({ user, userDetails, userBooks, userId 
           />
         ) : (
           <NoActiveListings />
+        )}
+      </div>
+
+      {/* Favorite Books Section */}
+      <div className="px-20 py-20">
+        {userFavorites.length > 0 ? (
+          <Collection
+            collection_type="My Favorite Books"
+            books={userFavorites}
+            userId={userId}
+          />
+        ) : (
+          <p className="text-gray-600">You have no favorite books listed.</p>
         )}
       </div>
 

@@ -1,6 +1,7 @@
+// pages/book/[id].tsx
 import React from "react";
 import BookDetails from "@/components/shared/BookDetails";
-import { fetchBookById } from "@/lib/actions/book.actions";
+import { fetchBookById, fetchBooksByCategory } from "@/lib/actions/book.actions";
 import { Metadata } from "next";
 
 type Book = {
@@ -8,9 +9,10 @@ type Book = {
   title: string;
   author: string;
   description: string;
-  imageURLs: string[]; // Assuming the API returns imageURLs
+  imageURLs: string[];
   price: string;
   salePrice?: string;
+  category: string;
 };
 
 type BookPageProps = {
@@ -43,7 +45,14 @@ const Page = async ({ params }: BookPageProps) => {
     );
   }
 
-  console.log("Book found:", book); 
+  console.log("Book found:", book);
+
+  let booksInSameCategory = await fetchBooksByCategory(book.category);
+
+  // Filter out the current book from the list of similar books
+  booksInSameCategory = booksInSameCategory.filter((otherBook: Book) => otherBook._id !== book._id);
+
+  console.log("Books in the same category (excluding current book):", booksInSameCategory);
 
   const bookDetails = {
     ...book,
@@ -52,7 +61,7 @@ const Page = async ({ params }: BookPageProps) => {
 
   return (
     <div className="mt-[100px]">
-      <BookDetails book={bookDetails} />
+      <BookDetails book={bookDetails} similarBooks={booksInSameCategory} />
     </div>
   );
 };

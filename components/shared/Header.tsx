@@ -10,7 +10,7 @@ import SearchBar from "./SearchBar";
 // The Header component is responsible for rendering the top navigation bar
 const Header = () => {
   return (
-    <header className="fixed z-50 top-0 w-full border-b h-[64px] md:h-[85px] lg:h-[87px] xl:h-[111px] bg-[#31457b]">
+    <header className="relative top-0 w-full border-b h-[64px] md:h-[85px] lg:h-[87px] xl:h-[111px] bg-[#31457b]">
       <div className="px-4 sm:px-6 md:px-8 lg:px-10 h-full w-full flex justify-between items-center relative z-50">
         <div className="flex items-center">
           <Link href="/" className="flex items-center gap-2">
