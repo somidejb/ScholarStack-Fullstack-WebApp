@@ -8,7 +8,6 @@ import Profile from '@/components/shared/Profile';
 const ProfilePage: React.FC = async () => {
   try {
     const clerkUser = await currentUser();
-    console.log('Current user:', clerkUser);
 
     if (!clerkUser) {
       console.log('No user found. User might not be authenticated.');
@@ -56,8 +55,6 @@ const ProfilePage: React.FC = async () => {
       userId: userDetails._id.toString(),
       clerkId: clerkUser.id,
     };
-
-    console.log('User props prepared:', userProps);
 
     return <Profile {...userProps} />;
   } catch (error) {
