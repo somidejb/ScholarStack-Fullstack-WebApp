@@ -1,7 +1,7 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
-
+import { useUser } from "@clerk/nextjs";
 import { Collection } from "./Collection";
 import NoActiveListings from "./NoActiveListing";
 import { IBook } from "@/lib/mongodb/database/models/book.model";
@@ -21,6 +21,7 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { FaPen } from "react-icons/fa";
+import { updateUserInClerkAndDB } from "@/lib/actions/user.actions";
 
 interface IUser {
   username: string;
@@ -39,6 +40,7 @@ interface ProfileProps {
   userDetails: IUserDetails;
   userBooks: IBook[];
   userId: string;
+  clerkId: string;
 }
 
 const Profile: React.FC<ProfileProps> = ({
@@ -46,19 +48,22 @@ const Profile: React.FC<ProfileProps> = ({
   userDetails,
   userBooks,
   userId,
+  clerkId,
 }) => {
+  const { user: clerkUser } = useUser();
   const [isActive, setIsActive] = useState(false);
   const [name, setName] = useState(user.fullName);
   const [username, setUsername] = useState(user.username);
   const [bio, setBio] = useState(userDetails.Bio);
+  const [location, setLocation] = useState(userDetails.Location);
+
   useEffect(() => {
-    // Load the initial state from localStorage
     const savedState = localStorage.getItem("activeMode");
     if (savedState !== null) {
       setIsActive(JSON.parse(savedState));
     } else {
-      setIsActive(true); // Default to active mode if no saved state
-      localStorage.setItem("activeMode", JSON.stringify(true)); // Save the default state
+      setIsActive(true);
+      localStorage.setItem("activeMode", JSON.stringify(true));
     }
   }, []);
 
@@ -74,30 +79,20 @@ const Profile: React.FC<ProfileProps> = ({
     e.preventDefault();
 
     const updatedProfile = {
-      fullName: name,
+      firstName: name.split(' ')[0],
+      lastName: name.split(' ')[1] || '',
       username: username,
       bio: bio,
+      location: location,
     };
 
-    // try {
-    //   const response = await fetch("/api/update-profile", {
-    //     method: "POST",
-    //     headers: {
-    //       "Content-Type": "application/json",
-    //     },
-    //     body: JSON.stringify({ userId, updatedProfile }),
-    //   });
-
-    //   if (response.ok) {
-    //     // Handle successful response
-    //     console.log("Profile updated successfully");
-    //   } else {
-    //     // Handle error response
-    //     console.error("Failed to update profile");
-    //   }
-    // } catch (error) {
-    //   console.error("An error occurred:", error);
-    // }
+    try {
+      await updateUserInClerkAndDB(userId, clerkId, updatedProfile);
+      console.log("Profile updated successfully");
+      // You might want to refresh the page or update the state here
+    } catch (error) {
+      console.error("Failed to update profile:", error);
+    }
   };
 
   const formatDate = (dateString: string) => {
@@ -111,10 +106,8 @@ const Profile: React.FC<ProfileProps> = ({
 
   return (
     <div className="mx-auto bg-white shadow-md rounded-lg mt-[50px]">
-      {/* Profile and User Details section */}
       <div className="flex items-start">
-        {/* Profile section */}
-        <div className="flex  items-center justify-center bg-[#D6DAEA] w-[1060px] h-[497px] left-0 top-[113px] ">
+        <div className="flex items-center justify-center bg-[#D6DAEA] w-[1060px] h-[497px] left-0 top-[113px] ">
           <div className="flex flex-col justify-center items-center lg:mr-[30px] lg:mt-8">
             <div className="relative w-36 h-36 md:w-[118px] md:h-[127px] lg:w-[346px] lg:h-[321px]">
               <Image
@@ -143,7 +136,7 @@ const Profile: React.FC<ProfileProps> = ({
                   <FaPen className="mr-2" />
                   Edit Profile
                 </Button>
-               </DialogTrigger>
+              </DialogTrigger>
               <DialogContent className="sm:max-w-[425px]">
                 <DialogHeader>
                   <DialogTitle>Edit profile</DialogTitle>
@@ -185,6 +178,17 @@ const Profile: React.FC<ProfileProps> = ({
                       className="col-span-3"
                     />
                   </div>
+                  <div className="grid grid-cols-4 items-center gap-4">
+                    <Label htmlFor="location" className="text-right">
+                      Location
+                    </Label>
+                    <Input
+                      id="location"
+                      value={location}
+                      onChange={(e) => setLocation(e.target.value)}
+                      className="col-span-3"
+                    />
+                  </div>
                   <DialogFooter>
                     <Button type="submit">Save changes</Button>
                   </DialogFooter>
@@ -202,7 +206,6 @@ const Profile: React.FC<ProfileProps> = ({
           </div>
         </div>
 
-        {/* User details section */}
         <div
           className="space-y-2 ml-2 mr-5 mt-20 lg:mr-10"
           style={{ fontFamily: "Poppins, sans-serif" }}
@@ -243,8 +246,8 @@ const Profile: React.FC<ProfileProps> = ({
           <div>
             <p style={{ fontSize: 25 }}>Status</p>
             <div className="flex items-center space-x-2">
-            <Switch id="active-mode" checked={isActive} onChange={handleToggle} />
-            <Label htmlFor="active-mode">Active</Label>
+              <Switch id="active-mode" checked={isActive} onChange={handleToggle} />
+              <Label htmlFor="active-mode">Active</Label>
             </div>
           </div>
         </div>
@@ -262,7 +265,6 @@ const Profile: React.FC<ProfileProps> = ({
         )}
       </div>
 
-      {/* Stats section */}
       <div className="flex justify-between px-4 py-4 bg-[#081F5C] mb-[130px]">
         <div>
           <p className="text-white">Listings Completed</p>
