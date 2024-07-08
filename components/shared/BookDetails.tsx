@@ -22,18 +22,18 @@ type BookDetailsProps = {
 
 const BookDetails: React.FC<BookDetailsProps> = ({ book }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedImage, setSelectedImage] = useState<string | null>(null);
+  const [selectedImageIndex, setSelectedImageIndex] = useState<number | null>(null);
 
   const hasImages = book.images && book.images.length > 0;
 
-  const handleImageClick = (imageUrl: string) => {
-    setSelectedImage(imageUrl);
+  const handleImageClick = (index: number) => {
+    setSelectedImageIndex(index);
     setIsModalOpen(true);
   };
 
   const closeModal = () => {
     setIsModalOpen(false);
-    setSelectedImage(null);
+    setSelectedImageIndex(null);
   };
 
   const navigateBack = () => {
@@ -55,16 +55,16 @@ const BookDetails: React.FC<BookDetailsProps> = ({ book }) => {
           Back to Search
         </button>
         <div className="flex flex-col lg:flex-row items-start justify-start mb-10">
-          <div className="w-full lg:w-auto flex justify-center lg:justify-start mb-5 lg:mb-0">
-            <div className="relative transition-transform duration-300 ease-in-out transform hover:scale-110 w-[150px] h-[200px] sm:w-[180px] sm:h-[240px] md:w-[290px] md:h-[400px] lg:w-[370px] lg:h-[500px] xl:w-[446px] xl:h-[600px]">
+          <div className="w-full sm:justify-evenly lg:w-auto flex justify-center lg:justify-start mb-5 lg:mb-0">
+            <div className="transition-transform duration-300 ease-in-out transform hover:scale-110 space-x-2 mr-2 mb-2 border border-gray-300 rounded shadow-2xl w-[150px] h-[200px] sm:w-[180px] sm:h-[240px] md:w-[290px] md:h-[400px] lg:w-[370px] lg:h-[500px] xl:w-[446px] xl:h-[600px] relative">
               {hasImages ? (
                 <Image
                   src={book.images[0]}
                   alt={book.title}
-                  width={500}
-                  height={312}
-                  className="mb-2 cursor-pointer"
-                  onClick={() => handleImageClick(book.images[0])}
+                  layout="fill"
+                  objectFit="cover"
+                  className="mb-2 cursor-pointer rounded"
+                  onClick={() => handleImageClick(0)}
                 />
               ) : (
                 <div className="w-[150px] h-[200px] sm:w-[180px] sm:h-[240px] md:w-[290px] md:h-[400px] lg:w-[370px] lg:h-[500px] xl:w-[446px] xl:h-[600px] mb-2 bg-gray-200 flex items-center justify-center">
@@ -73,22 +73,23 @@ const BookDetails: React.FC<BookDetailsProps> = ({ book }) => {
               )}
             </div>
           </div>
-          <div className="flex flex-col lg:flex-row items-start justify-start">
-            <div className="flex flex-wrap sm:justify-center lg:justify-start space-x-2 lg:space-x-0 lg:space-y-2 mt-0 lg:mt-0 lg:ml-5">
+          <div className="flex flex-col lg:flex-row items-start justify-start w-full lg:w-auto">
+            <div className="flex flex-row lg:flex-col justify-start items-center space-x-2 lg:space-x-0 lg:space-y-2 mt-0 lg:mt-0 lg:ml-5">
               {hasImages &&
                 book.images.slice(1).map((imageUrl, index) => (
-                  <Image
-                    key={index}
-                    src={imageUrl}
-                    alt={`Thumbnail ${index + 1}`}
-                    width={100}
-                    height={100}
-                    className="mr-2 cursor-pointer p-2 flex items-center justify-center transition-transform duration-300 ease-in-out transform hover:scale-110 border border-gray-300 rounded shadow-lg w-[70px] h-[80px] sm:w-[100px] sm:h-[100px] md:w-[100px] md:h-[100px] lg:w-[120px] lg:h-[150px]"
-                    onClick={() => handleImageClick(imageUrl)}
-                  />
+                  <div key={index} className="relative w-[70px] h-[80px] sm:w-[100px] sm:h-[100px] md:w-[100px] md:h-[100px] lg:w-[120px] lg:h-[150px]">
+                    <Image
+                      src={imageUrl}
+                      alt={`Thumbnail ${index + 1}`}
+                      layout="fill"
+                      objectFit="cover"
+                      className="cursor-pointer p-2 flex items-center justify-center transition-transform duration-300 ease-in-out transform hover:scale-110 border border-gray-300 rounded shadow-lg"
+                      onClick={() => handleImageClick(index + 1)}
+                    />
+                  </div>
                 ))}
             </div>
-            <div className="flex flex-col lg:justify-start lg:space-x-0 lg:space-y-2 lg:mt-0 max-w-lg text-left lg:ml-5">
+            <div className="flex flex-col lg:justify-start lg:space-x-0 lg:space-y-2 lg:mt-0 lg:ml-5 max-w-lg text-left">
               <h1 className="text-xl md:text-3xl lg:text-4xl font-bold mb-0">{book.title}</h1>
               <p className="text-lg sm:text-lg md:text-xl lg:text-xl mb-5 lg:mb-20">Author: {book.author}</p>
               <p className="text-xl sm:text-lg md:text-2xl lg:text-2xl font-semibold sm:mb-5 lg:mb-0">Actual price: ${book.price}</p>
@@ -119,8 +120,14 @@ const BookDetails: React.FC<BookDetailsProps> = ({ book }) => {
           </div>
         </div>
       </div>
-      {selectedImage && (
-        <ImageModal isOpen={isModalOpen} onClose={closeModal} imageUrl={selectedImage} />
+      {selectedImageIndex !== null && (
+        <ImageModal
+          isOpen={isModalOpen}
+          onClose={closeModal}
+          images={book.images}
+          selectedIndex={selectedImageIndex}
+          onSelect={setSelectedImageIndex}
+        />
       )}
       {/* <div className="text-lg text-gray-600 mt-10">
         <Collection collection_type="Similar to this..." books={[]} userId={''} />
