@@ -12,7 +12,7 @@ const EditProfile = () => {
               <label className="block text-sm font-medium text-gray-700">Profile Picture</label>
               <div className="relative w-24 h-24 mt-2">
                 <Image
-                  src="/assets/images/profile-icon.png" // Update with your image path
+                  src="/assets/images/profile-icon.png" 
                   alt="Profile Picture"
                   className="rounded-full"
                   layout="fill"

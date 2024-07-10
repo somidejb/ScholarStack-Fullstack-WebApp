@@ -69,6 +69,7 @@ export default async function Books({ searchParams }: SearchParamProps) {
                 price={book.price}
                 salePrice={book.salePrice}
                 favorites={favorites}
+                bookOwnerId={book.bookOwner._id}
               />
             ))}
           </div>

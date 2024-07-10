@@ -1,5 +1,4 @@
 "use client";
-
 import { useState, useEffect } from "react";
 import BookCard from "./BookCard";
 import Image from "next/image";
@@ -110,6 +109,7 @@ export const Collection = ({ collection_type, books, userId }: CollectionProps) 
                   key={book._id}
                   salePrice={book.salePrice}
                   favorites={favorites}
+                  bookOwnerId={book.bookOwner._id} // Pass bookOwnerId to BookCard
                 />
               </div>
             ))}

@@ -35,6 +35,7 @@
     "pusher-js": "^8.4.0-rc2",
     "query-string": "^9.0.0",
     "react": "^18",
+    "react-bootstrap-icons": "^1.11.4",
     "react-dom": "^18",
     "react-hook-form": "^7.52.0",
     "react-icons": "^5.2.1",
