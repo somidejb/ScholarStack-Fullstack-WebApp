@@ -3,11 +3,9 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEllipsis, faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 import ChatBox from "@/components/shared/ChatBox";
 import { IChat } from "@/lib/mongodb/database/models/chat.model";
-import { io } from "socket.io-client";
-
-const socket = io("http://localhost:3000", {
-  path: "/api/socket",
-});
+import { pusherClient } from "@/lib/pusher";
+import { toPusherKey } from "@/lib/utils";
+import { IMessage } from "@/lib/mongodb/database/models/message.model";
 
 interface ChatWindowProps {
   selectedChat: IChat | null;
@@ -31,17 +29,26 @@ const ChatWindow = ({
   useEffect(() => {
     if (selectedChat) {
       setChatMessages(messages);
-      socket.emit("join-chat", selectedChat._id);
-
-      socket.on("new-message", (message) => {
-        setChatMessages((prevMessages) => [...prevMessages, message]);
-      });
-
-      return () => {
-        socket.off("new-message");
-      };
     }
   }, [selectedChat, messages]);
+
+  useEffect(() => {
+    pusherClient.subscribe(
+      toPusherKey(`chat:${selectedChat?._id}`),
+    )
+    const messageHandler = (message: IMessage) => {
+      setChatMessages((prev) => [message, ...prev])
+    }
+
+    pusherClient.bind("incoming-message", messageHandler);
+    return () => {
+      pusherClient.unsubscribe(
+        toPusherKey(`chat:${selectedChat?._id}`),
+      )
+      pusherClient.unbind("incoming-message", messageHandler)
+    }
+  }, [])
+
 
   if (!selectedChat) {
     return (

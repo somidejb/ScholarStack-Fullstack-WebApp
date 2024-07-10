@@ -170,18 +170,20 @@ export async function getFavorites(userId: string) {
 
 export async function addFavorite(userId: string, bookId: string) {
   try {
-    await connectToDatabase()
-    const user = await User.findById(userId)
-    if (!user) throw new Error('User not found')
+    await connectToDatabase();
+    const user = await User.findById(userId);
+    console.log(user)
+    if (!user) throw new Error('User not found');
 
     if (!user.favorites.includes(bookId)) {
-      user.favorites.push(bookId)
-      await user.save()
+      user.favorites.push(bookId);
+      await user.save();
     }
 
-    return JSON.parse(JSON.stringify(user))
+    return JSON.parse(JSON.stringify(user));
   } catch (error) {
-    handleError(error)
+    console.error(`Error adding favorite for user ${userId} and book ${bookId}:`, error);
+    throw error; // Rethrow the error to be handled by the calling function
   }
 }
 
@@ -211,7 +213,7 @@ export async function fetchAllBooks() {
       return []
   }
 }
-export const fetchBookById = async (id: string) => {
+export async function fetchBookById(id: string) {
   try {
     await connectToDatabase();
     const book = await Book.findById(id).lean();

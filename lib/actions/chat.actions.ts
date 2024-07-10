@@ -51,22 +51,21 @@ export async function getChatByChatId(chatId: string){
     }
 }
 
-export async function addToSeenBy(chatId: string | undefined, userId: string){
-    try{
+export async function addToSeenBy(chatId: string | undefined, userId: string) {
+    try {
         await connectToDatabase();
         await Message.updateMany(
-            { chat: chatId},
-            { $addToSet: {seenBy: userId}},
-            { new: true}
+            { chat: chatId },
+            { $addToSet: { seenBy: userId } },
+            { new: true }
         ).populate({
             path: "sender seenBy",
             model: User,
         }).exec();
 
-        return new Response('Seen by added successfully', {status: 200});
-    }
-    catch(error){
+        return { success: true, message: 'Seen by added successfully' };
+    } catch (error) {
         console.log(error);
-        return new Response('Error adding seen by', {status: 500});
+        return { success: false, message: 'Error adding seen by' };
     }
 }

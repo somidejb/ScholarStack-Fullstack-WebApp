@@ -181,7 +181,7 @@ export const bookDefaultValues = {
     imageURLs: [],
     categoryId: "",
     languageId: "",
-    isFree: false,
+    isBookFree: false,
     price: "0",
     salePrice: "",
     location: "",

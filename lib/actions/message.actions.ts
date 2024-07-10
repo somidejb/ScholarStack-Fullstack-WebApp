@@ -1,11 +1,11 @@
 "use server";
 
-import { io } from "@/app/api/socket"; // Import the Socket.IO server instance
 import { connectToDatabase } from "../mongodb/database";
 import Chat from "../mongodb/database/models/chat.model";
 import Message from "../mongodb/database/models/message.model";
-import { handleError } from "../utils";
+import { handleError, toPusherKey } from "../utils";
 import User from "../mongodb/database/models/user.model";
+import { pusherServer } from "../pusher";
 
 type getMessageProps = {
     chatId: string | undefined;
@@ -30,6 +30,7 @@ export async function getMessage({ chatId, currentUserId, text, photo }: getMess
             photo,
             seenBy: currentUserId,
         });
+        console.log(newMessage)
 
         const updatedChat = await Chat.findByIdAndUpdate(
             chatId,
@@ -51,15 +52,27 @@ export async function getMessage({ chatId, currentUserId, text, photo }: getMess
             model: "User",
         }).exec();
 
-        if (!updatedChat) throw new Error('Message not sent');
+        await pusherServer.trigger(toPusherKey(`chat:${chatId}`), "incoming-message", newMessage)
+        const lastMessage = updatedChat.messages[updatedChat.messages.length - 1];
+        console.log("Last message:", lastMessage);
+        
+        updatedChat.members.forEach(async (member: any) => {
+            try{
+                await pusherServer.trigger(toPusherKey(`user:${member._id.toString()}`), "update-chat", {
+                    id: chatId,
+                    messages: [lastMessage]
+                });
+            }
+            catch (error) {
+                console.error("Error sending pusher update:", error);
+            }
+        })
 
-        // Emit the new message event to the specific chat room
-        if (io) {
-            io.to(chatId).emit("new-message", newMessage);
-        }
+        if (!updatedChat) throw new Error('Message not sent');
 
         return JSON.parse(JSON.stringify(newMessage));
     } catch (error) {
         handleError(error);
+
     }
 }

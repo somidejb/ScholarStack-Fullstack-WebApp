@@ -5,8 +5,7 @@ import BookCard from "./BookCard";
 import Image from "next/image";
 import Link from "next/link";
 import { IBook } from "@/lib/mongodb/database/models/book.model";
-import { getFavorites} from '@/lib/actions/book.actions'
-
+import { getFavorites } from '@/lib/actions/book.actions';
 
 type CollectionProps = {
   collection_type: string;
@@ -31,19 +30,25 @@ export const Collection = ({ collection_type, books, userId }: CollectionProps) 
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-
   useEffect(() => {
     const fetchFavorites = async () => {
       try {
-        const favorites: IBook[] = await getFavorites(userId);
-        setFavorites(favorites.map(favorite => favorite._id)); // Map to array of strings (book IDs)
+        const favoriteBooks: IBook[] = await getFavorites(userId);
+        const favoriteIds = favoriteBooks.reduce<string[]>((acc, favorite) => {
+          acc.push(favorite._id);
+          return acc;
+        }, []);
+        setFavorites(favoriteIds);
       } catch (error) {
         console.error('Failed to fetch favorites:', error);
       }
     };
 
-    fetchFavorites();
+    if (userId) {
+      fetchFavorites();
+    }
   }, [userId]);
+
 
   const totalSlides = Math.ceil(books.length / cardsPerSlide);
 

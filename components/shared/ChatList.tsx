@@ -104,15 +104,21 @@ const ChatList = ({ className, userId, currentUser }: ChatListProps) => {
             />
           </div>
           <div>
-            {chats.map((chat, index) => (
-              <ChatCard
-                key={index}
-                chat={chat}
-                index={index}
-                userId={userId}
-                handleSelectChat={handleSelectChat}
-              />
-            ))}
+            {chats.length === 0 ? (
+              <div className="text-center text-gray-500 mt-4">No conversations available</div>
+            ) : (
+              chats.map((chat, index) => (
+                <ChatCard
+                  key={index}
+                  chat={chat}
+                  index={index}
+                  userId={userId}
+                  handleSelectChat={handleSelectChat}
+                  currentUser={currentUser}
+                  setChats={setChats}
+                />
+              ))
+            )}
           </div>
         </div>
       </div>

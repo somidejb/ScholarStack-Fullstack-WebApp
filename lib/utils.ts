@@ -84,3 +84,7 @@ export const formatDateTime = (dateString: Date) => {
     timeOnly: formattedTime,
   }
 }
+
+export function toPusherKey(key: string){
+  return key.replace(/:/g, '__').toUpperCase()
+}

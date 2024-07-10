@@ -1,8 +1,7 @@
 "use client"
-import { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import React from 'react';
 import { addFavorite, removeFavorite } from '@/lib/actions/book.actions';
 
 type BookCardProps = {
@@ -13,12 +12,15 @@ type BookCardProps = {
   author: string;
   price?: string;
   salePrice?: string;
-  isFavorite?: boolean; // Add isFavorite prop
   favorites?: string[];
-}
+};
 
 const BookCard = ({ userId, bookId, title, imageUrl, author, price, salePrice, favorites }: BookCardProps) => {
   const [favorite, setFavorite] = useState(favorites?.includes(bookId));
+
+  useEffect(() => {
+    setFavorite(favorites?.includes(bookId));
+  }, [favorites, bookId]);
 
   const toggleFavorite = async () => {
     if (favorite) {
