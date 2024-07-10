@@ -1,19 +1,32 @@
 import React from 'react';
+import { currentUser } from "@clerk/nextjs/server";
 import { fetchAllBooks } from '@/lib/actions/book.actions';
-import { auth } from '@clerk/nextjs/server';
 import { IBook } from '@/lib/mongodb/database/models/book.model';
-import { getUserById } from '@/lib/actions/user.actions';
+import { getUserById, getUserById2 } from '@/lib/actions/user.actions';
 import Profile from '@/components/shared/Profile';
 
 const ProfilePage: React.FC = async () => {
   try {
-    const { sessionClaims } = auth();
-    const userId = sessionClaims?.userId as string;
+    const clerkUser = await currentUser();
 
-    console.log('Fetched user ID from Clerk:', userId);
-
-    if (!userId) {
+    if (!clerkUser) {
+      console.log('No user found. User might not be authenticated.');
       return <p>Please sign in to view your profile.</p>;
+    }
+
+    const clerkId = clerkUser.id;
+    console.log('Fetched user ID from Clerk:', clerkId);
+
+    let userDetails = null;
+    try {
+      userDetails = await getUserById2(clerkId);
+      if (!userDetails) {
+        console.error('User details not found for clerkId:', clerkId);
+        return <p>Error loading user details. Please try again later.</p>;
+      }
+    } catch (error) {
+      console.error('Error fetching user details:', error);
+      return <p>Error loading user details. Please try again later.</p>;
     }
 
     let books: IBook[] = [];
@@ -23,34 +36,24 @@ const ProfilePage: React.FC = async () => {
       console.error('Error fetching books:', error);
     }
 
-    const userBooks = books.filter(book => book.bookOwner?._id === userId);
+    const userBooks = books.filter(book => book.bookOwner?.toString() === userDetails._id.toString());
 
-    let userDetails = null;
-    try {
-      userDetails = await getUserById(userId);
-    } catch (error) {
-      console.error('Error fetching user details:', error);
-    }
-
-    if (!userDetails) {
-      return <p>Error loading user details. Please try again later.</p>;
-    }
-
-    const user = {
+    const profileUser = {
       username: userDetails.username,
-      fullName: `${userDetails.firstName} ${userDetails.lastName}`,
+      fullName: `${userDetails.firstName} ${userDetails.lastName}`.trim(),
       imageUrl: userDetails.photo,
       joinedAt: userDetails.joinedAt,
     };
 
     const userProps = {
-      user,
+      user: profileUser,
       userDetails: {
-        Bio: userDetails.bio,
-        Location: userDetails.location,
+        Bio: userDetails.bio || 'Please add a bio.',
+        Location: userDetails.location || 'Please add a location.',
       },
       userBooks,
-      userId, // Pass userId to Profile component
+      userId: userDetails._id.toString(),
+      clerkId: clerkUser.id,
     };
 
     return <Profile {...userProps} />;
