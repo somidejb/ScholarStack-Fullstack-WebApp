@@ -33,6 +33,12 @@ export type CreateUserParams = {
     }
     path: string
   }
+
+  export type CreateChatParams = {
+    userId: string;
+    members: string[];
+    path?: string;
+  }
   
   export type UpdateBookParams = {
     userId: string
@@ -86,4 +92,6 @@ export type CreateUserParams = {
     page: number
     category?: string
     language?: string
+    price?: string
+    salePrice?: string
   }

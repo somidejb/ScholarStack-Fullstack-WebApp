@@ -1,8 +1,9 @@
 "use client"
-import { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import React from 'react';
+import { FiEdit, FiTrash2, FiEye, FiMoreHorizontal } from 'react-icons/fi'; // Importing icons from react-icons/fi
+
 import { addFavorite, removeFavorite } from '@/lib/actions/book.actions';
 
 type BookCardProps = {
@@ -13,12 +14,17 @@ type BookCardProps = {
   author: string;
   price?: string;
   salePrice?: string;
-  isFavorite?: boolean; // Add isFavorite prop
   favorites?: string[];
-}
+  bookOwnerId: string;
+};
 
-const BookCard = ({ userId, bookId, title, imageUrl, author, price, salePrice, favorites }: BookCardProps) => {
+const BookCard = ({ userId, bookId, title, imageUrl, author, price, salePrice, favorites, bookOwnerId }: BookCardProps) => {
   const [favorite, setFavorite] = useState(favorites?.includes(bookId));
+
+  useEffect(() => {
+    setFavorite(favorites?.includes(bookId));
+  }, [favorites, bookId]);
+  const [menuOpen, setMenuOpen] = useState(false);
 
   const toggleFavorite = async () => {
     if (favorite) {
@@ -27,6 +33,10 @@ const BookCard = ({ userId, bookId, title, imageUrl, author, price, salePrice, f
       await addFavorite(userId, bookId);
     }
     setFavorite(!favorite);
+  };
+
+  const toggleMenu = () => {
+    setMenuOpen(!menuOpen);
   };
 
   return (
@@ -59,6 +69,30 @@ const BookCard = ({ userId, bookId, title, imageUrl, author, price, salePrice, f
             onClick={toggleFavorite}
           />
         </div>
+
+        {userId === bookOwnerId && (
+          <div className="absolute top-2 right-2 z-10">
+            <button className="cursor-pointer" onClick={toggleMenu}>
+              <FiMoreHorizontal size={24} className="text-gray-500 hover:text-gray-800" />
+            </button>
+            {menuOpen && (
+              <div className="absolute top-6 right-0 bg-white shadow-lg rounded-lg">
+                <Link href={`/books/${bookId}/update`} className=" px-4 py-2 text-indigo-900 hover:bg-indigo-100 flex items-center">
+                  <FiEdit size={16} className="inline-block mr-2" />
+                  Edit
+                </Link>
+                <Link href={`/books/${bookId}/delete`} className=" px-4 py-2 text-red-900 hover:bg-red-100 flex items-center">
+                  <FiTrash2 size={16} className="inline-block mr-2" />
+                  Delete
+                </Link>
+                <Link href={`/books/${bookId}`} className=" px-4 py-2 text-indigo-900 hover:bg-indigo-100 flex items-center">
+                  <FiEye size={16} className="inline-block mr-2" />
+                  View Listing
+                </Link>
+              </div>
+            )}
+          </div>
+        )}
       </div>
     </div>
   );

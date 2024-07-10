@@ -5,12 +5,28 @@ import { SearchParamProps } from '@/types';
 import { getAllBooks, getFavorites } from '@/lib/actions/book.actions';
 import { IBook } from '@/lib/mongodb/database/models/book.model';
 import { auth } from '@clerk/nextjs/server';
+import Pagination from '@/components/shared/Pagination';
 
 export default async function Books({ searchParams }: SearchParamProps) {
   const page = Number(searchParams?.page) || 1;
   const searchText = (searchParams?.query as string) || "";
-  const category = (searchParams?.category as string) || "";
-  const language = (searchParams?.language as string) || "";
+  const filters = (searchParams?.Filters as string) || "";
+
+  // Parse the Filters parameter manually
+  const parsedFilters: Record<string, string> = filters
+    .split('_AND_')
+    .reduce((acc, filter) => {
+      const [key, value] = filter.split('=');
+      if (key && value) {
+        acc[key] = value;
+      }
+      return acc;
+    }, {} as Record<string, string>);
+
+  const category = parsedFilters.categories || "";
+  const language = parsedFilters.languages || "";
+  const price = parsedFilters.price || "";
+
   const { sessionClaims } = auth();
   const userId = sessionClaims?.userId as string;
 
@@ -19,11 +35,14 @@ export default async function Books({ searchParams }: SearchParamProps) {
     query: searchText,
     category,
     language,
-    page,
-    limit: 15
+    price,
+    page: searchParams.page ? +searchParams.page : 1,
+    limit: 16,
   });
 
   const books = result?.data ?? [];
+  const isNext = result?.isNext ?? false;
+  const totalPages = result?.totalPages ?? 1;
 
   // Fetch favorites data
   let favorites: string[] = [];
@@ -50,9 +69,16 @@ export default async function Books({ searchParams }: SearchParamProps) {
                 price={book.price}
                 salePrice={book.salePrice}
                 favorites={favorites}
+                bookOwnerId={book.bookOwner._id}
               />
             ))}
           </div>
+          <div className="mt-10 mb-5">
+            <Pagination 
+              pageNumber={page}
+              isNext={isNext}
+            />
+          </div>         
         </div>
       </div>
     </>

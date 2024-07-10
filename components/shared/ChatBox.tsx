@@ -7,7 +7,7 @@ interface ChatBoxProps {
   className?: string;
 }
 
-const ChatBox: React.FC<ChatBoxProps> = ({ onSendMessage, className }) => {
+const ChatBox = ({ onSendMessage, className }: ChatBoxProps) => {
   const [message, setMessage] = useState('');
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -36,6 +36,7 @@ const ChatBox: React.FC<ChatBoxProps> = ({ onSendMessage, className }) => {
         onKeyPress={handleKeyPress}
         className="w-full p-2 border rounded-lg"
         placeholder="Write a message"
+        required
       />
       <button onClick={handleSend} className="p-2">
         <FontAwesomeIcon

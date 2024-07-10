@@ -58,10 +58,13 @@ const UserSchema = new Schema({
       ref: 'Book',
     },
   ],
-  chats:{
-    type:[{type: mongoose.Schema.Types.ObjectId, ref: "Chat"}],
-    default:[],
-  }
+  chats: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: 'Message',
+      default: [],
+    }
+  ]
 });
 
 const User = models.User || model("User", UserSchema);

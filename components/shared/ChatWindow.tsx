@@ -1,34 +1,55 @@
-import React from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEllipsis, faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 import ChatBox from "@/components/shared/ChatBox";
-
-interface Chat {
-  name: string;
-  message: string;
-  avatar: string;
-}
-
-interface Message {
-  sender: string;
-  content: string;
-}
+import { IChat } from "@/lib/mongodb/database/models/chat.model";
+import { pusherClient } from "@/lib/pusher";
+import { toPusherKey } from "@/lib/utils";
+import { IMessage } from "@/lib/mongodb/database/models/message.model";
 
 interface ChatWindowProps {
-  selectedChat: Chat | null;
-  messages: Message[];
+  selectedChat: IChat | null;
+  userId: string;
   onBack?: () => void;
   onSendMessage: (message: string) => void;
   className?: string;
+  messages: any[];
 }
 
-const ChatWindow: React.FC<ChatWindowProps> = ({
+const ChatWindow = ({
   selectedChat,
-  messages,
   onBack,
+  userId,
   onSendMessage,
   className,
-}) => {
+  messages,
+}: ChatWindowProps) => {
+  const [chatMessages, setChatMessages] = useState(messages);
+
+  useEffect(() => {
+    if (selectedChat) {
+      setChatMessages(messages);
+    }
+  }, [selectedChat, messages]);
+
+  useEffect(() => {
+    pusherClient.subscribe(
+      toPusherKey(`chat:${selectedChat?._id}`),
+    )
+    const messageHandler = (message: IMessage) => {
+      setChatMessages((prev) => [message, ...prev])
+    }
+
+    pusherClient.bind("incoming-message", messageHandler);
+    return () => {
+      pusherClient.unsubscribe(
+        toPusherKey(`chat:${selectedChat?._id}`),
+      )
+      pusherClient.unbind("incoming-message", messageHandler)
+    }
+  }, [])
+
+
   if (!selectedChat) {
     return (
       <div className={`flex-grow flex items-center justify-center ${className}`}>
@@ -36,6 +57,12 @@ const ChatWindow: React.FC<ChatWindowProps> = ({
       </div>
     );
   }
+
+  const bottomRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    bottomRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [chatMessages]);
 
   return (
     <div className={`flex flex-col h-full ${className}`}>
@@ -51,11 +78,11 @@ const ChatWindow: React.FC<ChatWindowProps> = ({
           </button>
         )}
         <img
-          src={selectedChat.avatar}
-          alt={`${selectedChat.name}'s avatar`}
+          src={selectedChat?.members[1].photo}
+          alt={`${selectedChat?.members[1].username}'s avatar`}
           className="w-10 h-10 rounded-full mr-2"
         />
-        <h3 className="text-lg font-semibold">{selectedChat.name}</h3>
+        <h3 className="text-lg font-semibold">{selectedChat.members[1].username}</h3>
         <FontAwesomeIcon
           icon={faEllipsis}
           height={15}
@@ -66,22 +93,22 @@ const ChatWindow: React.FC<ChatWindowProps> = ({
       </div>
       <div className="flex-grow p-4 overflow-y-auto bg-white">
         <div className="flex flex-col space-y-4">
-          {messages.map((msg, index) => (
-            <div
-              key={index}
-              className={`flex ${
-                msg.sender === "You" ? "justify-end" : "justify-start"
-              }`}
-            >
-              <div
-                className={`${
-                  msg.sender === "You" ? "bg-indigo-100" : "bg-gray-200"
-                } p-2 rounded-lg`}
-              >
-                <p className="text-sm">{msg.content}</p>
+          {chatMessages.map((msg, index) => (
+            msg?.sender?._id !== userId ? (
+              <div key={index} className="flex justify-start">
+                <div className="bg-gray-200 p-2 rounded-lg">
+                  <p className="text-sm">{msg.text}</p>
+                </div>
               </div>
-            </div>
+            ) : (
+              <div key={index} className="flex justify-end">
+                <div className="bg-indigo-100 p-2 rounded-lg">
+                  <p className="text-sm">{msg.text}</p>
+                </div>
+              </div>
+            )
           ))}
+          <div ref={bottomRef}></div>
         </div>
       </div>
       <ChatBox onSendMessage={onSendMessage} className="w-full" />
@@ -90,102 +117,3 @@ const ChatWindow: React.FC<ChatWindowProps> = ({
 };
 
 export default ChatWindow;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// import React from "react";
-// import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-// import { faEllipsis, faArrowLeft } from "@fortawesome/free-solid-svg-icons";
-// import Image from "next/image";
-
-// interface Chat {
-//   name: string;
-//   message: string;
-// }
-
-// interface Message {
-//   sender: string;
-//   content: string;
-// }
-
-// interface ChatWindowProps {
-//   selectedChat: Chat | null;
-//   messages: Message[];
-//   onBack?: () => void;
-//   className?: string;
-// }
-
-// const ChatWindow: React.FC<ChatWindowProps> = ({ selectedChat, messages, onBack, className }) => {
-//   if (!selectedChat) {
-//     return (
-      
-     
-//       <div className={`flex-grow flex items-center justify-center ${className}`}>
-//         <Image
-//          src="/assets/images/chatpage_img.png"
-//          alt="Eclipse"
-//          width={140}
-//          height={126}/>
-//         <p className="text-xl"> Select a chat to start messaging </p>
-//       </div>
-     
-//     );
-//   }
-
-//   return (
-//     <div className={`flex flex-col h-full ${className}`}>
-//       <div className="border-b p-4 flex items-center">
-//         {onBack && (
-//           <button className="mr-4 md:hidden" onClick={onBack}>
-//             <FontAwesomeIcon
-//               icon={faArrowLeft}
-//               height={15}
-//               width={15}
-//               style={{ color: "#000000" }}
-//             />
-//           </button>
-//         )}
-//         <img
-//           src="/profile.jpg"
-//           alt="Profile"
-//           className="h-8 w-8 rounded-full mr-2"
-//         />
-//         <h3 className="text-lg font-semibold">{selectedChat.name}</h3>
-//         <FontAwesomeIcon
-//           icon={faEllipsis}
-//           height={15}
-//           width={15}
-//           style={{ color: "#000000" }}
-//           className="ml-auto"
-//         />
-//       </div>
-//       <div className="flex-grow p-4 overflow-y-auto bg-white">
-//         <div className="flex flex-col space-y-4">
-//           {messages.map((msg, index) => (
-//             <div key={index} className={`flex ${msg.sender === 'You' ? 'justify-end' : 'justify-start'}`}>
-//               <div className={`${msg.sender === 'You' ? 'bg-indigo-100' : 'bg-gray-200'} p-2 rounded-lg`}>
-//                 <p className="text-sm">{msg.content}</p>
-//               </div>
-//             </div>
-//           ))}
-//         </div>
-//       </div>
-//     </div>
-//   );
-// };
-
-// export default ChatWindow;

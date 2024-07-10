@@ -16,9 +16,11 @@ const UpdateBook = async ({params: {id}}: UpdateBookProps) => {
   return (
     <>
       <section>
-        <h2 className="text-2xl font-bold mb-6 text-center text-blue-900 mt-1"> Upload Book</h2>
+        <h2 className="text-2xl font-bold mb-6 text-center text-blue-900 mt-1"> Edit Book</h2>
       </section>
       <BookForm 
+        book = {book}
+        bookId={id}
         userId = {userId}
         type="Edit"  
       />

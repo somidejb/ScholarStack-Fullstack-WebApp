@@ -1,12 +1,10 @@
 "use client";
-
 import { useState, useEffect } from "react";
 import BookCard from "./BookCard";
 import Image from "next/image";
 import Link from "next/link";
 import { IBook } from "@/lib/mongodb/database/models/book.model";
-import { getFavorites} from '@/lib/actions/book.actions'
-
+import { getFavorites } from '@/lib/actions/book.actions';
 
 type CollectionProps = {
   collection_type: string;
@@ -31,19 +29,25 @@ export const Collection = ({ collection_type, books, userId }: CollectionProps) 
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-
   useEffect(() => {
     const fetchFavorites = async () => {
       try {
-        const favorites: IBook[] = await getFavorites(userId);
-        setFavorites(favorites.map(favorite => favorite._id)); // Map to array of strings (book IDs)
+        const favoriteBooks: IBook[] = await getFavorites(userId);
+        const favoriteIds = favoriteBooks.reduce<string[]>((acc, favorite) => {
+          acc.push(favorite._id);
+          return acc;
+        }, []);
+        setFavorites(favoriteIds);
       } catch (error) {
         console.error('Failed to fetch favorites:', error);
       }
     };
 
-    fetchFavorites();
+    if (userId) {
+      fetchFavorites();
+    }
   }, [userId]);
+
 
   const totalSlides = Math.ceil(books.length / cardsPerSlide);
 
@@ -67,7 +71,7 @@ export const Collection = ({ collection_type, books, userId }: CollectionProps) 
   };
 
   return (
-    <section className="mt-[60px] lg:mt-[88px] items-center flex flex-col">
+    <section className="mt-[60px] lg:mt-[88px] items-center flex flex-col ml">
       <h2 className="text-center leading-[27px] md:leading-[36px] lg:leading-[73px] text-[22px] md:text-[30px] lg:text-[42px] tracking-widest font-normal">
         {collection_type}
       </h2>
@@ -105,6 +109,7 @@ export const Collection = ({ collection_type, books, userId }: CollectionProps) 
                   key={book._id}
                   salePrice={book.salePrice}
                   favorites={favorites}
+                  bookOwnerId={book.bookOwner._id} // Pass bookOwnerId to BookCard
                 />
               </div>
             ))}
@@ -123,7 +128,7 @@ export const Collection = ({ collection_type, books, userId }: CollectionProps) 
         </div>
       </div>
       <div className="flex w-full items-center mt-[24px] md:mt-[30px] card-center">
-        <div className="flex justify-center flex-grow">{renderDots()}</div>
+        <div className="flex justify-center flex-grow">{renderDots()}</div >
         <Link href="">
           <p className="cursor-pointer text-normal leading-[16px] md:leading-[23px] lg:leading-[32px] text-[11px] md:text-[16px] lg:text-[23px] tracking-widest text-[#2F27CE]">
             See more
