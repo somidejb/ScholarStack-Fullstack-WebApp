@@ -1,6 +1,5 @@
 "use client";
 import React, { useState } from "react";
-import ChatBox from "@/components/shared/ChatBox";
 import ChatList from "@/components/shared/ChatList";
 import ChatWindow from "@/components/shared/ChatWindow";
 import Header from "@/components/shared/Header";
@@ -83,6 +82,7 @@ const MessagingPage: React.FC = () => {
         ...prevMessages,
         [chatName]: [...(prevMessages[chatName] || []), newMessage],
       }));
+
       setChats((prevChats) => {
         const updatedChats = prevChats.map((chat) =>
           chat.name === chatName
@@ -94,15 +94,16 @@ const MessagingPage: React.FC = () => {
     }
   };
 
-  const handleSelectChat = (chat: Chat) => {
-    setChats((prevChats) => {
-      const updatedChats = prevChats.map((c) =>
-        c.name === chat.name ? { ...c, isOpened: true } : c
-      );
-      return updatedChats;
-    });
-    setSelectedChat(chat);
-  };
+const handleSelectChat = (chat: Chat) => {
+  setChats((prevChats) => {
+    const updatedChats = prevChats.map((c) =>
+      c.name === chat.name ? { ...c, isOpened: true } : { ...c, isOpened: false }
+    );
+    return updatedChats;
+  });
+  setSelectedChat(chat);
+};
+
 
   return (
     <div className="bg-gray-100 min-h-screen">
@@ -120,12 +121,13 @@ const MessagingPage: React.FC = () => {
               className="w-full h-full shadow-lg rounded-lg bg-white"
             />
           </div>
+          
           <div
             className={`flex flex-col flex-grow ${
               selectedChat ? "block" : "hidden"
-            } md:block`}
+            } md:block `}
           >
-            <div className="flex flex-col h-full shadow-lg rounded-lg bg-white">
+            <div className="flex flex-col h-full shadow-lg rounded-lg bg-white  ">
               <ChatWindow
                 selectedChat={selectedChat}
                 messages={selectedChat ? messages[selectedChat.name] || [] : []}
@@ -133,7 +135,6 @@ const MessagingPage: React.FC = () => {
                 className="flex-grow overflow-y-auto"
                 onSendMessage={handleSendMessage}
               />
-              
             </div>
           </div>
         </div>
@@ -144,6 +145,7 @@ const MessagingPage: React.FC = () => {
 };
 
 export default MessagingPage;
+
 
 
 

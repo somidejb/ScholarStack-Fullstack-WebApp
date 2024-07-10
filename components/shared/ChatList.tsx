@@ -42,7 +42,7 @@ const ChatList: React.FC<ChatListProps> = ({
         {chats.map((chat, index) => (
           <div
             key={index}
-            className={`flex justify-between items-center p-2 cursor-pointer`}
+            className={`flex justify-between items-center p-2 cursor-pointer hover:bg-gray-100`}
             onClick={() => onSelectChat(chat)}
           >
             <div className="flex items-center">
@@ -61,6 +61,9 @@ const ChatList: React.FC<ChatListProps> = ({
 };
 
 export default ChatList;
+
+
+
 
 
 
