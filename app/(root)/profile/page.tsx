@@ -4,17 +4,18 @@ import { auth } from '@clerk/nextjs/server';
 import { IBook } from '@/lib/mongodb/database/models/book.model';
 import { getUserById } from '@/lib/actions/user.actions';
 import Profile from '@/components/shared/Profile';
+import { handleBookNotification } from '@/lib/actions/extendPostedDate';
 import { daysSincePosted } from '@/lib/actions/datePosted';
 import { sendEmail } from '@/lib/actions/email';
-
 
 const ProfilePage: React.FC = async () => {
   try {
     const { sessionClaims } = auth();
     const userId = sessionClaims?.userId as string;
-    console.log('User ID:', userId);
+    console.log('Session claims:', sessionClaims);
 
     if (!userId) {
+      console.log('No user ID found.');
       return <p>Please sign in to view your profile.</p>;
     }
 
@@ -35,17 +36,24 @@ const ProfilePage: React.FC = async () => {
     }
 
     if (!userDetails) {
+      console.log('User details not found.');
       return <p>Error loading user details. Please try again later.</p>;
     }
 
+    console.log('User email:', userDetails.email);
+
     const userFavorites = books.filter(book => userDetails.favorites.includes(book._id));
 
+    for (const book of userBooks) {
+      await handleBookNotification(book, userDetails.email);
+    }
     // Check if any book listed by the user has been posted for 7 days
     for (const book of userBooks) {
       const daysPosted = daysSincePosted(new Date(book.postedAt));
       console.log(`Days since posted: ${daysPosted}`);
 
-      if (daysPosted === 7) {
+      if (daysPosted === 21) {
+        console.log(`Sending email to: ${userDetails.email}`); // Log the email before sending
         await sendEmail(userDetails.email, book.title);
       }
     }
@@ -55,6 +63,7 @@ const ProfilePage: React.FC = async () => {
       fullName: `${userDetails.firstName} ${userDetails.lastName}`,
       imageUrl: userDetails.photo,
       joinedAt: userDetails.joinedAt,
+      email: userDetails.email,
     };
 
     const userProps = {
@@ -64,8 +73,8 @@ const ProfilePage: React.FC = async () => {
         Location: userDetails.location,
       },
       userBooks,
-      userFavorites, // Adding the favorite books
-      userId, 
+      userFavorites,
+      userId,
     };
 
     return <Profile {...userProps} />;

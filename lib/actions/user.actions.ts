@@ -45,3 +45,17 @@ export async function getUserById(userId: string) {
   }
 }
 
+export async function getUserEmailById(userId: string): Promise<string> {
+  try {
+    await connectToDatabase();
+
+    const userEmail = await User.findById(userId).select('email'); // Select only the email field
+
+    if (!userEmail) throw new Error('User not found');
+    return userEmail.email; 
+  } catch (error) {
+    console.error('Error getting user email:', error);
+    throw error; 
+  }
+}
+

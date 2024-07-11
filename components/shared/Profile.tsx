@@ -1,4 +1,5 @@
-import React from 'react';
+"use client";
+import React, { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Collection } from './Collection';
@@ -10,6 +11,7 @@ interface IUser {
   fullName: string;
   imageUrl: string;
   joinedAt: string;
+  email: string;
 }
 
 interface IUserDetails {
@@ -27,6 +29,8 @@ interface ProfileProps {
 
 const Profile: React.FC<ProfileProps> = ({ user, userDetails, userBooks, userFavorites, userId }) => {
   console.log('User:', user);
+  const [isChecked, setChecked] = useState(true);
+
   const formatDate = (dateString: string) => {
     const options: Intl.DateTimeFormatOptions = {
       year: 'numeric',
@@ -48,8 +52,8 @@ const Profile: React.FC<ProfileProps> = ({ user, userDetails, userBooks, userFav
                 src={user.imageUrl || "/assets/images/profile-icon.png"}
                 alt="Profile Picture"
                 className="rounded-full"
-                layout="fill"
-                objectFit="cover"
+                fill
+                style={{ objectFit: 'cover' }}
               />
             </div>
             <h2 className="text-xl font-semibold mt-4 text-nowrap">{user.fullName}</h2>
@@ -81,7 +85,12 @@ const Profile: React.FC<ProfileProps> = ({ user, userDetails, userBooks, userFav
           </div>
           <div>
             <p className="text-gray-600">Status</p>
-            <input type="checkbox" className="toggle-checkbox" checked />
+            <input
+              type="checkbox"
+              className="toggle-checkbox"
+              checked={isChecked}
+              onChange={(e) => setChecked(e.target.checked)}
+            />
             <span className="font-semibold">Active</span>
           </div>
         </div>

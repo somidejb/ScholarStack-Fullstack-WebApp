@@ -196,7 +196,20 @@ export async function fetchBooksByCategory(categoryId: string) {
     handleError(error);
     return [];
   }
-};
+}
+export async function getUserEmailById(userId: string): Promise<string | null> {
+  try {
+    await connectToDatabase();
+
+    const user = await User.findById(userId).select('email'); // Only select the email field
+
+    if (!user) throw new Error('User not found');
+    return user.email; // Return the email directly
+  } catch (error) {
+    console.error('Error getting user email:', error);
+    return null; // Return null in case of error
+  }
+}
 
 
 
