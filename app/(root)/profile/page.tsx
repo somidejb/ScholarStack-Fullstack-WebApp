@@ -2,7 +2,7 @@ import React from 'react';
 import { fetchAllBooks } from '@/lib/actions/book.actions';
 import { auth } from '@clerk/nextjs/server';
 import { IBook } from '@/lib/mongodb/database/models/book.model';
-import { getUserById } from '@/lib/actions/user.actions';
+import { getUserById, updateUserLocation } from '@/lib/actions/user.actions';
 import Profile from '@/components/shared/Profile';
 import { handleBookNotification } from '@/lib/actions/extendPostedDate';
 import { daysSincePosted } from '@/lib/actions/datePosted';
@@ -12,12 +12,17 @@ const ProfilePage: React.FC = async () => {
   try {
     const { sessionClaims } = auth();
     const userId = sessionClaims?.userId as string;
+    const ip = sessionClaims?.ip as string; // Assuming IP is available in session claims and typing it as string
+
     console.log('Session claims:', sessionClaims);
 
     if (!userId) {
       console.log('No user ID found.');
       return <p>Please sign in to view your profile.</p>;
     }
+
+    // Update user location
+    await updateUserLocation(userId, ip, '/profile'); // Provide the correct path
 
     let books: IBook[] = [];
     try {
@@ -41,13 +46,15 @@ const ProfilePage: React.FC = async () => {
     }
 
     console.log('User email:', userDetails.email);
+    console.log('User location:', userDetails.location); // Log the user location here
 
     const userFavorites = books.filter(book => userDetails.favorites.includes(book._id));
 
     for (const book of userBooks) {
       await handleBookNotification(book, userDetails.email);
     }
-    // Check if any book listed by the user has been posted for 7 days
+
+    // Check if any book listed by the user has been posted for 21 days
     for (const book of userBooks) {
       const daysPosted = daysSincePosted(new Date(book.postedAt));
       console.log(`Days since posted: ${daysPosted}`);
