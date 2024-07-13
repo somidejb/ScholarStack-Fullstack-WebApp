@@ -1,23 +1,31 @@
-import mongoose from "mongoose";
+import mongoose, { Document, Schema, model, models } from "mongoose";
 
-const { Schema, model, models } = mongoose;
+export interface IOrder extends Document {
+  order: string;
+  seller: mongoose.Types.ObjectId;
+  buyer: mongoose.Types.ObjectId;
+  book: mongoose.Types.ObjectId;
+  price: string;
+  orderDate: Date;
+}
+
 const OrderSchema = new Schema({
   order: {
     type: String,
     required: true,
     unique: true,
   },
-  seller: { // Reference to 'User'
+  seller: {
     type: Schema.Types.ObjectId,
     ref: "User",
     required: true,
   },
-  buyer: { // Reference to 'User'
+  buyer: {
     type: Schema.Types.ObjectId,
     ref: "User",
     required: true,
   },
-  book: { // Reference to 'Book'
+  book: {
     type: Schema.Types.ObjectId,
     ref: "Book",
     required: true,
@@ -30,4 +38,7 @@ const OrderSchema = new Schema({
     default: Date.now,
   },
 });
+
 const Order = models.Order || model("Order", OrderSchema);
+
+export default Order;

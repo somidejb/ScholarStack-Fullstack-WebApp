@@ -1,7 +1,6 @@
 import BookCard from '@/components/shared/BookCard'; // Ensure this path is correct
 import Filters from '@/components/shared/Filters';
 import SearchBar from '@/components/shared/SearchBar';
-import { SearchParamProps } from '@/types';
 import { getAllBooks, getFavorites } from '@/lib/actions/book.actions';
 import { IBook } from '@/lib/mongodb/database/models/book.model';
 import { auth } from '@clerk/nextjs/server';
