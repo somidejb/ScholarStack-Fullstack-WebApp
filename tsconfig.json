@@ -21,6 +21,7 @@
       "@/*": ["./*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "app/api/booksapi/route"],
+  "include": ["next-env.d.ts","diya/**/*",  "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "app/api/booksapi/route", "app/**/*", "emails/**/*"],
   "exclude": ["node_modules"]
+  
 }
