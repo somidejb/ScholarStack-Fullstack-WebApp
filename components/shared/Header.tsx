@@ -9,7 +9,7 @@ import { Button } from "../ui/button";
 // The Header component is responsible for rendering the top navigation bar
 const Header = () => {
   return (
-    <header className="w-full border-b h-[64px] md:h-[85px] lg:h-[87px] xl:h-[111px] bg-[#31457b] relative">
+    <header className="w-full border-b h-[64px] md:h-[85px] lg:h-[87px]  bg-[#31457b] relative">
       <div className="px-4 sm:px-6 md:px-8 lg:px-10 h-full w-full flex justify-between items-center relative z-50">
         <div className="flex items-center">
           <Link href="/" className="flex items-center gap-2">

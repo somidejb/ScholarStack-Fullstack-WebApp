@@ -5,6 +5,8 @@ import { getAllBooks, getFavorites } from '@/lib/actions/book.actions';
 import { IBook } from '@/lib/mongodb/database/models/book.model';
 import { auth } from '@clerk/nextjs/server';
 import Pagination from '@/components/shared/Pagination';
+import { SearchParamProps } from '@/types';
+import Link from 'next/link';
 
 export default async function Books({ searchParams }: SearchParamProps) {
   const page = Number(searchParams?.page) || 1;
@@ -56,28 +58,41 @@ export default async function Books({ searchParams }: SearchParamProps) {
         <Filters />
         <div className="w-full flex flex-col items-center justify-center">
           <SearchBar />
-          <div className="px-[30px] grid gap-x-[35px] md:gap-x-[20px] xl:gap-x-[35px] gap-y-[20px] grid-cols-2 sm:grid-cols-4 lg:grid-cols-4 mb-6 mt-5 md:mt-10">
-            {books.map((book: IBook) => (
-              <BookCard 
-                key={book._id}
-                userId={userId}
-                bookId={book._id}
-                title={book.title}
-                imageUrl={book.imageURLs[1]}
-                author={book.author}
-                price={book.price}
-                salePrice={book.salePrice}
-                favorites={favorites}
-                bookOwnerId={book.bookOwner._id}
-              />
-            ))}
-          </div>
-          <div className="mt-10 mb-5">
-            <Pagination 
-              pageNumber={page}
-              isNext={isNext}
-            />
-          </div>         
+          {books.length === 0 ? (
+            <div className="text-center mt-10">
+              <img src="/assets/icons/no-result.png" alt="No result found" className="mx-auto" />
+              <h2 className="font-bold md:text-[30px]">Oops! No result found</h2>
+              <p className="font-semibold text-gray-700">We're sorry we don't have what you are looking for</p>
+              <Link href="/books/upload" className="mt-4 font-bold inline-block bg-[#31457B] text-white px-4 py-2 rounded-full hover:bg-blue-600 transition duration-200">
+                  Upload Book
+              </Link>
+            </div>
+          ) : (
+            <>
+              <div className="px-[30px] grid gap-x-[35px] md:gap-x-[30px] lg:gap-x-[40px] xl:gap-x-[60px] gap-y-[20px] grid-cols-2 sm:grid-cols-4 lg:grid-cols-4 mb-6 mt-5 md:mt-10">
+                {books.map((book: IBook) => (
+                  <BookCard 
+                    key={book._id}
+                    userId={userId}
+                    bookId={book._id}
+                    title={book.title}
+                    imageUrl={book.imageURLs[1]}
+                    author={book.author}
+                    price={book.price}
+                    salePrice={book.salePrice}
+                    favorites={favorites}
+                    bookOwnerId={book.bookOwner._id}
+                  />
+                ))}
+              </div>
+              <div className="mt-10 mb-5">
+                <Pagination 
+                  pageNumber={page}
+                  isNext={isNext}
+                />
+              </div>
+            </>
+          )}
         </div>
       </div>
     </>

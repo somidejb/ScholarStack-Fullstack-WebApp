@@ -71,11 +71,11 @@ export const Collection = ({ collection_type, books, userId }: CollectionProps) 
   };
 
   return (
-    <section className="mt-[60px] lg:mt-[88px] items-center flex flex-col ml">
+    <section className="mt-[60px] items-center flex flex-col ml">
       <h2 className="text-center leading-[27px] md:leading-[36px] lg:leading-[73px] text-[22px] md:text-[30px] lg:text-[42px] tracking-widest font-normal">
         {collection_type}
       </h2>
-      <div className="w-full card-center flex items-center mt-[8px] md:mt-[38px] lg:mt-[50px] relative">
+      <div className="w-full card-center flex items-center mt-[8px] md:mt-[38px] relative">
         <div
           onClick={handlePrevClick}
           className="absolute z-10 left-[12px] md:left-[30px] lg:left-[45px] cursor-pointer"
@@ -129,7 +129,7 @@ export const Collection = ({ collection_type, books, userId }: CollectionProps) 
       </div>
       <div className="flex w-full items-center mt-[24px] md:mt-[30px] card-center">
         <div className="flex justify-center flex-grow">{renderDots()}</div >
-        <Link href="">
+        <Link href="/books">
           <p className="cursor-pointer text-normal leading-[16px] md:leading-[23px] lg:leading-[32px] text-[11px] md:text-[16px] lg:text-[23px] tracking-widest text-[#2F27CE]">
             See more
           </p>
