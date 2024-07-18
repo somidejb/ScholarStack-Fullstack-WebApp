@@ -1,9 +1,9 @@
 "use client";
-import { Collection } from '@/components/shared/Collection';
-import React, { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { FaMapMarkerAlt } from 'react-icons/fa';
 import ImageModal from './ImageModal'; // Adjust the import path as necessary
+import { addFavorite, removeFavorite, getFavorites } from '@/lib/actions/book.actions';
 
 type Book = {
   _id: string;
@@ -18,13 +18,32 @@ type Book = {
 
 type BookDetailsProps = {
   book: Book;
+  userId: string; // Assuming userId is passed from parent component
+  initialFavorite: boolean; // Add this prop
 };
 
-const BookDetails: React.FC<BookDetailsProps> = ({ book }) => {
+const BookDetails: React.FC<BookDetailsProps> = ({ book, userId, initialFavorite }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedImageIndex, setSelectedImageIndex] = useState<number | null>(null);
+  const [favorite, setFavorite] = useState(initialFavorite);
 
   const hasImages = book.images && book.images.length > 0;
+
+  // Check if the book is already in favorites on component mount
+  useEffect(() => {
+    const fetchFavoriteStatus = async () => {
+      try {
+        // Fetch user's favorites and check if this book is among them
+        const favorites = await getFavorites(userId);
+        const isFavorite = favorites.some((favBook: any) => favBook._id === book._id);
+        setFavorite(isFavorite);
+      } catch (error) {
+        console.error('Error fetching favorite status:', error);
+      }
+    };
+
+    fetchFavoriteStatus();
+  }, [userId, book._id]);
 
   const handleImageClick = (index: number) => {
     setSelectedImageIndex(index);
@@ -38,6 +57,19 @@ const BookDetails: React.FC<BookDetailsProps> = ({ book }) => {
 
   const navigateBack = () => {
     window.history.back(); // Navigate back using browser history
+  };
+
+  const toggleFavorite = async () => {
+    try {
+      if (favorite) {
+        await removeFavorite(userId, book._id); // Remove from favorites
+      } else {
+        await addFavorite(userId, book._id); // Add to favorites
+      }
+      setFavorite(!favorite); // Toggle favorite state
+    } catch (error) {
+      console.error('Error toggling favorite:', error);
+    }
   };
 
   return (
@@ -105,15 +137,31 @@ const BookDetails: React.FC<BookDetailsProps> = ({ book }) => {
                 <button className="transition-transform duration-300 ease-in-out transform hover:scale-110 bg-indigo-900 text-sm hover:bg-indigo-700 hover:text-gray-200 hover:shadow-lg lg:text-xl text-white px-5 py-2 lg:px-10 lg:py-2 rounded-lg shadow-md">
                   Message Seller
                 </button>
-                <button className="transition-transform duration-300 ease-in-out transform hover:scale-110 border border-indigo-900 text-sm lg:text-xl text-indigo-900 px-10 py-2 lg:px-14 lg:py-2 relative rounded-lg shadow-md hover:bg-indigo-200 hover:text-indigo-900 hover:shadow-lg">
-                  Favorite
-                  <Image
-                    src="/assets/icons/favorite.svg"
-                    alt="heart"
-                    width={19}
-                    height={11}
-                    className="absolute right-6 top-1/2 transform -translate-y-1/2 object-contain w-[12px] md:w-[20px] xl:w-[24px] h-full"
-                  />
+                <button className="transition-transform duration-300 ease-in-out transform hover:scale-110 border border-indigo-900 text-sm lg:text-xl text-indigo-900 px-10 py-2 lg:px-14 lg:py-2 relative rounded-lg shadow-md hover:bg-indigo-200 hover:text-indigo-900 hover:shadow-lg"
+                  onClick={toggleFavorite}>
+                  {favorite ? (
+                    <>
+                      Unfavorite
+                      <Image
+                        src="/assets/icons/favorite-red.png"
+                        alt="heart"
+                        width={19}
+                        height={11}
+                        className="absolute right-6 top-1/2 transform -translate-y-1/2 object-contain w-[12px] md:w-[20px] xl:w-[24px] h-full"
+                      />
+                    </>
+                  ) : (
+                    <>
+                      Favorite
+                      <Image
+                        src={favorite ? "/assets/icons/favorite-red.png" : "/assets/icons/favorite.svg"} 
+                        alt="heart"
+                        width={19}
+                        height={11}
+                        className="absolute right-6 top-1/2 transform -translate-y-1/2 object-contain w-[12px] md:w-[20px] xl:w-[24px] h-full"
+                      />
+                    </>
+                  )}
                 </button>
               </div>
             </div>

@@ -1,6 +1,4 @@
 import React from 'react';
-import Image from 'next/image';
-import Link from 'next/link';
 import { fetchAllBooks } from '@/lib/actions/book.actions';
 import { auth } from '@clerk/nextjs/server';
 import { IBook } from '@/lib/mongodb/database/models/book.model';
@@ -10,6 +8,7 @@ import NoActiveListings from '@/components/shared/NoActiveListing';
 const ProfilePage: React.FC = async () => {
   const { sessionClaims } = auth();
   const userId = sessionClaims?.userId as string;
+  console.log('User ID:', userId);
 
   let books: IBook[] = [];
   try {
@@ -26,7 +25,6 @@ const ProfilePage: React.FC = async () => {
       {/* Profile and User Details section */}
       <div className="flex items-start">
         {/* Profile section */}
-       
         {/* User Details section */}
       </div>
       {/* Listings section */}
@@ -36,6 +34,7 @@ const ProfilePage: React.FC = async () => {
             collection_type="My Listings"
             books={userBooks}
             userId={userId}
+            isProfilePage={true} // Pass isProfilePage as true
           />
         ) : (
           <NoActiveListings />
@@ -60,4 +59,4 @@ const ProfilePage: React.FC = async () => {
   );
 };
 
-export default ProfilePage; 
+export default ProfilePage;
