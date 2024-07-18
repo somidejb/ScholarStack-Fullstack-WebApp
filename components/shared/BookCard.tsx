@@ -1,9 +1,9 @@
-"use client"
+"use client";
 import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { FiEdit, FiTrash2, FiEye, FiMoreHorizontal } from 'react-icons/fi'; // Importing icons from react-icons/fi
-
+import { FiEdit, FiTrash2, FiEye, FiMoreHorizontal } from 'react-icons/fi';
+import { motion } from 'framer-motion';
 import { addFavorite, removeFavorite } from '@/lib/actions/book.actions';
 
 type BookCardProps = {
@@ -20,11 +20,11 @@ type BookCardProps = {
 
 const BookCard = ({ userId, bookId, title, imageUrl, author, price, salePrice, favorites, bookOwnerId }: BookCardProps) => {
   const [favorite, setFavorite] = useState(favorites?.includes(bookId));
+  const [menuOpen, setMenuOpen] = useState(false);
 
   useEffect(() => {
     setFavorite(favorites?.includes(bookId));
   }, [favorites, bookId]);
-  const [menuOpen, setMenuOpen] = useState(false);
 
   const toggleFavorite = async () => {
     if (favorite) {
@@ -39,18 +39,53 @@ const BookCard = ({ userId, bookId, title, imageUrl, author, price, salePrice, f
     setMenuOpen(!menuOpen);
   };
 
+  const fadeIn = {
+    hidden: { opacity: 0 },
+    visible: { opacity: 1 }
+  };
+
+  const scaleUp = {
+    hidden: { scale: 0.8 },
+    visible: { scale: 1 }
+  };
+
   return (
-    <div className="relative rounded-[15px] w-full lg:rounded-[30px] flex h-[135px] md:h-[180px] lg:h-[230px] xl:h-[300px] lg:min-w-[170px] lg:max-w-[200px] xl:min-w-[220px] xl:max-w-[250px] min-w-[104px] md:min-w-[130px] md:max-w-[150px] flex-col card-shadow mb-1">
+    <motion.div 
+      className="relative rounded-[15px] w-full lg:rounded-[30px] flex h-[135px] md:h-[180px] lg:h-[230px] xl:h-[300px] lg:min-w-[170px] lg:max-w-[200px] xl:min-w-[220px] xl:max-w-[250px] min-w-[104px] md:min-w-[130px] md:max-w-[150px] flex-col card-shadow mb-1"
+      initial="hidden"
+      animate="visible"
+      variants={fadeIn}
+      transition={{ duration: 0.5 }}
+    >
       <div className="flex flex-col items-start justify-center w-full h-full px-[7px] lg:px-[18px] xl:px-[25px] pt-[10px] md:pt-[13px]">
         <Link href={`books/${bookId}`} className="rounded-[10px] w-full h-[90px] md:h-[120px] lg:h-[210px] xl:h-[300px] overflow-hidden flex-center book-shadow">
-          <Image src={imageUrl} alt={title} width={216} height={301} className="object-contain" />
+          <motion.div variants={scaleUp}>
+            <Image src={imageUrl} alt={title} width={216} height={301} className="object-contain" />
+          </motion.div>
         </Link>
-
-        <p className="pt-[3px] font-bold p-card overflow-hidden line-clamp-1">{title}</p>
-        <p className="font-normal p-card line-clamp-1">{author}</p>
-
+        <motion.p 
+          className="pt-[3px] font-bold p-card overflow-hidden line-clamp-1"
+          initial={{ y: 20, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ delay: 0.3 }}
+        >
+          {title}
+        </motion.p>
+        <motion.p 
+          className="font-normal p-card line-clamp-1"
+          initial={{ y: 20, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ delay: 0.5 }}
+        >
+          {author}
+        </motion.p>
         <div className="flex justify-between w-full">
-          <div className="flex p-card gap-1">
+          <motion.div 
+            className="flex p-card gap-1"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.7 }}
+          >
             {salePrice ? (
               <>
                 <p className="font-bold text-red-400">{`$ ${salePrice}`}</p>
@@ -59,17 +94,22 @@ const BookCard = ({ userId, bookId, title, imageUrl, author, price, salePrice, f
             ) : (
               <p className="font-bold">{price === "0" ? "Free" : `$ ${price}`}</p>
             )}
-          </div>
-          <Image 
-            src={favorite ? "/assets/icons/favorite-red.png" : "/assets/icons/favorite.svg"} 
-            alt="heart" 
-            width={19} 
-            height={11} 
-            className={`object-contain w-[12px] md:w-[20px] lg:w-[24px] h-full cursor-pointer`} 
-            onClick={toggleFavorite}
-          />
+          </motion.div>
+          <motion.div 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.9 }}
+          >
+            <Image 
+              src={favorite ? "/assets/icons/favorite-red.png" : "/assets/icons/favorite.svg"} 
+              alt="heart" 
+              width={19} 
+              height={11} 
+              className={`object-contain w-[12px] md:w-[20px] lg:w-[24px] h-full cursor-pointer`} 
+              onClick={toggleFavorite}
+            />
+          </motion.div>
         </div>
-
         {userId === bookOwnerId && (
           <div className="absolute top-2 right-2 z-10">
             <button className="cursor-pointer" onClick={toggleMenu}>
@@ -94,7 +134,7 @@ const BookCard = ({ userId, bookId, title, imageUrl, author, price, salePrice, f
           </div>
         )}
       </div>
-    </div>
+    </motion.div>
   );
 }
 

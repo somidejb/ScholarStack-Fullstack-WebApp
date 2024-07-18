@@ -105,7 +105,7 @@ const Profile: React.FC<ProfileProps> = ({
   };
 
   return (
-    <div className="mx-auto bg-white shadow-md rounded-lg mt-[50px]">
+    <div className="mx-auto bg-white shadow-md rounded-lg">
       <div className="flex items-start">
         <div className="flex items-center justify-center bg-[#D6DAEA] w-[1060px] h-[497px] left-0 top-[113px] ">
           <div className="flex flex-col justify-center items-center lg:mr-[30px] lg:mt-8">
@@ -207,7 +207,7 @@ const Profile: React.FC<ProfileProps> = ({
         </div>
 
         <div
-          className="space-y-2 ml-2 mr-5 mt-20 lg:mr-10"
+          className="space-y-2 ml-2 mr-5 lg:mr-10"
           style={{ fontFamily: "Poppins, sans-serif" }}
         >
           <div>
@@ -265,7 +265,7 @@ const Profile: React.FC<ProfileProps> = ({
         )}
       </div>
 
-      <div className="flex justify-between px-4 py-4 bg-[#081F5C] mb-[130px]">
+      <div className="flex justify-between px-4 py-4 bg-[#081F5C]">
         <div>
           <p className="text-white">Listings Completed</p>
           <p className="text-white font-semibold text-2xl"></p>
