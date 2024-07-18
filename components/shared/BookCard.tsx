@@ -1,3 +1,4 @@
+"use client";
 import { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -92,10 +93,10 @@ const BookCard = ({ userId, bookId, title, imageUrl, author, price, salePrice, f
 
         {isProfilePage && userId === bookOwnerId && (
           <div className="flex justify-center mt-3 gap-2 mb-3">
-            <button className="px-3 py-1 shadow-xl bg-red-500 text-white text-sm rounded-lg hover:bg-gradient-to-r hover:bg-red-900">
+            <button className="px-2 py-1 shadow-xl bg-red-500 text-white text-xs md:text-sm lg:text-base rounded-lg hover:bg-gradient-to-r hover:bg-red-900">
               Mark as Sold
             </button>
-            <button className="px-3 py-1 shadow-xl  bg-blue-600 text-white text-sm rounded-lg hover:bg-gradient-to-r hover:bg-indigo-600">
+            <button className="px-2 py-1 shadow-xl bg-blue-600 text-white text-xs md:text-sm lg:text-base rounded-lg hover:bg-gradient-to-r hover:bg-indigo-600">
               Still Listed
             </button>
           </div>
