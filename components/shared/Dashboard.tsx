@@ -33,9 +33,51 @@
 // export default Dashboard;
 
 // components/Dashboard.tsx
-import React from 'react';
 
-const Dashboard = () => {
+
+import React, { useState } from 'react';
+import BookCardAdmin from './BookCardAdmin';
+
+interface DashboardProps {
+  books: {
+    title: string;
+    postedBy: string;
+    date: string;
+    price: string;
+    imageUrl: string;
+  }[];
+}
+
+const Dashboard: React.FC<DashboardProps> = ({ books }) => {
+  const [bookList, setBookList] = useState(books.map(book => ({ ...book, status: 'default' as 'approved' | 'rejected' | 'default' })));
+  const [removingBook, setRemovingBook] = useState<number | null>(null);
+
+  const handleApprove = (index: number) => {
+    setRemovingBook(index);
+    setBookList(prevBooks => {
+      const newBooks = [...prevBooks];
+      newBooks[index].status = 'approved';
+      return newBooks;
+    });
+    setTimeout(() => {
+      setBookList(prevBooks => prevBooks.filter((_, i) => i !== index));
+      setRemovingBook(null);
+    }, 500); // Duration should match the CSS transition duration
+  };
+
+  const handleReject = (index: number) => {
+    setRemovingBook(index);
+    setBookList(prevBooks => {
+      const newBooks = [...prevBooks];
+      newBooks[index].status = 'rejected';
+      return newBooks;
+    });
+    setTimeout(() => {
+      setBookList(prevBooks => prevBooks.filter((_, i) => i !== index));
+      setRemovingBook(null);
+    }, 500); // Duration should match the CSS transition duration
+  };
+
   return (
     <div className="p-6">
       <h1 className="text-3xl font-semibold mb-4">Dashboard</h1>
@@ -49,30 +91,21 @@ const Dashboard = () => {
           <p className="text-4xl text-center">34</p>
         </div>
       </div>
-      <div className="mt-7">
-        <div className="bg-white p-6 rounded-xl shadow-md flex flex-col space-y-4 hover:shadow-lg transform hover:scale-105 transition duration-200 ease-in-out">
-          <div className="flex flex-col md:flex-row items-center md:space-x-4">
-            <img
-              src="/assets/images/book-admin.png"
-              alt="Book Cover"
-              className="w-24 h-28 md:w-20 md:h-24"
+      <div className="mt-7 space-y-4">
+        {bookList.map((book, index) => (
+          <div key={index} className={`mb-4 ${removingBook === index ? 'transform translate-x-full opacity-0 transition duration-500 ease-in-out' : ''}`}>
+            <BookCardAdmin
+              title={book.title}
+              postedBy={book.postedBy}
+              date={book.date}
+              price={book.price}
+              imageUrl={book.imageUrl}
+              status={book.status}
+              onApprove={() => handleApprove(index)}
+              onReject={() => handleReject(index)}
             />
-            <div className="flex-grow">
-              <h4 className="text-lg font-semibold">Title: Book Lovers by Emily Henry</h4>
-              <p>Posted by: Sarah Lim</p>
-              <p>Date: February 14, 2024</p>
-              <p>Price: $15.81</p>
-            </div>
-            <div className="flex space-x-2 mt-4 md:mt-0">
-              <button className="bg-green-600 text-white px-4 py-2 rounded-lg">
-                Approved
-              </button>
-              <button className="bg-red-600 text-white px-4 py-2 rounded-lg">
-                Rejected
-              </button>
-            </div>
           </div>
-        </div>
+        ))}
       </div>
     </div>
   );

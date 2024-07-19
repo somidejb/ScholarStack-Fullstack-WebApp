@@ -5,6 +5,18 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { BsMenuButton } from "react-icons/bs";
 import { RxFileText } from "react-icons/rx";
+import {
+  Command,
+  CommandDialog,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
+  CommandSeparator,
+  CommandShortcut,
+} from "@/components/ui/command"
+
 
 const Sidebar = () => {
   const pathname = usePathname();
@@ -35,6 +47,10 @@ const Sidebar = () => {
         </nav>
       </div>
     </div>
+
+
+
+
   );
 };
 

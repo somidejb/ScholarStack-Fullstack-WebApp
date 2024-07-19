@@ -2,24 +2,84 @@
 "use client";
 
 import React from 'react';
-import Sidebar from '@/components/admin/SideBar';
-import Dashboard from '@/components/admin/Dashboard';
-import Reports from '@/components/admin/Reports';
+import Sidebar from '@/components/shared/SideBar';
+import Dashboard from '@/components/shared/Dashboard';
+import Reports from '@/components/shared/Reports';
 import { usePathname } from 'next/navigation';
 import { CiSearch } from "react-icons/ci";
+import BookCardAdmin from '@/components/shared/BookCardAdmin';
 
 const AdminPage = () => {
   const pathname = usePathname();
 
+  const books = [
+    {
+      title: 'Book Lovers by Emily Henry',
+      postedBy: 'Sarah Lim',
+      date: 'February 14, 2024',
+      price: '$15.81',
+      imageUrl: '/assets/images/book-admin.png',
+    },
+    {
+      title: 'Book Lovers by Emily Henry',
+      postedBy: 'Sarah Lim',
+      date: 'February 14, 2024',
+      price: '$15.81',
+      imageUrl: '/assets/images/book-admin.png',
+    },
+    {
+      title: 'Book Lovers by Emily Henry',
+      postedBy: 'Sarah Lim',
+      date: 'February 14, 2024',
+      price: '$15.81',
+      imageUrl: '/assets/images/book-admin.png',
+    },
+    {
+      title: 'Book Lovers by Emily Henry',
+      postedBy: 'Sarah Lim',
+      date: 'February 14, 2024',
+      price: '$15.81',
+      imageUrl: '/assets/images/book-admin.png',
+    },
+    {
+      title: 'Book Lovers by Emily Henry',
+      postedBy: 'Sarah Lim',
+      date: 'February 14, 2024',
+      price: '$15.81',
+      imageUrl: '/assets/images/book-admin.png',
+    },
+    {
+      title: 'Book Lovers by Emily Henry',
+      postedBy: 'Sarah Lim',
+      date: 'February 14, 2024',
+      price: '$15.81',
+      imageUrl: '/assets/images/book-admin.png',
+    },
+    {
+      title: 'Book Lovers by Emily Henry',
+      postedBy: 'Sarah Lim',
+      date: 'February 14, 2024',
+      price: '$15.81',
+      imageUrl: '/assets/images/book-admin.png',
+    },
+    {
+      title: 'Book Lovers by Emily Henry',
+      postedBy: 'Sarah Lim',
+      date: 'February 14, 2024',
+      price: '$15.81',
+      imageUrl: '/assets/images/book-admin.png',
+    },
+  
+  ];
   // Determine which component to render based on the current route
   const renderComponent = () => {
     switch (pathname) {
       case '/admin/dashboard':
-        return <Dashboard />;
+        //return <Dashboard />;
       case '/admin/reports':
         return <Reports />;
       default:
-        return  <Reports /> ;
+        return  <Dashboard books={books}/> ;
     }
   };
 

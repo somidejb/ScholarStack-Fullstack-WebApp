@@ -31,6 +31,7 @@
     "axios": "^1.7.2",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
+    "cmdk": "^1.0.0",
     "lucide-react": "^0.365.0",
     "mongodb": "^6.7.0",
     "mongoose": "^8.4.1",
