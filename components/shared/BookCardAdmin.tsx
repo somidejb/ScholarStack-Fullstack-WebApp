@@ -41,10 +41,10 @@ const BookCardAdmin: React.FC<BookCardAdminProps> = ({ title, postedBy, date, pr
         </div>
         <div className="flex space-x-2 mt-4 md:mt-0">
           <button onClick={onApprove} className="bg-green-600 text-white px-4 py-2 rounded-lg">
-            Approved
+            Approve
           </button>
           <button onClick={onReject} className="bg-red-600 text-white px-4 py-2 rounded-lg">
-            Rejected
+            Reject
           </button>
         </div>
       </div>
