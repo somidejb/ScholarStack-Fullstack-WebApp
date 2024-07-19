@@ -1,4 +1,5 @@
 // components/shared/BookCardAdmin.tsx
+
 import React from 'react';
 
 interface BookCardAdminProps {

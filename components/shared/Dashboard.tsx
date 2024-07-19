@@ -1,3 +1,5 @@
+// components/shared/Dashboard.tsx
+
 "use client";
 import React, { useState } from 'react';
 import BookCardAdmin from './BookCardAdmin';
@@ -6,9 +8,9 @@ interface DashboardProps {
   books: {
     title: string;
     postedBy: string;
-    date: string;
+    datePosted: string;
     price: string;
-    imageUrl: string;
+    bookImage: string;
   }[];
 }
 
@@ -75,9 +77,9 @@ const Dashboard: React.FC<DashboardProps> = ({ books }) => {
             <BookCardAdmin
               title={book.title}
               postedBy={book.postedBy}
-              date={book.date}
+              date={book.datePosted}
               price={book.price}
-              imageUrl={book.imageUrl}
+              imageUrl={book.bookImage}
               status={book.status}
               onApprove={() => handleApprove(index)}
               onReject={() => handleReject(index)}
