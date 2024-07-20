@@ -49,10 +49,16 @@ const Page = async ({ params }: BookPageProps) => {
     ...book,
     images: book.imageURLs,
   };
- 
+  
+  const bookDetailsProps = {
+    book: bookDetails,
+    userId: "your_user_id",
+    initialFavorite: false,
+  };
+  
   return (
     <div className="mt-[100px]">
-      <BookDetails book={bookDetails} />
+      <BookDetails {...bookDetailsProps} />
     </div>
   );
 };

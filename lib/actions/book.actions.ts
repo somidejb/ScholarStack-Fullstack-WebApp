@@ -186,4 +186,18 @@ export const fetchBookById = async (id: string) => {
     return null;
   }
 };
- 
+export const fetchAllBooksAdmin = async () => {
+  try {
+    const books = await Book.find({}, 'title price postedAt imageURLs bookOwner').populate('bookOwner', 'firstName lastName');
+    return books.map(book => ({
+      title: book.title,
+      price: book.price,
+      datePosted: new Date(book.postedAt).toLocaleDateString(),
+      bookImage: book.imageURLs[0], 
+      postedBy: `${book.bookOwner.firstName} ${book.bookOwner.lastName}`
+    }));
+  } catch (error) {
+    console.error('Error fetching books:', error);
+    throw new Error('Failed to fetch books');
+  }
+};

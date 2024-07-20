@@ -22,7 +22,7 @@
       
     }
   },
-  "include": ["next-env.d.ts",  "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "app/api/booksapi/route", "app/**/*", "emails/**/*"],
+  "include": ["next-env.d.ts",  "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "app/api/booksapi/route", "app/**/*", "emails/**/*, "],
   "exclude": ["node_modules"]
   
 }

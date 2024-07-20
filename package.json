@@ -50,6 +50,7 @@
     "react-select": "^5.8.0",
     "react-swipeable": "^7.0.1",
     "resend": "^3.4.0",
+    "svix": "^1.25.0",
     "tailwind-merge": "^2.3.0",
     "tailwindcss-animate": "^1.0.7",
     "uploadthing": "^6.12.0",

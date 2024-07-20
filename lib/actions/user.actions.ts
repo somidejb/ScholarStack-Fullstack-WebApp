@@ -2,8 +2,7 @@
 
 import { revalidatePath } from 'next/cache'
 import { handleError } from '@/lib/utils'
-
-import { CreateUserParams, UpdateUserParams} from '@/types'
+import { CreateUserParams, UpdateUserParams } from '@/types'
 import User from '../mongodb/database/models/user.model'
 import { connectToDatabase } from '../mongodb/database'
 
@@ -45,3 +44,12 @@ export async function getUserById(userId: string) {
   }
 }
 
+export async function getTotalUsers() {
+  try {
+    await connectToDatabase()
+    const userCount = await User.countDocuments()
+    return userCount
+  } catch (error) {
+    handleError(error)
+  }
+}
