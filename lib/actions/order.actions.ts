@@ -59,20 +59,19 @@ const populateOrder = (query: Query<any, any, {}, any>) => {
 
 export async function createOrder({ userId, order, path }: CreateOrderParams) {
   try {
-    await connectToDatabase()
+    await connectToDatabase();
 
-    const buyer = await User.findById(userId)
-    if (!buyer) throw new Error('Buyer not found')
+    const buyer = await User.findById(userId);
+    if (!buyer) throw new Error('Buyer not found');
 
-    const newOrder = await Order.create({ ...order, buyer: userId })
-    revalidatePath(path)
+    const newOrder = await Order.create({ ...order, buyer: userId });
+    revalidatePath(path);
 
-    return JSON.parse(JSON.stringify(newOrder))
+    return JSON.parse(JSON.stringify(newOrder));
   } catch (error) {
-    handleError(error)
+    handleError(error);
   }
 }
-
 export async function getOrderById(orderId: string) {
   try {
     await connectToDatabase()

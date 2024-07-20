@@ -4,17 +4,14 @@ import { auth } from '@clerk/nextjs/server';
 import { IBook } from '@/lib/mongodb/database/models/book.model';
 import { getUserById, updateUserLocation } from '@/lib/actions/user.actions';
 import Profile from '@/components/shared/Profile';
-import { handleBookNotification } from '@/lib/actions/extendPostedDate';
 import { daysSincePosted } from '@/lib/actions/datePosted';
-import { sendEmail } from '@/lib/actions/email';
+import Modal from '@/components/shared/Modal';
 
 const ProfilePage: React.FC = async () => {
   try {
     const { sessionClaims } = auth();
     const userId = sessionClaims?.userId as string;
-    const ip = sessionClaims?.ip as string; // Assuming IP is available in session claims and typing it as string
-
-    console.log('Session claims:', sessionClaims);
+    const ip = sessionClaims?.ip as string;
 
     if (!userId) {
       console.log('No user ID found.');
@@ -22,7 +19,7 @@ const ProfilePage: React.FC = async () => {
     }
 
     // Update user location
-    await updateUserLocation(userId, ip, '/profile'); // Provide the correct path
+    await updateUserLocation(userId, ip, '/profile');
 
     let books: IBook[] = [];
     try {
@@ -46,24 +43,15 @@ const ProfilePage: React.FC = async () => {
     }
 
     console.log('User email:', userDetails.email);
-    console.log('User location:', userDetails.location); // Log the user location here
+    console.log('User location:', userDetails.location);
 
     const userFavorites = books.filter(book => userDetails.favorites.includes(book._id));
 
-    for (const book of userBooks) {
-      await handleBookNotification(book, userDetails.email);
-    }
-
-    // Check if any book listed by the user has been posted for 21 days
-    for (const book of userBooks) {
+    const modalBooks = userBooks.filter(book => {
       const daysPosted = daysSincePosted(new Date(book.postedAt));
-      console.log(`Days since posted: ${daysPosted}`);
-
-      if (daysPosted === 21) {
-        console.log(`Sending email to: ${userDetails.email}`); // Log the email before sending
-        await sendEmail(userDetails.email, book.title);
-      }
-    }
+      console.log(`Book title: ${book.title}, Days since posted: ${daysPosted}`);
+      return daysPosted === 21;
+    });
 
     const user = {
       username: userDetails.username,
@@ -82,6 +70,7 @@ const ProfilePage: React.FC = async () => {
       userBooks,
       userFavorites,
       userId,
+      modalBooks,
     };
 
     return <Profile {...userProps} />;

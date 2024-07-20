@@ -1,10 +1,13 @@
-"use client";
-import React, { useState } from 'react';
+'use client';
+
+import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Collection } from './Collection';
 import NoActiveListings from './NoActiveListing';
 import { IBook } from '@/lib/mongodb/database/models/book.model';
+import Modal from './Modal';
+import { daysSincePosted } from '@/lib/actions/datePosted';
 
 interface IUser {
   username: string;
@@ -23,13 +26,39 @@ interface ProfileProps {
   user: IUser;
   userDetails: IUserDetails;
   userBooks: IBook[];
-  userFavorites: IBook[]; // Add the favorite books prop
+  userFavorites: IBook[];
   userId: string;
 }
 
-const Profile: React.FC<ProfileProps> = ({ user, userDetails, userBooks, userFavorites, userId }) => {
-  console.log('User:', user);
+const Profile: React.FC<ProfileProps> = ({
+  user,
+  userDetails,
+  userBooks,
+  userFavorites,
+  userId,
+}) => {
   const [isChecked, setChecked] = useState(true);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [modalBooks, setModalBooks] = useState<IBook[]>([]);
+
+  const openModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
+
+  useEffect(() => {
+    const booksToShow = userBooks.filter((book) => {
+      const daysPosted = daysSincePosted(new Date(book.postedAt));
+      return daysPosted === 23 ;
+    });
+    if (booksToShow.length > 0) {
+      setModalBooks(booksToShow);
+      openModal();
+    }
+  }, [userBooks]);
 
   const formatDate = (dateString: string) => {
     const options: Intl.DateTimeFormatOptions = {
@@ -103,6 +132,7 @@ const Profile: React.FC<ProfileProps> = ({ user, userDetails, userBooks, userFav
             collection_type="My Listings"
             books={userBooks}
             userId={userId}
+            isProfilePage={true} // Pass isProfilePage as true
           />
         ) : (
           <NoActiveListings />
@@ -123,10 +153,10 @@ const Profile: React.FC<ProfileProps> = ({ user, userDetails, userBooks, userFav
       </div>
 
       {/* Stats section */}
-      <div className="flex justify-between px-4 py-4 bg-[#081F5C] mb-[130px]">
+      <div className="flex justify-between px-4 py-4 bg-[#081F5C]">
         <div>
           <p className="text-white">Listings Completed</p>
-          <p className="text-white font-semibold text-2xl"></p>
+          <p className="text-white font-semibold text-2xl">37</p>
         </div>
         <div>
           <p className="text-white">Ongoing Listings</p>
@@ -134,9 +164,11 @@ const Profile: React.FC<ProfileProps> = ({ user, userDetails, userBooks, userFav
         </div>
         <div>
           <p className="text-white">Joined ScholarStack</p>
-          <p className="text-white font-semibold text-2xl">{formatDate(user.joinedAt)}</p>
+          <p className="text-white font-semibold text-2xl">June 2024</p>
         </div>
       </div>
+
+      <Modal isOpen={isModalOpen} onClose={closeModal} books={modalBooks} userId={userId} />
     </div>
   );
 };
