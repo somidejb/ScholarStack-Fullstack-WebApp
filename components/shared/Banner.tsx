@@ -92,9 +92,10 @@ const Banner = () => {
           </motion.div>
           <motion.div 
             className="w-[120px] md:w-[240px] h-[182px] md:h-[370px] lg:w-[300px] lg:h-[460px] xl:w-[340px]"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 1.2 }}
+            variants={fadeInUp}
+            initial="hidden"
+            animate="visible"
+            transition={{ delay: 1.5}}
           >
             <Image
               src="/assets/images/banner-hero.png"

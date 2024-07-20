@@ -124,7 +124,7 @@ const BookForm = ({userId, type, book, bookId} : BookFormProps) => {
             opacity: 1,
             y: 0,
             transition: {
-              duration: 0.3, 
+              duration: 0.6, 
             },
           },
         };
@@ -175,7 +175,7 @@ const BookForm = ({userId, type, book, bookId} : BookFormProps) => {
                             control={form.control}
                             name="description"
                             render={({ field }) => (
-                                <FormItem className="w-full">
+                                <FormItem className="w-full">                                   
                                     <FormLabel className="input-label">*Book Description</FormLabel>
                                     <FormControl className="h-[250px]">
                                         <Textarea {...field} className="textarea" />
