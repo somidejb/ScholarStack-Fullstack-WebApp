@@ -1,4 +1,3 @@
-// components/shared/BookCardAdmin.tsx
 
 import React from 'react';
 
@@ -54,3 +53,5 @@ const BookCardAdmin: React.FC<BookCardAdminProps> = ({ title, postedBy, date, pr
 };
 
 export default BookCardAdmin;
+
+

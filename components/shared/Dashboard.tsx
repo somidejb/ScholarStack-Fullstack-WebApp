@@ -1,4 +1,3 @@
-// components/shared/Dashboard.tsx
 
 "use client";
 import React, { useState } from 'react';
@@ -29,7 +28,7 @@ const Dashboard: React.FC<DashboardProps> = ({ books }) => {
     setTimeout(() => {
       setBookList(prevBooks => prevBooks.filter((_, i) => i !== index));
       setRemovingBook(null);
-    }, 500); // Duration should match the CSS transition duration
+    }, 500); 
   };
 
   const handleReject = (index: number) => {
@@ -42,7 +41,7 @@ const Dashboard: React.FC<DashboardProps> = ({ books }) => {
     setTimeout(() => {
       setBookList(prevBooks => prevBooks.filter((_, i) => i !== index));
       setRemovingBook(null);
-    }, 500); // Duration should match the CSS transition duration
+    }, 500); 
   };
 
   const filteredBooks = bookList.filter(book =>
@@ -51,8 +50,8 @@ const Dashboard: React.FC<DashboardProps> = ({ books }) => {
   );
 
   return (
-    <div className="p-6">
-      <div className="mb-4" style={{ marginTop: '-20px', width: '100%' }}>
+    <div className="p-6 md:p-4">
+      <div className="mb-6 md:mb-4 w-full">
         <input
           type="text"
           placeholder="Search by title or posted by..."
@@ -61,7 +60,7 @@ const Dashboard: React.FC<DashboardProps> = ({ books }) => {
           className="px-5 py-2.5 border shadow-md rounded-2xl bg-white outline-none hover:shadow-lg transform hover:scale-105 transition duration-200 ease-in-out w-full"
         />
       </div>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-10">
         <div className="bg-blue-900 text-white p-6 rounded shadow hover:shadow-lg transform hover:scale-105 transition duration-200 ease-in-out">
           <h2 className="text-center">Total Subscriptions</h2>
           <p className="text-4xl text-center">125</p>
@@ -71,9 +70,9 @@ const Dashboard: React.FC<DashboardProps> = ({ books }) => {
           <p className="text-4xl text-center">34</p>
         </div>
       </div>
-      <div className="space-y-4">
+      <div className="space-y-6 md:space-y-4">
         {filteredBooks.map((book, index) => (
-          <div key={index} className={`mb-4 ${removingBook === index ? 'transform translate-x-full opacity-0 transition duration-500 ease-out' : ''}`}>
+          <div key={index} className={`mb-6 ${removingBook === index ? 'transform translate-x-full opacity-0 transition duration-500 ease-out' : ''}`}>
             <BookCardAdmin
               title={book.title}
               postedBy={book.postedBy}
@@ -92,3 +91,4 @@ const Dashboard: React.FC<DashboardProps> = ({ books }) => {
 };
 
 export default Dashboard;
+
