@@ -1,6 +1,7 @@
+// pages/profile/[id].tsx
 import React from 'react';
 import { fetchAllBooks } from '@/lib/actions/book.actions';
-import { auth } from '@clerk/nextjs/server';
+import { auth, clerkClient } from '@clerk/nextjs/server';
 import { IBook } from '@/lib/mongodb/database/models/book.model';
 import { getUserById } from '@/lib/actions/user.actions';
 import Profile from '@/components/shared/Profile';
@@ -9,15 +10,22 @@ import { daysSincePosted } from '@/lib/actions/datePosted';
 const ProfilePage: React.FC = async () => {
   try {
     const { sessionClaims } = auth();
-    const userId = sessionClaims?.userId as string;
-    const ip = sessionClaims?.ip as string;
+    console.log('Full Session Claims:', sessionClaims);
+
+    let userId = sessionClaims?.userId;
+
+    if (!userId) {
+      const session = await clerkClient.sessions.getSession(sessionClaims?.sid || '');
+      userId = session?.userId;
+    }
+    
+    console.log('User ID:', userId);
 
     if (!userId) {
       console.log('No user ID found.');
       return <p>Please sign in to view your profile.</p>;
     }
 
-  
     let books: IBook[] = [];
     try {
       books = await fetchAllBooks();
@@ -29,7 +37,7 @@ const ProfilePage: React.FC = async () => {
 
     let userDetails = null;
     try {
-      userDetails = await getUserById(userId);
+      userDetails = await getUserById(userId.toString());
     } catch (error) {
       console.error('Error fetching user details:', error);
     }
@@ -66,7 +74,7 @@ const ProfilePage: React.FC = async () => {
       },
       userBooks,
       userFavorites,
-      userId,
+      userId: userId.toString(), // Ensure userId is a string
       modalBooks,
     };
 

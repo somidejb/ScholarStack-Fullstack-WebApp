@@ -9,6 +9,7 @@ import { getMessage } from "@/lib/actions/message.actions";
 import { addToSeenBy } from "@/lib/actions/chat.actions";
 import { IChat } from "@/lib/mongodb/database/models/chat.model";
 import { IUser } from "@/lib/mongodb/database/models/user.model";
+import {motion} from 'framer-motion'
 
 interface ChatListProps {
   className?: string;
@@ -88,7 +89,12 @@ const ChatList = ({ className, userId, currentUser }: ChatListProps) => {
 
   return (
     <div className="flex flex-grow overflow-hidden p-4 space-x-4">
-      <div className={`w-full ${selectedChat ? "hidden" : "block"} md:block md:w-1/3`}>
+      <motion.div
+        className={`w-full ${selectedChat ? "hidden" : "block"} md:block md:w-1/3`}
+        initial={{ opacity: 0, x: -50 }}
+        animate={{ opacity: 1, x: 0 }}
+        transition={{ duration: 0.3 }}
+      >
         <div className={`p-4 overflow-y-auto ${className}`}>
           <div className="p-0.5">
             <div className="flex justify-between items-center mb-4">
@@ -121,8 +127,13 @@ const ChatList = ({ className, userId, currentUser }: ChatListProps) => {
             )}
           </div>
         </div>
-      </div>
-      <div className={`flex flex-col flex-grow ${selectedChat ? "block" : "hidden"} md:block`}>
+      </motion.div>
+      <motion.div
+        className={`flex flex-col flex-grow ${selectedChat ? "block" : "hidden"} md:block`}
+        initial={{ opacity: 0, x: 50 }}
+        animate={{ opacity: 1, x: 0 }}
+        transition={{ duration: 0.3 }}
+      >
         <div className="flex flex-col h-full shadow-lg rounded-lg bg-white">
           {selectedChat ? (
             <ChatWindow
@@ -139,7 +150,7 @@ const ChatList = ({ className, userId, currentUser }: ChatListProps) => {
             </div>
           )}
         </div>
-      </div>
+      </motion.div>
     </div>
   );
 };

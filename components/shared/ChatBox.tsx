@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPaperPlane } from "@fortawesome/free-solid-svg-icons";
+import { motion } from "framer-motion";
 
 interface ChatBoxProps {
   onSendMessage: (message: string) => void;
@@ -29,7 +30,7 @@ const ChatBox = ({ onSendMessage, className }: ChatBoxProps) => {
 
   return (
     <div className={`p-4 border-t border-gray-300 ${className} flex items-center`}>
-      <input
+      <motion.input
         type="text"
         value={message}
         onChange={handleInputChange}
@@ -37,19 +38,27 @@ const ChatBox = ({ onSendMessage, className }: ChatBoxProps) => {
         className="w-full p-2 border rounded-lg"
         placeholder="Write a message"
         required
+        initial={{ opacity: 0, x: -20 }}
+        animate={{ opacity: 1, x: 0 }}
+        transition={{ duration: 0.3, type: 'spring', stiffness: 100 }}
       />
-      <button onClick={handleSend} className="p-2">
+      <motion.button
+        onClick={handleSend}
+        className="p-2 ml-2"
+        initial={{ opacity: 0, scale: 0.8 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 0.3, type: 'spring', stiffness: 150 }}
+      >
         <FontAwesomeIcon
           icon={faPaperPlane}
           height={18}
           width={18}
           style={{ color: "#000000" }}
         />
-      </button>
+      </motion.button>
     </div>
   );
 };
-
 export default ChatBox;
 
 

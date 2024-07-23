@@ -1,13 +1,13 @@
-"use client";
+// components/shared/Profile.tsx
+'use client';
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
-import { useUser } from "@clerk/nextjs";
-import { Collection } from "./Collection";
-import NoActiveListings from "./NoActiveListing";
+import Link from 'next/link';
+import { Collection } from './Collection';
+import NoActiveListings from './NoActiveListing';
 import { IBook } from "@/lib/mongodb/database/models/book.model";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
-//import "@fontsource/poppins";
 import { Mail } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -21,13 +21,14 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { FaPen } from "react-icons/fa";
-import { updateUserInClerkAndDB } from "@/lib/actions/user.actions";
+import { updateUser } from "@/lib/actions/user.actions"; // Assume this function updates the user in MongoDB
 
 interface IUser {
   username: string;
   fullName: string;
   imageUrl: string;
   joinedAt: string;
+  email: string;
 }
 
 interface IUserDetails {
@@ -39,18 +40,19 @@ interface ProfileProps {
   user: IUser;
   userDetails: IUserDetails;
   userBooks: IBook[];
+  userFavorites: IBook[];
   userId: string;
-  clerkId: string;
+  modalBooks: IBook[];
 }
 
 const Profile: React.FC<ProfileProps> = ({
   user,
   userDetails,
   userBooks,
+  userFavorites,
   userId,
-  clerkId,
+  modalBooks,
 }) => {
-  const { user: clerkUser } = useUser();
   const [isActive, setIsActive] = useState(false);
   const [name, setName] = useState(user.fullName);
   const [username, setUsername] = useState(user.username);
@@ -87,7 +89,7 @@ const Profile: React.FC<ProfileProps> = ({
     };
 
     try {
-      await updateUserInClerkAndDB(userId, clerkId, updatedProfile);
+      await updateUser(userId, updatedProfile);
       console.log("Profile updated successfully");
       // You might want to refresh the page or update the state here
     } catch (error) {
@@ -253,7 +255,8 @@ const Profile: React.FC<ProfileProps> = ({
         </div>
       </div>
 
-      <div className="px-20 py-20">
+       {/* User Books Section */}
+       <div className="px-20 py-20">
         {userBooks.length > 0 ? (
           <Collection
             collection_type="My Listings"
@@ -265,15 +268,20 @@ const Profile: React.FC<ProfileProps> = ({
         )}
       </div>
 
+      {/* Favorite Books Section */}
+      <div className="px-20 py-20">
+        {userFavorites.length > 0 ? (
+          <Collection
+            collection_type="My Favorite Books"
+            books={userFavorites}
+            userId={userId}
+          />
+        ) : (
+          <p className="text-gray-600">You have no favorite books listed.</p>
+        )}
+      </div>
+
       <div className="flex justify-between px-4 py-4 bg-[#081F5C]">
-        <div>
-          <p className="text-white">Listings Completed</p>
-          <p className="text-white font-semibold text-2xl"></p>
-        </div>
-        <div>
-          <p className="text-white">Ongoing Listings</p>
-          <p className="text-white font-semibold text-2xl">04</p>
-        </div>
         <div>
           <p className="text-white">Joined ScholarStack</p>
           <p className="text-white font-semibold text-2xl">

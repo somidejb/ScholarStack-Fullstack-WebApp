@@ -6,6 +6,7 @@ import { IChat } from "@/lib/mongodb/database/models/chat.model";
 import { pusherClient } from "@/lib/pusher";
 import { toPusherKey } from "@/lib/utils";
 import { IMessage } from "@/lib/mongodb/database/models/message.model";
+import {motion} from 'framer-motion'
 
 interface ChatWindowProps {
   selectedChat: IChat | null;
@@ -65,7 +66,12 @@ const ChatWindow = ({
   }, [chatMessages]);
 
   return (
-    <div className={`flex flex-col h-full ${className}`}>
+    <motion.div
+      className={`flex flex-col h-full ${className}`}
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.3, ease: 'easeInOut' }}
+    >
       <div className="border-b p-4 flex items-center">
         {onBack && (
           <button className="mr-4 md:hidden" onClick={onBack}>
@@ -91,28 +97,31 @@ const ChatWindow = ({
           className="ml-auto"
         />
       </div>
-      <div className="flex-grow p-4 overflow-y-auto bg-white">
+      <motion.div
+        className="flex-grow p-4 overflow-y-auto bg-white"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.3, ease: 'easeInOut' }}
+      >
         <div className="flex flex-col space-y-4">
           {chatMessages.map((msg, index) => (
-            msg?.sender?._id !== userId ? (
-              <div key={index} className="flex justify-start">
-                <div className="bg-gray-200 p-2 rounded-lg">
-                  <p className="text-sm">{msg.text}</p>
-                </div>
+            <motion.div
+              key={index}
+              className={`flex ${msg.sender?._id !== userId ? 'justify-start' : 'justify-end'}`}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.2, delay: index * 0.05 }}
+            >
+              <div className={`p-2 rounded-lg ${msg.sender?._id !== userId ? 'bg-gray-200' : 'bg-indigo-100'}`}>
+                <p className="text-sm">{msg.text}</p>
               </div>
-            ) : (
-              <div key={index} className="flex justify-end">
-                <div className="bg-indigo-100 p-2 rounded-lg">
-                  <p className="text-sm">{msg.text}</p>
-                </div>
-              </div>
-            )
+            </motion.div>
           ))}
           <div ref={bottomRef}></div>
         </div>
-      </div>
+      </motion.div>
       <ChatBox onSendMessage={onSendMessage} className="w-full" />
-    </div>
+    </motion.div>
   );
 };
 

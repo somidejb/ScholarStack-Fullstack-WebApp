@@ -5,6 +5,7 @@ import { pusherClient } from '@/lib/pusher';
 import { formatDateTime, toPusherKey } from '@/lib/utils';
 import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
+import { motion } from "framer-motion";
 
 interface ChatCardProps {
     chat: IChat;
@@ -68,25 +69,37 @@ const ChatCard = ({ chat, index, userId, handleSelectChat, currentUser, setChats
     //         }
     //     }
     // }, [currentUser]);
-
     return (
-        <div
+        <motion.div
             key={index}
             className="flex justify-between items-center p-2 cursor-pointer"
             onClick={() => handleSelectChat(chat)}
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.3, type: 'spring', stiffness: 200 }}
         >
             <div className="flex items-center">
-                <img src={otherMember.photo} alt={`${otherMember.username}'s avatar`} className="chat-avatar w-10 h-10 rounded-full mr-2" />
+                <motion.img
+                    src={otherMember.photo}
+                    alt={`${otherMember.username}'s avatar`}
+                    className="chat-avatar w-10 h-10 rounded-full mr-2"
+                    initial={{ opacity: 0, scale: 0.8 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ duration: 0.3, type: 'spring', stiffness: 150 }}
+                />
                 <div>
                     <h3 className="text-sm">{otherMember.username}</h3>
-                    {!lastMessage ? ( <p className={`text-xs ${seen ? "text-gray-500" : "text-gray-500 font-bold"}`}>Started a chat</p>):
-                    (<p className={`text-xs text-gray-500 ${!seen && "font-bold"}`}>{lastMessage?.text}</p>)}
+                    {!lastMessage ? (
+                        <p className={`text-xs ${seen ? "text-gray-500" : "text-gray-500 font-bold"}`}>Started a chat</p>
+                    ) : (
+                        <p className={`text-xs text-gray-500 ${!seen && "font-bold"}`}>{lastMessage?.text}</p>
+                    )}
                 </div>
             </div>
             <p className="text-xs text-gray-500">
                 {!lastMessage ? timeOnly : lastMessageTime}
             </p>
-        </div>
+        </motion.div>
     );
 };
 
