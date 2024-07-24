@@ -1,7 +1,7 @@
 import { connectToDatabase } from "@/lib/mongodb/database";
-import Chat from "@/lib/mongodb/database/models/chat";
 import { NextApiRequest, NextApiResponse } from "next";
 import User from "@/lib/mongodb/database/models/user.model";
+import Chat from "@/lib/mongodb/database/models/chat.model";
 
 
 

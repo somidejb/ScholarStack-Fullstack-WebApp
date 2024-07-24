@@ -32,10 +32,10 @@ const ChatList = ({ className, userId, currentUser }: ChatListProps) => {
   };
 
   useEffect(() => {
-    if (userId) {
+    if (currentUser) {
       getChats();
     }
-  }, [userId]);
+  }, [currentUser]);
 
   const handleBack = () => {
     setSelectedChat(null);
@@ -85,6 +85,7 @@ const ChatList = ({ className, userId, currentUser }: ChatListProps) => {
       }));
     }
   };
+  
 
   return (
     <div className="flex flex-grow overflow-hidden p-4 space-x-4">
@@ -115,6 +116,7 @@ const ChatList = ({ className, userId, currentUser }: ChatListProps) => {
                   userId={userId}
                   handleSelectChat={handleSelectChat}
                   currentUser={currentUser}
+                  chats={chats}
                   setChats={setChats}
                 />
               ))
@@ -134,8 +136,13 @@ const ChatList = ({ className, userId, currentUser }: ChatListProps) => {
               messages={messages[selectedChat._id] || []}
             />
           ) : (
-            <div className={`flex-grow flex items-center justify-center overflow-y-auto`}>
-              Select a chat to start messaging
+            <div className={`flex-grow flex items-center justify-center overflow-y-auto ${className}`}>
+              <div className="text-center p-4">
+                <img src="/assets/icons/chat.png" alt="Chat Icon" className="mx-auto mb-4 w-16 h-16" />
+                <div className="text-gray-500 text-xl font-semibold">
+                  Select a chat to start messaging
+                </div>
+              </div>
             </div>
           )}
         </div>

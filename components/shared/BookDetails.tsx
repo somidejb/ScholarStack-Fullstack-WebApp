@@ -1,6 +1,6 @@
 "use client";
 import { Collection } from '@/components/shared/Collection';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
 import { FaMapMarkerAlt } from 'react-icons/fa';
 import Link from 'next/link';
@@ -9,6 +9,7 @@ import { IBook } from '@/lib/mongodb/database/models/book.model';
 import { useRouter } from 'next/navigation';
  
 import ImageModal from './ImageModal'; // Adjust the import path as necessary
+import { addFavorite, removeFavorite } from '@/lib/actions/book.actions';
 
 type Book = {
   _id: string;
@@ -25,10 +26,26 @@ type BookDetailsProps = {
   book: IBook;
   userId: string;
   bookOwner: string;
+  favorites: string[];
 };
  
 
-const BookDetails: React.FC<BookDetailsProps> = ({ book, userId, bookOwner }) => {
+const BookDetails: React.FC<BookDetailsProps> = ({ book, userId, bookOwner, favorites }) => {
+  const [favorite, setFavorite] = useState(favorites?.includes(book?._id));
+
+  useEffect(() => {
+    setFavorite(favorites?.includes(book?._id));
+  }, [favorites, book?._id]);
+
+  const toggleFavorite = async () => {
+    if (favorite) {
+      await removeFavorite(userId, book?._id);
+    } else {
+      await addFavorite(userId, book?._id);
+    }
+    setFavorite(!favorite);
+  };
+
   const members: string[] = [bookOwner];
   const router = useRouter();
   const createChat = async () => {
@@ -124,11 +141,12 @@ const BookDetails: React.FC<BookDetailsProps> = ({ book, userId, bookOwner }) =>
                 <button className="transition-transform duration-300 ease-in-out transform hover:scale-110 border border-indigo-900 text-sm lg:text-xl text-indigo-900 px-10 py-2 lg:px-14 lg:py-2 relative rounded-lg shadow-md hover:bg-indigo-200 hover:text-indigo-900 hover:shadow-lg">
                   Favorite
                   <Image
-                    src="/assets/icons/favorite.svg"
+                    src={favorite ? "/assets/icons/favorite-red.png" : "/assets/icons/favorite.svg"} 
                     alt="heart"
                     width={19}
                     height={11}
                     className="absolute right-6 top-1/2 transform -translate-y-1/2 object-contain w-[12px] md:w-[20px] xl:w-[24px] h-full"
+                    onClick={toggleFavorite}
                   />
                 </button>
               </div>

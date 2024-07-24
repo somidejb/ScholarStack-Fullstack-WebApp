@@ -7,6 +7,11 @@ import { auth } from '@clerk/nextjs/server';
 import Pagination from '@/components/shared/Pagination';
 import { SearchParamProps } from '@/types';
 import Link from 'next/link';
+import { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: "Books | Scholar Stack",
+}
 
 export default async function Books({ searchParams }: SearchParamProps) {
   const page = Number(searchParams?.page) || 1;

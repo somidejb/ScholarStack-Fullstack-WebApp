@@ -24,6 +24,7 @@ const MessageSchema = new Schema({
     text: {
         type: String,
         required: true,
+        default: '',
     },
     createdAt: {
         type: Date,

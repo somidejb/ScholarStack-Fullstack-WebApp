@@ -30,7 +30,7 @@ export async function getMessage({ chatId, currentUserId, text, photo }: getMess
             photo,
             seenBy: currentUserId,
         });
-        console.log(newMessage)
+        console.log("new message from getMessage(): ",newMessage)
 
         const updatedChat = await Chat.findByIdAndUpdate(
             chatId,
@@ -49,26 +49,29 @@ export async function getMessage({ chatId, currentUserId, text, photo }: getMess
             populate: { path: "sender seenBy", model: "User" },
         }).populate({
             path: "members",
-            model: "User",
+            model: User,
         }).exec();
+        
+        /*Trigger a pusher event about a specific chat about a new message */
+        await pusherServer.trigger(chatId, "new-message", newMessage)
+        //await pusherServer.trigger(toPusherKey(`chat:${chatId}`), "incoming-message", newMessage)
 
-        await pusherServer.trigger(toPusherKey(`chat:${chatId}`), "incoming-message", newMessage)
+        if (!updatedChat) throw new Error('Message not sent');
+
         const lastMessage = updatedChat.messages[updatedChat.messages.length - 1];
-        console.log("Last message:", lastMessage);
+        console.log("Last message from getMessage(): ",lastMessage)
         
         updatedChat.members.forEach(async (member: any) => {
             try{
-                await pusherServer.trigger(toPusherKey(`user:${member._id.toString()}`), "update-chat", {
-                    id: chatId,
-                    messages: [lastMessage]
+                await pusherServer.trigger(member._id.toString(), "update-chat", {
+                  id: chatId,
+                  messages: [lastMessage],
                 });
             }
             catch (error) {
-                console.error("Error sending pusher update:", error);
+                console.error("Error sending pusher update event:", error);
             }
         })
-
-        if (!updatedChat) throw new Error('Message not sent');
 
         return JSON.parse(JSON.stringify(newMessage));
     } catch (error) {

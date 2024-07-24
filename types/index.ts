@@ -21,6 +21,10 @@ export type UpdateUserParams = {
   photo: string;
 };
 
+export type DeleteUserParams = {
+  clerkId: string | undefined;
+}
+
 // ====== BOOK PARAMS
 export type CreateBookParams = {
   userId: string;

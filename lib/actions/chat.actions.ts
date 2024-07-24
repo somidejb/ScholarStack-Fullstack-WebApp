@@ -14,13 +14,16 @@ export async function getChats({userId, members} : CreateChatParams){
         const query = {members: {$all : [userId, ...members], $size: 2}}
 
         let chat = await Chat.findOne(query);
-
+        console.log("Chat created from the getChat action: ",chat)
         if(!chat){
             chat = await Chat.create({members: [userId, ...members]});
             await chat.save();
 
             const updateAllMembers = chat.members.map(async(memberId: string) => {
-                await User.findByIdAndUpdate(memberId, {$addToSet: {chats: chat._id}}, {new: true});
+                await User.findByIdAndUpdate(
+                    memberId, 
+                    {$addToSet: {chats: chat._id}}, 
+                    {new: true});
             })
             Promise.all(updateAllMembers); 
         };

@@ -3,13 +3,15 @@
 import { revalidatePath } from 'next/cache'
 
 
-import { CreateUserParams, UpdateUserParams} from '@/types'
+import { CreateUserParams, DeleteUserParams, UpdateUserParams} from '@/types'
 import User from '../mongodb/database/models/user.model'
 import { connectToDatabase } from '../mongodb/database'
 import Chat from '../mongodb/database/models/chat.model'
 import Message from '../mongodb/database/models/message.model'
 import { handleError } from '@/lib/utils';
 import { clerkClient } from "@clerk/nextjs/server";
+import { connect } from 'http2'
+import Book from '../mongodb/database/models/book.model'
 
 export async function updateUser(userId: string, updatedProfile: any) {
   try {
@@ -44,6 +46,26 @@ export async function createUser(user: CreateUserParams) {
     return JSON.parse(JSON.stringify(newUser))
   } catch (error) {
     handleError(error)
+  }
+}
+
+export async function deleteUser(params: DeleteUserParams){
+  try{
+    connectToDatabase();
+    const {clerkId} = params;
+
+    const user = await User.findOneAndDelete({clerkId});
+
+    if(!user) throw new Error('User not found');
+
+    const userBookIds = await Book.find({bookOwner: user._id}).distinct('_id');
+    await Book.deleteMany({bookOwner: user._id});
+
+    const deletedUser = await User.findByIdAndDelete(user._id);
+    return deletedUser;
+  }
+  catch(error){
+    handleError(error);
   }
 }
 

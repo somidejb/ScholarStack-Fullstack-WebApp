@@ -1,8 +1,9 @@
 import React from "react";
 import BookDetails from "@/components/shared/BookDetails";
-import { fetchBookById } from "@/lib/actions/book.actions";
+import { fetchBookById, getFavorites } from "@/lib/actions/book.actions";
 import { Metadata } from "next";
 import { auth } from "@clerk/nextjs/server";
+import { IBook } from "@/lib/mongodb/database/models/book.model";
 
 type Book = {
   _id: string;
@@ -36,7 +37,13 @@ const Page = async ({ params }: BookPageProps) => {
   const {sessionClaims} = auth();
   const userId = sessionClaims?.userId as string;
   const book = await fetchBookById(params.id);
- 
+  
+  let favorites: string[] = [];
+  if (userId) {
+    const favoriteBooks = await getFavorites(userId);
+    favorites = favoriteBooks.map((favorite: IBook) => favorite._id);
+  }
+
   if (!book) {
     console.log("No book found with id:", params.id);
     return (
@@ -55,7 +62,7 @@ const Page = async ({ params }: BookPageProps) => {
  
   return (
     <div className="mt-[100px]">
-      <BookDetails book={bookDetails} userId={userId} bookOwner={book.bookOwner} />
+      <BookDetails book={bookDetails} userId={userId} bookOwner={book.bookOwner} favorites={favorites} />
     </div>
   );
 };
