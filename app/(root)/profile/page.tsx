@@ -10,6 +10,8 @@ import Modal from '@/components/shared/Modal';
 const ProfilePage: React.FC = async () => {
   try {
     const { sessionClaims } = auth();
+    //console.log('Session Claims:', sessionClaims); // Debug log for session claims
+
     const userId = sessionClaims?.userId as string;
     const ip = sessionClaims?.ip as string;
 

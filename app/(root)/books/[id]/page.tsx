@@ -35,6 +35,7 @@ export async function generateMetadata({ params }: BookPageProps): Promise<Metad
 
 const Page = async ({ params }: BookPageProps) => {
   const book = await fetchBookById(params.id);
+  console.log("Book found:", book);
 
   if (!book) {
     console.log("No book found with id:", params.id);

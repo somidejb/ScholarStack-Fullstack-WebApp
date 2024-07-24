@@ -15,6 +15,7 @@ export interface IBook extends Document {
   salePrice?: string;
   location: string;
   bookOwner: {
+    username: string;
     clerkUserId: string;_id: string, firstName: string, lastName:string, photo: string
 };
   isFavorite?: boolean;

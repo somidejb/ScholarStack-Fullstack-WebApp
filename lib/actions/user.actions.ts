@@ -53,7 +53,6 @@ export async function getUserById(userId: string) {
 
     if (!user) throw new Error('User not found');
 
-    console.log('Fetched user details:', user); // Log the fetched user details
     return JSON.parse(JSON.stringify(user));
   } catch (error) {
     handleError(error);
@@ -82,7 +81,7 @@ export async function updateUserLocation(userId: string, ip: string, path: strin
 
     // Get the user's location
     const location = await getUserLocation(ip);
-    console.log('Location fetched:', location);
+   
 
     // Update the user's location in the database
     const updatedUser = await User.findByIdAndUpdate(
@@ -95,7 +94,6 @@ export async function updateUserLocation(userId: string, ip: string, path: strin
 
     revalidatePath(path);
 
-    console.log('Updated user with location:', updatedUser); // Log the updated user
     return JSON.parse(JSON.stringify(updatedUser));
   } catch (error) {
     handleError(error);

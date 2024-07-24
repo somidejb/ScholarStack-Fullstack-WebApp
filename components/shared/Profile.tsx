@@ -40,6 +40,7 @@ const Profile: React.FC<ProfileProps> = ({
   const [isChecked, setChecked] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalBooks, setModalBooks] = useState<IBook[]>([]);
+  const [lastDismissed, setLastDismissed] = useState<Date | null>(null); // New state to track the last dismissed date
 
   const openModal = () => {
     setIsModalOpen(true);
@@ -50,15 +51,26 @@ const Profile: React.FC<ProfileProps> = ({
   };
 
   useEffect(() => {
-    const booksToShow = userBooks.filter((book) => {
+    const now = new Date();
+
+    if (lastDismissed) {
+      const daysSinceDismissed = Math.floor((now.getTime() - lastDismissed.getTime()) / (1000 * 60 * 60 * 24));
+      if (daysSinceDismissed < 7) return; // Don't open the modal if it has been dismissed within the last 7 days
+    }
+
+    const shouldOpenModal = userBooks.some(book => {
       const daysPosted = daysSincePosted(new Date(book.postedAt));
-      return daysPosted === 23 ;
+      return daysPosted % 7 === 0;
     });
-    if (booksToShow.length > 0) {
-      setModalBooks(booksToShow);
+
+    if (shouldOpenModal) {
+      setModalBooks(userBooks.filter(book => {
+        const daysPosted = daysSincePosted(new Date(book.postedAt));
+        return daysPosted % 7 === 0;
+      }));
       openModal();
     }
-  }, [userBooks]);
+  }, [userBooks, lastDismissed]);
 
   const formatDate = (dateString: string) => {
     const options: Intl.DateTimeFormatOptions = {
@@ -67,6 +79,11 @@ const Profile: React.FC<ProfileProps> = ({
       day: 'numeric',
     };
     return new Date(dateString).toLocaleDateString(undefined, options);
+  };
+
+  const handleNotSold = () => {
+    setLastDismissed(new Date()); // Set the current date as the last dismissed date
+    setIsModalOpen(false);
   };
 
   return (
@@ -168,7 +185,7 @@ const Profile: React.FC<ProfileProps> = ({
         </div>
       </div>
 
-      <Modal isOpen={isModalOpen} onClose={closeModal} books={modalBooks} userId={userId} />
+      <Modal isOpen={isModalOpen} onClose={closeModal} books={modalBooks} userId={userId} handleNotSold={handleNotSold} />
     </div>
   );
 };

@@ -31,7 +31,7 @@ export const books = [
         image: "/assets/images/book1.png",
         condition: "Good",
         description: "A comprehensive introduction to computer science concepts and programming.",
-        category: "Recently Uploaded"
+     
     },
     {
         id: 2,
