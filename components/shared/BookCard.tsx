@@ -53,11 +53,11 @@ const BookCard = ({ userId, bookId, title, imageUrl, author, price, salePrice, f
           <div className="flex p-card gap-1">
             {salePrice ? (
               <>
-                <p className="font-bold text-red-400">{`$ ${salePrice}`}</p>
-                <p className="font-normal text-gray-400 line-through">{price === "0" ? "Free" : `$ ${price}`}</p>
+                <p className="font-medium text-red-400">{`$ ${salePrice}`}</p>
+                <p className="font-medium text-gray-400 line-through">{price === "0" ? "Free" : `$ ${price}`}</p>
               </>
             ) : (
-              <p className="font-bold">{price === "0" ? "Free" : `$ ${price}`}</p>
+              <p className="font-medium">{price === "0" ? "Free" : `$ ${price}`}</p>
             )}
           </div>
           <Image 
