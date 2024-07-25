@@ -145,9 +145,9 @@ const BookDetails: React.FC<BookDetailsProps> = ({ book, userId, bookOwner }) =>
           onSelect={setSelectedImageIndex}
         />
       )}
-      {/* <div className="text-lg text-gray-600 mt-10">
+      {<div className="text-lg text-gray-600 mt-10">
         <Collection collection_type="Similar to this..." books={[]} userId={''} />
-      </div> */}
+      </div>}
     </div>
   );
 };

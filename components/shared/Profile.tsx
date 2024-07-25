@@ -54,9 +54,7 @@ const Profile: React.FC<ProfileProps> = ({
   userId,
   clerkId,
 }) => {
-  const [isActive, setIsActive] = useState(
-    JSON.parse(localStorage.getItem("activeMode") || "false")
-  );
+  const [isActive, setIsActive] = useState(false);
   const [name, setName] = useState(user.fullName);
   const [username, setUsername] = useState(user.username);
   const [bio, setBio] = useState(userDetails.Bio);
@@ -64,6 +62,13 @@ const Profile: React.FC<ProfileProps> = ({
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalBooks, setModalBooks] = useState<IBook[]>([]);
   const [lastDismissed, setLastDismissed] = useState<Date | null>(null);
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const activeMode = JSON.parse(localStorage.getItem("activeMode") || "false");
+      setIsActive(activeMode);
+    }
+  }, []);
 
   const openModal = () => {
     setIsModalOpen(true);
