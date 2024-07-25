@@ -15,7 +15,17 @@ interface ModalProps {
 }
 
 const Modal: React.FC<ModalProps> = ({ isOpen, onClose, books, userId, handleNotSold }) => {
-  if (!isOpen) return null;
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'auto';
+    }
+
+    return () => {
+      document.body.style.overflow = 'auto';
+    };
+  }, [isOpen]);
 
   const handleSold = async (bookId: string, sellerId: string, price: string) => {
     try {
@@ -41,12 +51,7 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, books, userId, handleNot
     }
   };
 
-  useEffect(() => {
-    document.body.style.overflow = 'hidden';
-    return () => {
-      document.body.style.overflow = 'auto';
-    };
-  }, []);
+  if (!isOpen) return null;
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center">

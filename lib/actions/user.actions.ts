@@ -128,3 +128,28 @@ export async function getChatsById(userId: string) {
     handleError(error);
   }
 }
+export async function updateUserLocation(userId: string, ip: string, path: string) {
+  try {
+    await connectToDatabase();
+ 
+    // Get the user's location
+    const location = await getUserLocation(ip);
+   
+ 
+    // Update the user's location in the database
+    const updatedUser = await User.findByIdAndUpdate(
+      userId,
+      { location },
+      { new: true }
+    );
+ 
+    if (!updatedUser) throw new Error('User update failed');
+ 
+    revalidatePath(path);
+ 
+    return JSON.parse(JSON.stringify(updatedUser));
+  } catch (error) {
+    handleError(error);
+  }
+}
+ 

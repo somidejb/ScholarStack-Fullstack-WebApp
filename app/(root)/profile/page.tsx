@@ -1,5 +1,5 @@
 import React from 'react';
-import { currentUser } from "@clerk/nextjs/server";
+import { auth, currentUser } from "@clerk/nextjs/server";
 import { fetchAllBooks } from '@/lib/actions/book.actions';
 import { IBook } from '@/lib/mongodb/database/models/book.model';
 import { getUserById, updateUserLocation } from '@/lib/actions/user.actions';
@@ -64,7 +64,7 @@ const ProfilePage: React.FC = async () => {
     };
 
     const userProps = {
-      user: profileUser,
+      user,
       userDetails: {
         Bio: userDetails.bio || 'Please add a bio.',
         Location: userDetails.location || 'Please add a location.',
@@ -75,7 +75,7 @@ const ProfilePage: React.FC = async () => {
       modalBooks,
     };
 
-    return <Profile {...userProps} />;
+    return <Profile clerkId={''} {...userProps} />;
   } catch (error) {
     console.error('Error in ProfilePage component:', error);
     return <p>Something went wrong. Please try again later.</p>;
