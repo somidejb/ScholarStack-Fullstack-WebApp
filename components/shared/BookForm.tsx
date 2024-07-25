@@ -25,6 +25,7 @@ import { useUploadThing } from '@/lib/uploadthing'
 import { createBook, updateBook } from '@/lib/actions/book.actions'
 import { IBook } from '@/lib/mongodb/database/models/book.model'
 import { bookDefaultValues } from '@/constants'
+import { createAdminBook } from '@/lib/actions/admin.action'
 
 
 type BookFormProps = {
@@ -80,7 +81,8 @@ const BookForm = ({userId, type, book, bookId} : BookFormProps) => {
                 const newBook = await createBook({
                     userId,
                     book: { ...values, imageURLs: uploadedImageURLs, postedAt: new Date() },
-                    path: '/profile'
+                    path: '/profile',
+                    page: 'admin'
                 });
 
                 if (newBook) {

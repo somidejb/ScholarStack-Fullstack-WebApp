@@ -1,10 +1,11 @@
 import { Document, Schema, model, models } from "mongoose";
 
-export interface IBook extends Document {
+export interface IAdminBooks extends Document {
   description: string;
   _id: string;
   title: string;
   author: string;
+  bookDescription: string;
   postedAt: Date;
   imageURLs: string[];
   category: {_id: string, name: string};
@@ -14,12 +15,12 @@ export interface IBook extends Document {
   salePrice?: string;
   location: string;
   bookOwner: {
-    _id: string, firstName: string, lastName:string, photo: string
+    clerkUserId: string;_id: string, firstName: string, lastName:string, photo: string
 };
   isFavorite?: boolean;
 }
 
-const BookSchema = new Schema({
+const AdminBooksSchema = new Schema({
   title: {
     type: String,
     required: true,
@@ -72,6 +73,6 @@ const BookSchema = new Schema({
   },
 });
 
-const Book = models.Book || model("Book", BookSchema);
+const AdminBooks = models.AdminBooks || model("AdminBooks", AdminBooksSchema);
 
-export default Book;
+export default AdminBooks;

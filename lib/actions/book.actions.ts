@@ -10,6 +10,7 @@ import User from '../mongodb/database/models/user.model'
 import Book from '../mongodb/database/models/book.model'
 import Language from '../mongodb/database/models/language.model'
 import { title } from 'process'
+import AdminBooks from '../mongodb/database/models/adminbooks.model'
  
 const getCategoryByName = async (name: string) => {
     return Category.findOne({ name: { $regex: name, $options: 'i' } })
@@ -20,17 +21,27 @@ const getLanguageByName = async (name: string) => {
 }
  
  
-export async function createBook({ userId, book, path }: CreateBookParams) {
+export async function createBook({ userId, book, path, page}: CreateBookParams) {
     try {
       await connectToDatabase()
+      
+      const owner = await User.findById(userId);
+
+      if (!owner) throw new Error('Book Owner not found');
+      
+      if(page === "admin"){
+        const newBook = await AdminBooks.create({ ...book, category: book.categoryId, language: book.languageId, bookOwner: userId })
+        revalidatePath(path)
  
-      const owner = await User.findById(userId)
-      if (!owner) throw new Error('Book Owner not found')
+        return JSON.parse(JSON.stringify(newBook))
+      }
+      else{
+        const newBook = await Book.create({ ...book, category: book.categoryId, language: book.languageId, bookOwner: userId })
+        revalidatePath(path)
  
-      const newBook = await Book.create({ ...book, category: book.categoryId, language: book.languageId, bookOwner: userId })
-      revalidatePath(path)
- 
-      return JSON.parse(JSON.stringify(newBook))
+        return JSON.parse(JSON.stringify(newBook))
+      }
+  
     } catch (error) {
       handleError(error)
     }
@@ -79,12 +90,18 @@ export async function updateBook({ userId, book, path }: UpdateBookParams) {
     }
   }
  
-export async function deleteBook({ bookId, path }: DeleteBookParams) {
+export async function deleteBook({ bookId, path, page }: DeleteBookParams) {
     try {
       await connectToDatabase()
- 
-      const deletedBook = await Book.findByIdAndDelete(bookId)
-      if (deletedBook) revalidatePath(path)
+      
+      if(page === "admin"){
+        const deletedBook = await AdminBooks.findByIdAndDelete(bookId);
+        if (deletedBook) revalidatePath(path)
+      }
+      else{
+        const deletedBook = await Book.findByIdAndDelete(bookId)
+        if (deletedBook) revalidatePath(path)
+      }
     } catch (error) {
       handleError(error)
     }
