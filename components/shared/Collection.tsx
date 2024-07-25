@@ -10,9 +10,10 @@ type CollectionProps = {
   collection_type: string;
   books: IBook[];
   userId: string;
+  isProfilePage?: boolean;
 };
 
-export const Collection = ({ collection_type, books, userId }: CollectionProps) => {
+export const Collection = ({ collection_type, books, userId, isProfilePage }: CollectionProps) => {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [cardsPerSlide, setCardsPerSlide] = useState(3);
   const [favorites, setFavorites] = useState<string[]>([]);
@@ -109,7 +110,8 @@ export const Collection = ({ collection_type, books, userId }: CollectionProps) 
                   key={book._id}
                   salePrice={book.salePrice}
                   favorites={favorites}
-                  bookOwnerId={book.bookOwner._id} // Pass bookOwnerId to BookCard
+                  bookOwnerId={book.bookOwner._id}
+                  isProfilePage={isProfilePage}
                 />
               </div>
             ))}

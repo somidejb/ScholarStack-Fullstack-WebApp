@@ -42,6 +42,7 @@ const populateBook = (query: any) => {
     .populate({ path: 'category', model: Category, select: '_id name' })
     .populate({ path: 'language', model: Language, select: '_id name' });
 };
+
   
   export async function getBookById(bookId: string) {
     try {
@@ -204,13 +205,14 @@ export async function removeFavorite(userId: string, bookId: string) {
  
 export async function fetchAllBooks() {
   try {
-      await connectToDatabase()
-     
-      const books = await populateBook(Book.find({})).lean()
-      return JSON.parse(JSON.stringify(books))
+    await connectToDatabase();
+    
+    const books = await populateBook(Book.find({})).lean();
+  
+    return JSON.parse(JSON.stringify(books));
   } catch (error) {
-      handleError(error)
-      return []
+    handleError(error);
+    return [];
   }
 }
 export async function fetchBookById(id: string) {
@@ -233,5 +235,22 @@ export async function fetchBooksByCategory(categoryId: string) {
     handleError(error);
     return [];
   }
-};
- 
+}
+export async function getUserEmailById(userId: string): Promise<string | null> {
+  try {
+    await connectToDatabase();
+
+    const user = await User.findById(userId).select('email'); // Only select the email field
+
+    if (!user) throw new Error('User not found');
+    return user.email; // Return the email directly
+  } catch (error) {
+    console.error('Error getting user email:', error);
+    return null; // Return null in case of error
+  }
+}
+
+
+
+
+

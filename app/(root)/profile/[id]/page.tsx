@@ -1,30 +1,30 @@
-// pages/profile/[id].tsx
 import React from 'react';
+import { currentUser } from '@clerk/nextjs/server';
 import { fetchAllBooks } from '@/lib/actions/book.actions';
-import { auth, clerkClient } from '@clerk/nextjs/server';
 import { IBook } from '@/lib/mongodb/database/models/book.model';
-import { getUserById } from '@/lib/actions/user.actions';
+import { getUserById, updateUserLocation } from '@/lib/actions/user.actions';
 import Profile from '@/components/shared/Profile';
 import { daysSincePosted } from '@/lib/actions/datePosted';
 
-const ProfilePage: React.FC = async () => {
+const ProfilePage = async ({ params }: { params: { id: string } }) => {
+  const { id } = params;
+
   try {
-    const { sessionClaims } = auth();
-    console.log('Full Session Claims:', sessionClaims);
+    const user = await currentUser();
 
-    let userId = sessionClaims?.userId;
-
-    if (!userId) {
-      const session = await clerkClient.sessions.getSession(sessionClaims?.sid || '');
-      userId = session?.userId;
+    // If user is null, return an error message
+    if (!user) {
+      return <p>Error loading user details. Please try again later.</p>;
     }
-    
-    console.log('User ID:', userId);
 
-    if (!userId) {
-      console.log('No user ID found.');
-      return <p>Please sign in to view your profile.</p>;
+    const targetUserId = id || user.id;
+
+    if (!targetUserId) {
+      return <p>Error loading user details. Please try again later.</p>;
     }
+
+    const ip = '127.0.0.1'; // Placeholder, replace with actual IP logic if needed
+    await updateUserLocation(targetUserId, ip, `/profile/${targetUserId}`);
 
     let books: IBook[] = [];
     try {
@@ -32,56 +32,54 @@ const ProfilePage: React.FC = async () => {
     } catch (error) {
       console.error('Error fetching books:', error);
     }
-
-    const userBooks = books.filter(book => book.bookOwner?._id === userId);
-
+   
     let userDetails = null;
+    let dbUserId = null;
+
     try {
-      userDetails = await getUserById(userId.toString());
+      userDetails = await getUserById(targetUserId);
+      dbUserId = userDetails._id;
     } catch (error) {
       console.error('Error fetching user details:', error);
     }
 
     if (!userDetails) {
-      console.log('User details not found.');
       return <p>Error loading user details. Please try again later.</p>;
     }
 
-    console.log('User email:', userDetails.email);
-    console.log('User location:', userDetails.location);
+    // Ensure IDs are compared as strings
+    const userBooks = books.filter(book => String(book.bookOwner?._id) === String(dbUserId));
+    console.log('User books:', userBooks);
 
     const userFavorites = books.filter(book => userDetails.favorites.includes(book._id));
 
     const modalBooks = userBooks.filter(book => {
       const daysPosted = daysSincePosted(new Date(book.postedAt));
-      console.log(`Book title: ${book.title}, Days since posted: ${daysPosted}`);
       return daysPosted === 21;
     });
 
-    const user = {
-      username: userDetails.username,
-      fullName: `${userDetails.firstName} ${userDetails.lastName}`,
-      imageUrl: userDetails.photo,
-      joinedAt: userDetails.joinedAt,
-      email: userDetails.email,
-    };
-
     const userProps = {
-      user,
+      user: {
+        username: userDetails.username,
+        fullName: `${userDetails.firstName} ${userDetails.lastName}`.trim(),
+        imageUrl: userDetails.photo,
+        joinedAt: userDetails.joinedAt,
+        email: userDetails.email,
+      },
       userDetails: {
-        Bio: userDetails.bio,
-        Location: userDetails.location,
+        Bio: userDetails.bio || 'Please add a bio.',
+        Location: userDetails.location || 'Please add a location.',
       },
       userBooks,
       userFavorites,
-      userId: userId.toString(), // Ensure userId is a string
+      userId: targetUserId,
       modalBooks,
     };
 
-    return <Profile {...userProps} />;
+    return <Profile clerkId={user.id} {...userProps} />;
   } catch (error) {
     console.error('Error in ProfilePage component:', error);
-    return <p>Something went wrong. Please try again later.</p>;
+    return <p>Error loading user details. Please try again later.</p>;
   }
 };
 

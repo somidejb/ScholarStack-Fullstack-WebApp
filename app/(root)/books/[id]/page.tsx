@@ -36,9 +36,8 @@ const Page = async ({ params }: BookPageProps) => {
   const {sessionClaims} = auth();
   const userId = sessionClaims?.userId as string;
   const book = await fetchBookById(params.id);
+  console.log("Book found:", book);
 
-  
- 
   if (!book) {
     console.log("No book found with id:", params.id);
     return (
