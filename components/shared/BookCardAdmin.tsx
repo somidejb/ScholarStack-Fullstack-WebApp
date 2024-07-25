@@ -3,24 +3,21 @@ import { getUserById } from '@/lib/actions/user.actions';
 import { format } from 'date-fns';
 
 interface BookCardAdminProps {
-  book: {
+  book:{
     _id: string;
     title: string;
     author: string;
     description: string;
-    postedAt: Date | string;
+    postedAt: Date;
     imageURLs: string[];
-    categoryId: string;
-    languageId: string;
-    isFree?: boolean;
+    category: {_id: string};
+    language: {_id: string};
+    isBookFree?: boolean;
     price?: string;
     salePrice?: string;
     location: string;
     bookOwner: {
-      _id: string;
-      firstName: string;
-      lastName: string;
-      photo: string;
+      _id: string, firstName: string, lastName:string, photo: string
     };
   };
   onApprove: () => void;

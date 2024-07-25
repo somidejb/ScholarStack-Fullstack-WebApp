@@ -172,6 +172,12 @@ p{
   .field-div{
     @apply mt-5 flex flex-col gap-5 md:flex-row !important;
   }
+  .custom-mobHeight{
+    height: calc(100vh - 64px);
+  }
+  .custom-medHeight{
+    height: calc(100vh - 85px);
+  }
 
 }
 @layer base {

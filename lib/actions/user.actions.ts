@@ -137,3 +137,13 @@ export async function getChatsById(userId: string) {
     handleError(error);
   }
 }
+
+export async function countAllUsers() {
+  try {
+    await connectToDatabase();
+    const count = await User.countDocuments();
+    return String(count);
+  } catch (error) {
+    handleError(error);
+  }
+}

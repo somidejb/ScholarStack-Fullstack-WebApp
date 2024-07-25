@@ -14,9 +14,9 @@ interface DashboardProps {
     description: string;
     postedAt: Date;
     imageURLs: string[];
-    categoryId: string;
-    languageId: string;
-    isFree?: boolean;
+    category: {_id: string};
+    language: {_id: string};
+    isBookFree?: boolean;
     price?: string;
     salePrice?: string;
     location: string;
@@ -25,9 +25,10 @@ interface DashboardProps {
     };
   }[];
   path: string;
+  totalSubs: string | undefined;
 }
 
-const Dashboard = ({ books, path } : DashboardProps) => {
+const Dashboard = ({ books, path, totalSubs } : DashboardProps) => {
   const [bookList, setBookList] = useState(books.map(book => ({ ...book})));
   console.log("Book List: ", bookList);
   const [removingBook, setRemovingBook] = useState<number | null>(null);
@@ -102,11 +103,11 @@ const Dashboard = ({ books, path } : DashboardProps) => {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-10">
         <div className="bg-blue-900 text-white p-6 rounded shadow hover:shadow-lg transform hover:scale-105 transition duration-200 ease-in-out">
           <h2 className="text-center">Total Subscriptions</h2>
-          <p className="text-4xl text-center">125</p>
+          <p className="text-4xl text-center">{totalSubs}</p>
         </div>
         <div className="bg-gray-400 text-white p-6 rounded shadow hover:shadow-lg transform hover:scale-105 transition duration-200 ease-in-out">
-          <h2 className="text-center">Reports</h2>
-          <p className="text-4xl text-center">34</p>
+          <h2 className="text-center">Pending</h2>
+          <p className="text-4xl text-center">{bookList.length}</p>
         </div>
       </div>
       <div className="space-y-6 md:space-y-4">

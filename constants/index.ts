@@ -1,7 +1,7 @@
 import { Label } from "@radix-ui/react-label";
 
 export const headerLinks = [
-    {
+      {
         label: 'Home',
         route: '/'
       },
@@ -22,7 +22,7 @@ export const headerLinks = [
         route: '/chats'
       },
       {
-        Label: 'Admin',
+        label: 'Admin',
         route: '/admin'
       },
 ]

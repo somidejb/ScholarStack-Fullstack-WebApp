@@ -9,12 +9,12 @@ const Chats = async() => {
   console.log("user Id: ", userId);
   const currentUser = await getUserById(userId);
   return (
-    <div className="bg-gray-100 min-h-screen">
-      <div className="flex flex-col h-screen">
+    <div className="bg-gray-100 custom-mobHeight md:custom-medHeight">
+      <div className="flex flex-col custom-mobHeight md:custom-medHeight">
         <ChatList
           className="w-full h-full shadow-lg rounded-lg bg-white"
           userId={userId}
-          currentUser={currentUser}
+          currentUser={currentUser}          
         />
       </div>
     </div>

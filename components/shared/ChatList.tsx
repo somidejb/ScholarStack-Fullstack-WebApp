@@ -9,6 +9,7 @@ import { getMessage } from "@/lib/actions/message.actions";
 import { addToSeenBy } from "@/lib/actions/chat.actions";
 import { IChat } from "@/lib/mongodb/database/models/chat.model";
 import { IUser } from "@/lib/mongodb/database/models/user.model";
+import Link from "next/link";
 
 interface ChatListProps {
   className?: string;
@@ -88,7 +89,7 @@ const ChatList = ({ className, userId, currentUser }: ChatListProps) => {
   
 
   return (
-    <div className="flex flex-grow overflow-hidden p-4 space-x-4">
+    <div className="h-full flex flex-grow overflow-hidden p-4 gap-4">
       <div className={`w-full ${selectedChat ? "hidden" : "block"} md:block md:w-1/3`}>
         <div className={`p-4 overflow-y-auto ${className}`}>
           <div className="p-0.5">
@@ -106,7 +107,13 @@ const ChatList = ({ className, userId, currentUser }: ChatListProps) => {
           </div>
           <div>
             {chats.length === 0 ? (
-              <div className="text-center text-gray-500 mt-4">No conversations available</div>
+              <div className="mt-4 flex flex-col items-center text-gray-500 font-semibold text-lg md:text-sm lg:text-lg">
+                <img src="/assets/images/no-chat.png" alt="No chats" className="w-16 h-16" />
+                <p>Find the book you're interested in</p>
+                <p>Click on Message Seller to start a chat</p>
+                <p>Happy browsing!</p>
+                <Link href="/books" className="my-1 rounded-md bg-[#31457B] p-2 text-white text-sm">Explore Books</Link>
+              </div>
             ) : (
               chats.map((chat, index) => (
                 <ChatCard

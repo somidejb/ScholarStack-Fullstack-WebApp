@@ -7,7 +7,7 @@ import { pusherClient } from "@/lib/pusher";
 import { toPusherKey } from "@/lib/utils";
 import { IMessage } from "@/lib/mongodb/database/models/message.model";
 import Link from "next/link";
-import {format} from 'date-fns';
+import { format } from 'date-fns';
 
 interface ChatWindowProps {
   selectedChat: IChat | null;
@@ -27,6 +27,8 @@ const ChatWindow = ({
   messages,
 }: ChatWindowProps) => {
   const [chatMessages, setChatMessages] = useState<IMessage[]>(messages || []);
+  const bottomRef = useRef<HTMLDivElement>(null);
+  const chatContainerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (selectedChat) {
@@ -52,10 +54,14 @@ const ChatWindow = ({
     };
   }, []);
 
-  const bottomRef = useRef<HTMLDivElement>(null);
-
   useEffect(() => {
-    bottomRef.current?.scrollIntoView({ behavior: "smooth" });
+    const footerHeight = 216.8; // Known footer height
+    if (chatContainerRef.current) {
+      chatContainerRef.current.scrollTo({
+        top: chatContainerRef.current.scrollHeight - footerHeight,
+        behavior: "smooth",
+      });
+    }
   }, [chatMessages]);
 
   console.log("Chat Messages:", chatMessages);
@@ -88,8 +94,8 @@ const ChatWindow = ({
           className="ml-auto"
         />
       </div>
-      <div className="flex-grow p-4 overflow-y-auto bg-white">
-        <div className="flex flex-col space-y-4">
+      <div ref={chatContainerRef} className="flex-grow p-4 overflow-y-auto bg-white">
+        <div className="flex flex-col space-y-4 py-1">
           {chatMessages.map((msg, index) => (
             msg?.sender?._id !== userId ? (
               <div key={index} className="flex justify-start items-start flex-col">
