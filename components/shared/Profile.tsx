@@ -60,13 +60,13 @@ const Profile: React.FC<ProfileProps> = ({
 
     const shouldOpenModal = userBooks.some(book => {
       const daysPosted = daysSincePosted(new Date(book.postedAt));
-      return daysPosted % 7 === 0;
+      return daysPosted ===1;
     });
 
     if (shouldOpenModal) {
       setModalBooks(userBooks.filter(book => {
         const daysPosted = daysSincePosted(new Date(book.postedAt));
-        return daysPosted % 7 === 0;
+        return daysPosted ===1;
       }));
       openModal();
     }
