@@ -90,6 +90,7 @@ export async function updateUserInClerkAndDB(userId: string, clerkId: string, up
   }
 }
 
+
 export async function getChatsById(userId: string) {
   try {
     await connectToDatabase();

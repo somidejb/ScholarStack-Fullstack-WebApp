@@ -4,7 +4,8 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { FiEdit, FiTrash2, FiEye, FiMoreHorizontal } from 'react-icons/fi'; // Importing icons from react-icons/fi
 import { motion } from 'framer-motion';
-import { addFavorite, removeFavorite } from '@/lib/actions/book.actions';
+import { addFavorite, deleteBook, removeFavorite } from '@/lib/actions/book.actions';
+import { createOrder } from '@/lib/actions/order.actions';
 
 type BookCardProps = {
   userId: string;
@@ -226,7 +227,7 @@ const BookCard = ({
           onCancel={handleCancelSold}
         />
       )}
-    </div>
+    </motion.div>
   );
 };
 
