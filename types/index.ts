@@ -8,6 +8,12 @@ export type CreateUserParams = {
   photo: string;
 };
 
+export type CreateChatParams = {
+  userId: string;
+  members: string[];
+  path?: string;
+}
+
 export type UpdateUserParams = {
   firstName: string;
   lastName: string;
@@ -64,6 +70,7 @@ export type GetAllBooksParams = {
   page: number;
   category?: string;
   language?: string;
+  price?: string;
 };
 
 // ====== ORDER PARAMS

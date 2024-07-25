@@ -5,12 +5,11 @@ import MobileNav from "./MobileNav";
 import NavItems from "./NavItems";
 import { SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
 import { Button } from "../ui/button";
-import SearchBar from "./SearchBar";
 
 // The Header component is responsible for rendering the top navigation bar
 const Header = () => {
   return (
-    <header className="relative top-0 w-full border-b h-[64px] md:h-[85px] lg:h-[87px] xl:h-[111px] bg-[#31457b]">
+    <header className="w-full border-b h-[64px] md:h-[85px] lg:h-[87px]  bg-[#31457b] relative">
       <div className="px-4 sm:px-6 md:px-8 lg:px-10 h-full w-full flex justify-between items-center relative z-50">
         <div className="flex items-center">
           <Link href="/" className="flex items-center gap-2">
@@ -57,8 +56,6 @@ const Header = () => {
           </SignedOut>
         </div>
       </div>
-
-
     </header>
   );
 };

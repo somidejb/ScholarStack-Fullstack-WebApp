@@ -1,6 +1,6 @@
 import React from 'react';
+import { currentUser } from "@clerk/nextjs/server";
 import { fetchAllBooks } from '@/lib/actions/book.actions';
-import { auth } from '@clerk/nextjs/server';
 import { IBook } from '@/lib/mongodb/database/models/book.model';
 import { getUserById, updateUserLocation } from '@/lib/actions/user.actions';
 import Profile from '@/components/shared/Profile';
@@ -57,17 +57,17 @@ const ProfilePage: React.FC = async () => {
 
     const user = {
       username: userDetails.username,
-      fullName: `${userDetails.firstName} ${userDetails.lastName}`,
+      fullName: `${userDetails.firstName} ${userDetails.lastName}`.trim(),
       imageUrl: userDetails.photo,
       joinedAt: userDetails.joinedAt,
       email: userDetails.email,
     };
 
     const userProps = {
-      user,
+      user: profileUser,
       userDetails: {
-        Bio: userDetails.bio,
-        Location: userDetails.location,
+        Bio: userDetails.bio || 'Please add a bio.',
+        Location: userDetails.location || 'Please add a location.',
       },
       userBooks,
       userFavorites,

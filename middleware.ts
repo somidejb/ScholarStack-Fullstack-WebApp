@@ -7,6 +7,7 @@ import {
 const isProtectedRoute = createRouteMatcher([
     '/books(.*)',
     '/profile(.*)',
+    '/chats(.*)',
 ])
 
 export default clerkMiddleware((auth, req) => {

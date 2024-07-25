@@ -1,26 +1,68 @@
-import React from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEllipsis, faArrowLeft } from "@fortawesome/free-solid-svg-icons";
-
-interface Chat {
-  name: string;
-  message: string;
-}
+import ChatBox from "@/components/shared/ChatBox";
+import { IChat } from "@/lib/mongodb/database/models/chat.model";
+import { pusherClient } from "@/lib/pusher";
+import { toPusherKey } from "@/lib/utils";
+import { IMessage } from "@/lib/mongodb/database/models/message.model";
 
 interface ChatWindowProps {
-  selectedChat: Chat | null;
+  selectedChat: IChat | null;
+  userId: string;
   onBack?: () => void;
+  onSendMessage: (message: string) => void;
   className?: string;
+  messages: any[];
 }
 
-const ChatWindow: React.FC<ChatWindowProps> = ({ selectedChat, onBack, className }) => {
+const ChatWindow = ({
+  selectedChat,
+  onBack,
+  userId,
+  onSendMessage,
+  className,
+  messages,
+}: ChatWindowProps) => {
+  const [chatMessages, setChatMessages] = useState(messages);
+
+  useEffect(() => {
+    if (selectedChat) {
+      setChatMessages(messages);
+    }
+  }, [selectedChat, messages]);
+
+  useEffect(() => {
+    pusherClient.subscribe(
+      toPusherKey(`chat:${selectedChat?._id}`),
+    )
+    const messageHandler = (message: IMessage) => {
+      setChatMessages((prev) => [message, ...prev])
+    }
+
+    pusherClient.bind("incoming-message", messageHandler);
+    return () => {
+      pusherClient.unsubscribe(
+        toPusherKey(`chat:${selectedChat?._id}`),
+      )
+      pusherClient.unbind("incoming-message", messageHandler)
+    }
+  }, [])
+
+
   if (!selectedChat) {
     return (
-      <div className={`flex-grow p-4 overflow-y-auto ${className}`}>
+      <div className={`flex-grow flex items-center justify-center ${className}`}>
         Select a chat to start messaging
       </div>
     );
   }
+
+  const bottomRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    bottomRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [chatMessages]);
 
   return (
     <div className={`flex flex-col h-full ${className}`}>
@@ -36,11 +78,11 @@ const ChatWindow: React.FC<ChatWindowProps> = ({ selectedChat, onBack, className
           </button>
         )}
         <img
-          src="/profile.jpg"
-          alt="Profile"
-          className="h-8 w-8 rounded-full mr-2"
+          src={selectedChat?.members[1].photo}
+          alt={`${selectedChat?.members[1].username}'s avatar`}
+          className="w-10 h-10 rounded-full mr-2"
         />
-        <h3 className="text-lg font-semibold">{selectedChat.name}</h3>
+        <h3 className="text-lg font-semibold">{selectedChat.members[1].username}</h3>
         <FontAwesomeIcon
           icon={faEllipsis}
           height={15}
@@ -51,38 +93,25 @@ const ChatWindow: React.FC<ChatWindowProps> = ({ selectedChat, onBack, className
       </div>
       <div className="flex-grow p-4 overflow-y-auto bg-white">
         <div className="flex flex-col space-y-4">
-          <div className="text-sm">
-            <div className="flex flex-row items-start text-sm">
-              <img
-                src="/profile.jpg"
-                alt="Profile"
-                className="h-5 w-5 rounded-full"
-              />
-              <p className="ml-2">{selectedChat.name}</p>
-            </div>
-            <div className="flex items-start">
-              <div className="bg-gray-200 p-2 rounded-lg">
-                <p className="text-sm">{selectedChat.message}</p>
+          {chatMessages.map((msg, index) => (
+            msg?.sender?._id !== userId ? (
+              <div key={index} className="flex justify-start">
+                <div className="bg-gray-200 p-2 rounded-lg">
+                  <p className="text-sm">{msg.text}</p>
+                </div>
               </div>
-            </div>
-          </div>
-          <div className="text-sm">
-            <div className="flex flex-col items-end">
-              <div className="flex flex-row items-center">
-                <p className="pt-2">You</p>
-                <img
-                  src="/profile.jpg"
-                  alt="Profile"
-                  className="h-5 w-5 rounded-full ml-2"
-                />
+            ) : (
+              <div key={index} className="flex justify-end">
+                <div className="bg-indigo-100 p-2 rounded-lg">
+                  <p className="text-sm">{msg.text}</p>
+                </div>
               </div>
-              <div className="bg-indigo-100 p-2 rounded-lg">
-                <p className="text-sm">Hey</p>
-              </div>
-            </div>
-          </div>
+            )
+          ))}
+          <div ref={bottomRef}></div>
         </div>
       </div>
+      <ChatBox onSendMessage={onSendMessage} className="w-full" />
     </div>
   );
 };
