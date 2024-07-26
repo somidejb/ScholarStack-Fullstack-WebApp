@@ -6,14 +6,25 @@ import Link from 'next/link';
 import Image from 'next/image';
 
 const Dashboard = () => {
-  const [approvalStatus, setApprovalStatus] = useState<null | 'approved' | 'rejected'>(null); // null, 'approved', 'rejected'
+  // Initial state for books, each with an approvalStatus property
+  const [books, setBooks] = useState([
+    { title: "Under The Rain", author: "Sarah Wins", price: 12, genre: "Fiction", img: "/assets/images/book1.png", approvalStatus: null },
+    { title: "Midnight Dreams", author: "Shreya", price: 4.2, genre: "Drama", img: "/assets/images/book2.png", approvalStatus: null },
+    { title: "Day Remember", author: "Nicholas", price: 42, genre: "Love", img: "/assets/images/book3.png", approvalStatus: null },
+  ]);
 
-  const handleApprove = () => {
-    setApprovalStatus('approved');
+  const handleApprove = (index) => {
+    const updatedBooks = books.map((book, i) => 
+      i === index ? { ...book, approvalStatus: 'approved' } : book
+    );
+    setBooks(updatedBooks);
   };
 
-  const handleReject = () => {
-    setApprovalStatus('rejected');
+  const handleReject = (index) => {
+    const updatedBooks = books.map((book, i) => 
+      i === index ? { ...book, approvalStatus: 'rejected' } : book
+    );
+    setBooks(updatedBooks);
   };
 
   return (
@@ -34,42 +45,46 @@ const Dashboard = () => {
         </Link>
       </div>
       <div className="mt-4 sm:mt-6 lg:mt-6 xl:mt-8">
-        <div className="bg-white p-3 sm:p-4 lg:p-5 xl:p-6 rounded-xl shadow-md flex flex-col space-y-3 hover:shadow-lg transition duration-200 ease-in-out">
-          <div className="flex flex-col md:flex-row items-center md:space-x-3">
-            <Image
-              src="/assets/images/book2.png"
-              alt="Book Cover"
-              className="w-16 h-20 sm:w-20 sm:h-24 md:w-16 md:h-20 lg:w-24 lg:h-28 xl:w-28 xl:h-32"
-              width={32}
-              height={36}
-            />
-            <div className="flex-grow mt-3 md:mt-0">
-              <h4 className="text-sm sm:text-base md:text-lg lg:text-xl xl:text-2xl font-semibold">Title: Book Lovers by Emily Henry</h4>
-              <p className="text-xs sm:text-sm md:text-base lg:text-lg xl:text-xl">Posted by: Sarah Lim</p>
-              <p className="text-xs sm:text-sm md:text-base lg:text-lg xl:text-xl">Date: February 14, 2024</p>
-              <p className="text-xs sm:text-sm md:text-base lg:text-lg xl:text-xl">Price: $15.81</p>
+        <div className="space-y-4">
+          {books.map((book, index) => (
+            <div key={index} className="bg-white p-3 sm:p-4 lg:p-5 xl:p-6 rounded-xl shadow-md flex flex-col space-y-3 hover:shadow-lg transition duration-200 ease-in-out">
+              <div className="flex items-center space-x-3">
+                <Image
+                  src={book.img}
+                  alt="Book Cover"
+                  className="w-16 h-20 sm:w-20 sm:h-24 md:w-16 md:h-20 lg:w-24 lg:h-28 xl:w-28 xl:h-32"
+                  width={32}
+                  height={36}
+                />
+                <div className="flex-grow">
+                  <h4 className="text-sm sm:text-base md:text-lg lg:text-xl xl:text-2xl font-semibold">{book.title}</h4>
+                  <p className="text-xs sm:text-sm md:text-base lg:text-lg xl:text-xl">By: {book.author}</p>
+                  <p className="text-xs sm:text-sm md:text-base lg:text-lg xl:text-xl">Price: {book.price}</p>
+                  <p className="text-xs sm:text-sm md:text-base lg:text-lg xl:text-xl">{book.genre}</p>
+                </div>
+              </div>
+              <div className="flex space-x-2">
+                <button
+                  className={`bg-green-600 text-white px-2 sm:px-3 py-1 sm:py-1 rounded-lg text-xs sm:text-sm md:text-base lg:text-lg xl:text-xl flex items-center space-x-2 ${book.approvalStatus === 'approved' ? 'bg-opacity-60 cursor-not-allowed' : ''}`}
+                  onClick={() => handleApprove(index)}
+                  disabled={book.approvalStatus === 'approved'}
+                >
+                  <FaCheck className={`text-sm ${book.approvalStatus === 'approved' ? 'opacity-100' : 'opacity-0'}`} />
+                  <span>Approved</span>
+                </button>
+                <button
+                  className={`bg-red-600 text-white px-2 sm:px-3 py-1 sm:py-1 rounded-lg text-xs sm:text-sm md:text-base lg:text-lg xl:text-xl flex items-center space-x-2 ${book.approvalStatus === 'rejected' ? 'bg-opacity-60 cursor-not-allowed' : ''}`}
+                  onClick={() => handleReject(index)}
+                  disabled={book.approvalStatus === 'rejected'}
+                >
+                  <FaTimes className={`text-sm ${book.approvalStatus === 'rejected' ? 'opacity-100' : 'opacity-0'}`} />
+                  <span>Rejected</span>
+                </button>
+              </div>
             </div>
-            <div className="flex space-x-2 mt-3 md:mt-0">
-              <button
-                className={`bg-green-600 text-white px-2 sm:px-3 py-1 sm:py-1 rounded-lg text-xs sm:text-sm md:text-base lg:text-lg xl:text-xl flex items-center space-x-2 ${approvalStatus === 'approved' ? 'bg-opacity-60 cursor-not-allowed' : ''}`}
-                onClick={handleApprove}
-                disabled={approvalStatus === 'approved'}
-              >
-                <FaCheck className={`text-sm ${approvalStatus === 'approved' ? 'opacity-100' : 'opacity-0'}`} />
-                <span>Approved</span>
-              </button>
-              <button
-                className={`bg-red-600 text-white px-2 sm:px-3 py-1 sm:py-1 rounded-lg text-xs sm:text-sm md:text-base lg:text-lg xl:text-xl flex items-center space-x-2 ${approvalStatus === 'rejected' ? 'bg-opacity-60 cursor-not-allowed' : ''}`}
-                onClick={handleReject}
-                disabled={approvalStatus === 'rejected'}
-              >
-                <FaTimes className={`text-sm ${approvalStatus === 'rejected' ? 'opacity-100' : 'opacity-0'}`} />
-                <span>Rejected</span>
-              </button>
-            </div>
-          </div>
+          ))}
         </div>
-      </div>
+      </div> 
     </div>
   );
 };

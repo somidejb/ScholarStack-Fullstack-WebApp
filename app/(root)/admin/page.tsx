@@ -10,7 +10,7 @@ const AdminPage = async () => {
   return (
     <div className="flex bg-slate-100  ">
       <Sidebar />
-      <div className="flex-grow p-8 ">
+      <div className="flex-grow p-2 ">
         <Dashboard books={books} />
       </div>
     </div>
