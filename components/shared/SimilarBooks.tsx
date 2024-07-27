@@ -11,7 +11,7 @@ const SimilarBooks: React.FC<SimilarBooksProps> = ({ similarBooks }) => {
   return (
     <div className="text-lg text-gray-600 mt-10">
       <Collection
-        collection_type="Similar to this"
+        collection_type="Similar to this..."
         books={similarBooks}
         userId={""}
       />

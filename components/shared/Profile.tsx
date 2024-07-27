@@ -25,6 +25,7 @@ import { daysSincePosted } from "@/lib/actions/datePosted";
 import Modal from "./Modal";
 import { motion } from "framer-motion";
 
+
 interface IUser {
   username: string;
   fullName: string;
@@ -69,7 +70,9 @@ const Profile: React.FC<ProfileProps> = ({
 
   useEffect(() => {
     if (typeof window !== "undefined") {
-      const activeMode = JSON.parse(localStorage.getItem("activeMode") || "false");
+      const activeMode = JSON.parse(
+        localStorage.getItem("activeMode") || "false"
+      );
       setIsActive(activeMode);
     }
   }, []);
@@ -144,7 +147,11 @@ const Profile: React.FC<ProfileProps> = ({
     };
 
     try {
-      const updatedUser = await updateUserInClerkAndDB(userId, clerkId, updatedProfile);
+      const updatedUser = await updateUserInClerkAndDB(
+        userId,
+        clerkId,
+        updatedProfile
+      );
       console.log("Profile updated successfully");
 
       // Update local state with the updated profile data
@@ -152,7 +159,7 @@ const Profile: React.FC<ProfileProps> = ({
       setUsername(updatedUser.username);
       setBio(updatedUser.bio);
       setLocation(updatedUser.location);
-      
+
       // Close the dialog
       setIsDialogOpen(false);
     } catch (error) {
@@ -210,11 +217,10 @@ const Profile: React.FC<ProfileProps> = ({
               </DialogTrigger>
               <DialogContent className="sm:max-w-[425px]">
                 <DialogHeader>
-                  
-                    <DialogTitle>Edit profile</DialogTitle>
-                  
+                  <DialogTitle>Edit profile</DialogTitle>
                   <DialogDescription>
-                    Make changes to your profile here. Click save when you're done.
+                    Make changes to your profile here. Click save when you're
+                    done.
                   </DialogDescription>
                 </DialogHeader>
                 <form onSubmit={handleSubmit} className="grid gap-4 py-4">
@@ -289,12 +295,18 @@ const Profile: React.FC<ProfileProps> = ({
           className="space-y-2 ml-2 mr-5 lg:mr-10"
           style={{ fontFamily: "Poppins, sans-serif" }}
         >
-          <div className="space-y-2 ml-2 mr-5 lg:mr-10" style={{ fontFamily: "Poppins, sans-serif" }}>
+          <div
+            className="space-y-2 ml-2 mr-5 lg:mr-10"
+            style={{ fontFamily: "Poppins, sans-serif" }}
+          >
             <div>
               <p className="text-[#000000]" style={{ fontSize: 25 }}>
                 Username
               </p>
-              <p className="text-[#081F5C] opacity-[60%]" style={{ fontSize: 20 }}>
+              <p
+                className="text-[#081F5C] opacity-[60%]"
+                style={{ fontSize: 20 }}
+              >
                 {username}
               </p>
             </div>
@@ -302,7 +314,10 @@ const Profile: React.FC<ProfileProps> = ({
               <p className="text-[#000000]" style={{ fontSize: 25 }}>
                 Bio
               </p>
-              <p className="text-[#081F5C] opacity-[60%]" style={{ fontSize: 20 }}>
+              <p
+                className="text-[#081F5C] opacity-[60%]"
+                style={{ fontSize: 20 }}
+              >
                 {bio}
               </p>
             </div>
@@ -310,14 +325,21 @@ const Profile: React.FC<ProfileProps> = ({
               <p className="text-[#000000]" style={{ fontSize: 25 }}>
                 Location
               </p>
-              <p className="text-[#081F5C] opacity-[60%]" style={{ fontSize: 20 }}>
+              <p
+                className="text-[#081F5C] opacity-[60%]"
+                style={{ fontSize: 20 }}
+              >
                 {location}
               </p>
             </div>
             <div>
               <p style={{ fontSize: 25 }}>Status</p>
               <div className="flex items-center space-x-2">
-                <Switch id="active-mode" checked={isActive} onChange={handleToggle} />
+                <Switch
+                  id="active-mode"
+                  checked={isActive}
+                  onChange={handleToggle}
+                />
                 <Label htmlFor="active-mode">Active</Label>
               </div>
             </div>
@@ -326,21 +348,33 @@ const Profile: React.FC<ProfileProps> = ({
       </motion.div>
 
       {/* User Books Section */}
-      <motion.div initial={{ y: 200 }} animate={{ y: 0 }} transition={{ duration: 0.5 }} className="px-20 py-20">
-        {userBooks.length > 0 ? (
-          <Collection collection_type="My Listings" books={userBooks} userId={userId} isProfilePage={true} />
-        ) : (
-          <NoActiveListings />
-        )}
+      <motion.div
+        initial={{ y: 200 }}
+        animate={{ y: 0 }}
+        transition={{ duration: 0.5 }}
+        className="px-20 py-20"
+      >
+        <Collection
+          collection_type="My Listings"
+          books={userBooks}
+          userId={userId}
+          isProfilePage={true}
+        />
       </motion.div>
 
+    
       {/* Favorite Books Section */}
-      <motion.div initial={{ y: 200 }} animate={{ y: 0 }} transition={{ duration: 0.5 }} className="px-20 py-20">
-        {userFavorites.length > 0 ? (
-          <Collection collection_type="My Favorite Books" books={userFavorites} userId={userId} />
-        ) : (
-          <p className="text-gray-600">You have no favorite books listed.</p>
-        )}
+      <motion.div
+        initial={{ y: 200 }}
+        animate={{ y: 0 }}
+        transition={{ duration: 0.5 }}
+        className="px-20 py-20"
+      >
+        <Collection
+          collection_type="My Favorite Books"
+          books={userFavorites}
+          userId={userId}
+        />
       </motion.div>
 
       {/* Stats section */}
@@ -360,7 +394,9 @@ const Profile: React.FC<ProfileProps> = ({
         </div>
         <div>
           <p className="text-white">Joined ScholarStack</p>
-          <p className="text-white font-semibold text-2xl">{formatDate(user.joinedAt)}</p>
+          <p className="text-white font-semibold text-2xl">
+            {formatDate(user.joinedAt)}
+          </p>
         </div>
       </motion.div>
 
