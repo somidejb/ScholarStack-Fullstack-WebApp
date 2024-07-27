@@ -45,17 +45,21 @@ const ChatCard = ({ chat, index, userId, handleSelectChat, currentUser, chats,  
         if(currentUser){
             pusherClient.subscribe(userId);
 
-            const handleChatUpdate = (updatedChat: IChat) => {
-                setChats((allChats) => allChats.map((chat) => {
-                    if(chat._id === updatedChat._id){
-                        return updatedChat;
+            const handleChatUpdate = (updatedChat: any) => {
+                setChats((allChats : any) => allChats.map((chat : IChat) => {
+                    if(chat._id === updatedChat.id){
+                        return { ...chat, messages: updatedChat.messages};
                     }else{
                         return chat;
                     }
                 }))
             }
+            const handleNewChat = (newChat: any) => {
+                setChats((allChats) => [...allChats, newChat]);
+            }
 
             pusherClient.bind("update-chat", handleChatUpdate);
+            pusherClient.bind("new-chat", handleNewChat);
 
             return () => {
                 pusherClient.unsubscribe(userId);

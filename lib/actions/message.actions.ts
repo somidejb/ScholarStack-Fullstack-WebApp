@@ -79,3 +79,23 @@ export async function getMessage({ chatId, currentUserId, text, photo }: getMess
 
     }
 }
+
+export async function getMessagesByChatId(chatId: string) {
+    try {
+        await connectToDatabase();
+
+        const chat = await Chat.findById(chatId)
+            .populate({
+                path: "messages",
+                model: Message,
+                populate: { path: "sender seenBy", model: "User" },
+            }).exec();
+
+        if (!chat) throw new Error("Chat not found");
+
+        return chat.messages;
+    } catch (error) {
+        handleError(error);
+        return [];
+    }
+}

@@ -32,12 +32,6 @@ const ChatList = ({ className, userId, currentUser }: ChatListProps) => {
     }
   };
 
-  useEffect(() => {
-    if (currentUser) {
-      getChats();
-    }
-  }, [currentUser]);
-
   const handleBack = () => {
     setSelectedChat(null);
   };
@@ -84,9 +78,14 @@ const ChatList = ({ className, userId, currentUser }: ChatListProps) => {
         ...prevMessages,
         [chat._id]: chat.messages,
       }));
+      console.log("Messages in the handle select chat:", messages);
     }
   };
-  
+  useEffect(() => {
+    if (currentUser) {
+      getChats();
+    }
+  }, [currentUser]);
 
   return (
     <div className="h-full flex flex-grow overflow-hidden p-4 gap-4">

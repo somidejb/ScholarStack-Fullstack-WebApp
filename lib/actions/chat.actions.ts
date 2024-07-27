@@ -4,8 +4,9 @@ import { CreateChatParams } from "@/types"
 import { connectToDatabase } from "../mongodb/database"
 import Chat from "../mongodb/database/models/chat.model"
 import { handleError } from "../utils"
-import User from "../mongodb/database/models/user.model"
+import User, { IUser } from "../mongodb/database/models/user.model"
 import Message from "../mongodb/database/models/message.model"
+import { pusherServer } from "../pusher"
 
 
 export async function getChats({userId, members} : CreateChatParams){
@@ -26,6 +27,11 @@ export async function getChats({userId, members} : CreateChatParams){
                     {new: true});
             })
             Promise.all(updateAllMembers); 
+            
+            /* Trigger a pusher event for each member to notify a new chat*/
+            chat.members.map((member: any) => {
+                pusherServer.trigger(member._id.toString(), "new-chat", chat)
+            })
         };
         return JSON.parse(JSON.stringify(chat));
     }
