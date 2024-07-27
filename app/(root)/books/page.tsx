@@ -11,7 +11,7 @@ import { Metadata } from 'next';
 
 export const metadata: Metadata = {
   title: "Books | Scholar Stack",
-}
+};
 
 export default async function Books({ searchParams }: SearchParamProps) {
   const page = Number(searchParams?.page) || 1;
@@ -67,9 +67,9 @@ export default async function Books({ searchParams }: SearchParamProps) {
             <div className="text-center mt-10">
               <img src="/assets/icons/no-result.png" alt="No result found" className="mx-auto" />
               <h2 className="font-bold md:text-[30px]">Oops! No result found</h2>
-              <p className="font-semibold text-gray-700">We're sorry we don't have what you are looking for</p>
+              <p className="font-semibold text-gray-700">We&apos;re sorry we don&apos;t have what you are looking for</p>
               <Link href="/books/upload" className="mt-4 font-bold inline-block bg-[#31457B] text-white px-4 py-2 rounded-full hover:bg-blue-600 transition duration-200">
-                  Upload Book
+                Upload Book
               </Link>
             </div>
           ) : (
