@@ -26,6 +26,7 @@ const ChatWindow = ({
   className,
   messages,
 }: ChatWindowProps) => {
+  console.log("messages from the chat window: ", messages);
   const [chatMessages, setChatMessages] = useState<IMessage[]>(messages || []);
   const bottomRef = useRef<HTMLDivElement>(null);
   const chatContainerRef = useRef<HTMLDivElement>(null);
