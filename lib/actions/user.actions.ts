@@ -115,3 +115,62 @@ export async function getChatsById(userId: string) {
     handleError(error);
   }
 }
+
+export async function getMonthlyUserStats() {
+  try {
+    await connectToDatabase();
+
+    const startOfMonth = new Date();
+    startOfMonth.setDate(1);
+    startOfMonth.setHours(0, 0, 0, 0);
+
+    const endOfMonth = new Date(startOfMonth);
+    endOfMonth.setMonth(endOfMonth.getMonth() + 1);
+
+    const users = await User.aggregate([
+      {
+        $match: {
+          createdAt: {
+            $gte: startOfMonth,
+            $lt: endOfMonth,
+          },
+        },
+      },
+      {
+        $group: {
+          _id: {
+            $dateToString: { format: "%Y-%m-%d", date: "$createdAt" }
+          },
+          userCount: { $sum: 1 }
+        },
+      },
+      {
+        $sort: { "_id": 1 }
+      }
+    ]);
+
+    // Convert to required format
+    return users.map(entry => ({
+      date: entry._id,
+      userCount: entry.userCount
+    }));
+
+  } catch (error) {
+    handleError(error);
+  }
+}
+
+
+export async function getUsersByJoinDate(startDate: Date, endDate: Date) {
+  try {
+    await connectToDatabase();
+    const users = await User.find({
+      joinedAt: { $gte: startDate, $lte: endDate }
+    }).sort({ joinedAt: 1 }); // Sort by joinedAt date
+    console.log("users from grtUser: ", users)
+    return users;
+  } catch (error) {
+    console.error('Error fetching users:', error);
+    throw error;
+  }
+}

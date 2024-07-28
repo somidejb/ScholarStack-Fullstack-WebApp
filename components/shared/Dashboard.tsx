@@ -50,7 +50,7 @@ const Dashboard: React.FC<DashboardProps> = ({ books }) => {
   );
 
   return (
-    <div className="p-6 md:p-4">
+    <div className="p-6 md:p-4 ">
       <div className="mb-6 md:mb-4 w-full">
         <input
           type="text"
@@ -60,15 +60,12 @@ const Dashboard: React.FC<DashboardProps> = ({ books }) => {
           className="px-5 py-2.5 border shadow-md rounded-2xl bg-white outline-none hover:shadow-lg transform hover:scale-105 transition duration-200 ease-in-out w-full"
         />
       </div>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-10">
+      <div className="space-y-6 md:space-y-4 gap-4 mb-10">
         <div className="bg-blue-900 text-white p-6 rounded shadow hover:shadow-lg transform hover:scale-105 transition duration-200 ease-in-out">
           <h2 className="text-center">Total Subscriptions</h2>
           <p className="text-4xl text-center">125</p>
         </div>
-        <div className="bg-gray-400 text-white p-6 rounded shadow hover:shadow-lg transform hover:scale-105 transition duration-200 ease-in-out">
-          <h2 className="text-center">Reports</h2>
-          <p className="text-4xl text-center">34</p>
-        </div>
+        
       </div>
       <div className="space-y-6 md:space-y-4">
         {filteredBooks.map((book, index) => (

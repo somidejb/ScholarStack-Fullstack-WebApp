@@ -2,16 +2,15 @@
 import React from 'react';
 import Sidebar from '@/components/shared/SideBar';
 import Dashboard from '@/components/shared/Dashboard';
-import Reports from '@/components/shared/Reports';
 import { fetchAllBooksAdmin } from '@/lib/actions/book.actions';
 
 const AdminPage = async () => {
   const books = await fetchAllBooksAdmin();
 
   return (
-    <div className="flex bg-slate-100  ">
+    <div className="flex flex-col md:flex-row bg-slate-100 min-h-screen">
       <Sidebar />
-      <div className="flex-grow p-8 ">
+      <div className="flex-grow p-4 md:p-2">
         <Dashboard books={books} />
       </div>
     </div>
@@ -19,3 +18,4 @@ const AdminPage = async () => {
 };
 
 export default AdminPage;
+
