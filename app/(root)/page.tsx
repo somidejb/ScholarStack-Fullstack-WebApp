@@ -1,4 +1,4 @@
-import { fetchAllBooks, getFavorites } from '@/lib/actions/book.actions';
+import { fetchAllBooks } from '@/lib/actions/book.actions';
 import Banner from '@/components/shared/Banner';
 import { Collection } from '@/components/shared/Collection';
 import { auth } from '@clerk/nextjs/server';

@@ -2,7 +2,7 @@ import React from 'react';
 import { currentUser } from '@clerk/nextjs/server';
 import { fetchAllBooks } from '@/lib/actions/book.actions';
 import { IBook } from '@/lib/mongodb/database/models/book.model';
-import { getUserById, updateUserLocation } from '@/lib/actions/user.actions';
+import { getUserByClerkId, updateUserLocation } from '@/lib/actions/user.actions';
 import Profile from '@/components/shared/Profile';
 import { daysSincePosted } from '@/lib/actions/datePosted';
 
@@ -12,19 +12,18 @@ const ProfilePage = async ({ params }: { params: { id: string } }) => {
   try {
     const user = await currentUser();
 
-    // If user is null, return an error message
     if (!user) {
       return <p>Error loading user details. Please try again later.</p>;
     }
 
-    const targetUserId = id || user.id;
+    const targetClerkId = id || user.id;
 
-    if (!targetUserId) {
+    if (!targetClerkId) {
       return <p>Error loading user details. Please try again later.</p>;
     }
 
     const ip = '127.0.0.1'; // Placeholder, replace with actual IP logic if needed
-    await updateUserLocation(targetUserId, ip, `/profile/${targetUserId}`);
+    await updateUserLocation(targetClerkId, ip, `/profile/${targetClerkId}`);
 
     let books: IBook[] = [];
     try {
@@ -32,12 +31,12 @@ const ProfilePage = async ({ params }: { params: { id: string } }) => {
     } catch (error) {
       console.error('Error fetching books:', error);
     }
-   
+
     let userDetails = null;
     let dbUserId = null;
 
     try {
-      userDetails = await getUserById(targetUserId);
+      userDetails = await getUserByClerkId(targetClerkId);
       dbUserId = userDetails._id;
     } catch (error) {
       console.error('Error fetching user details:', error);
@@ -47,7 +46,6 @@ const ProfilePage = async ({ params }: { params: { id: string } }) => {
       return <p>Error loading user details. Please try again later.</p>;
     }
 
-    // Ensure IDs are compared as strings
     const userBooks = books.filter(book => String(book.bookOwner?._id) === String(dbUserId));
     console.log('User books:', userBooks);
 
@@ -72,7 +70,7 @@ const ProfilePage = async ({ params }: { params: { id: string } }) => {
       },
       userBooks,
       userFavorites,
-      userId: targetUserId,
+      userId: targetClerkId,
       modalBooks,
     };
 

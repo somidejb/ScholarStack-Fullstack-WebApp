@@ -59,15 +59,22 @@ export async function createUser(user: CreateUserParams) {
   }
 }
 
-export async function getUserById(userId: string) {
+export async function getUserByClerkId(clerkId: string) {
   try {
     await connectToDatabase();
 
-    const user = await User.findOne({ clerkId: userId });
+    console.log(`Fetching user with clerkId: ${clerkId}`);
+    const user = await User.findOne({ clerkId });
 
-    if (!user) throw new Error('User not found');
-    return JSON.parse(JSON.stringify(user));
+    if (!user) {
+      console.error('User not found');
+      throw new Error('User not found');
+    }
+
+    console.log('User found:', user);
+    return user; // Returning the user document which includes the _id field
   } catch (error) {
+    console.error('Error fetching user by clerkId:', error);
     handleError(error);
   }
 }
@@ -138,3 +145,51 @@ export async function updateUserLocation(clerkId: string, ip: string, path: stri
     handleError(error);
   }
 }
+
+export async function addFavorite(clerkId: string, bookId: string) {
+  try {
+    await connectToDatabase();
+    const user = await User.findOne({ clerkId });
+    console.log(user);
+    if (!user) throw new Error('User not found');
+
+    if (!user.favorites.includes(bookId)) {
+      user.favorites.push(bookId);
+      await user.save();
+    }
+
+    return JSON.parse(JSON.stringify(user));
+  } catch (error) {
+    console.error(`Error adding favorite for user ${clerkId} and book ${bookId}:`, error);
+    throw error; // Rethrow the error to be handled by the calling function
+  }
+}
+
+export async function removeFavorite(clerkId: string, bookId: string) {
+  try {
+    await connectToDatabase();
+    const user = await User.findOne({ clerkId });
+    if (!user) throw new Error('User not found');
+
+    user.favorites.pull(bookId);
+    await user.save();
+
+    return JSON.parse(JSON.stringify(user));
+  } catch (error) {
+    handleError(error);
+  }
+}
+
+export async function getUserById2(userId: string) {
+  try {
+    await connectToDatabase()
+ 
+    const user = await User.findById(userId)
+ 
+    if (!user) throw new Error('User not found')
+    return JSON.parse(JSON.stringify(user))
+  } catch (error) {
+    handleError(error)
+  }
+}
+ 

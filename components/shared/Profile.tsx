@@ -1,4 +1,5 @@
 "use client";
+
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
@@ -312,7 +313,7 @@ const Profile: React.FC<ProfileProps> = ({
           <Collection
             collection_type="My Favorite Books"
             books={userFavorites}
-            userId={userId}
+            userId={clerkId}
           />
         ) : (
           <p className="text-gray-600">You have no favorite books listed.</p>

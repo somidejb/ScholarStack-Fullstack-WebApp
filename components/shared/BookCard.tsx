@@ -1,10 +1,10 @@
 "use client";
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { FiEdit, FiTrash2, FiEye, FiMoreHorizontal } from 'react-icons/fi';
 import { createOrder } from '@/lib/actions/order.actions';
-import { deleteBook, addFavorite, removeFavorite } from '@/lib/actions/book.actions';
+import { deleteBook, addFavorite, addFavorite2, removeFavorite2 } from '@/lib/actions/book.actions';
 
 type BookCardProps = {
   userId: string;
@@ -37,10 +37,15 @@ const BookCard = ({
   const [showSoldConfirmation, setShowSoldConfirmation] = useState(false);
 
   const toggleFavorite = async () => {
+    const profilePath = `/profile/${userId}`;
     if (favorite) {
-      await removeFavorite(userId, bookId);
-    } else {
       await addFavorite(userId, bookId);
+    } else {
+      if (typeof window !== 'undefined' && window.location.pathname === profilePath) {
+        await addFavorite2(userId, bookId);
+      } else {
+        await addFavorite(userId, bookId);
+      }
     }
     setFavorite(!favorite);
   };
@@ -125,17 +130,18 @@ const BookCard = ({
               <p className="font-bold">{price === "0" ? "Free" : `$ ${price}`}</p>
             )}
           </div>
-          <Image
-            src={favorite ? "/assets/icons/favorite-red.png" : "/assets/icons/favorite.svg"}
-            alt="heart"
-            width={19}
-            height={11}
-            className="object-contain w-[12px] md:w-[20px] lg:w-[24px] h-full cursor-pointer"
-            onClick={toggleFavorite}
-          />
+          <div onClick={toggleFavorite} className="cursor-pointer">
+            <Image
+              src={favorite ? "/assets/icons/favorite-red.png" : "/assets/icons/favorite.svg"}
+              alt="heart"
+              width={19}
+              height={11}
+              className="object-contain w-[12px] md:w-[20px] lg:w-[24px] h-full"
+            />
+          </div>
         </div>
 
-        {userId === bookOwnerId && (
+        {isProfilePage && userId !== bookOwnerId && (
           <div className="absolute top-2 right-2 z-10">
             <button className="cursor-pointer" onClick={toggleMenu}>
               <FiMoreHorizontal size={24} className="text-gray-500 hover:text-gray-800" />
@@ -159,7 +165,7 @@ const BookCard = ({
           </div>
         )}
 
-        {isProfilePage && userId === bookOwnerId && (
+        {isProfilePage && userId !== bookOwnerId && (
           <div className="flex justify-center mt-3 gap-2 mb-3">
             <button className="px-3 py-1 shadow-xl bg-gradient-to-r from-yellow-600 to-orange-600 text-white text-sm rounded-lg hover:bg-gradient-to-r hover:from-red-900 hover:to-red-800" onClick={handleMarkAsSoldClick}>
               Mark as Sold

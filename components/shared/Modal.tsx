@@ -28,6 +28,7 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, books, userId, handleNot
   }, [isOpen]);
 
   const handleSold = async (bookId: string, sellerId: string, price: string) => {
+    console.log('handleSold called'); // Log to verify function call
     try {
       const order = {
         order: `ORD-${Date.now()}`,
@@ -37,6 +38,8 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, books, userId, handleNot
         price: parseFloat(price),
         orderDate: new Date(),
       };
+
+      console.log('Order details:', order); // Log order details
 
       const newOrder = await createOrder({ userId, order, path: '/path-to-revalidate' });
 

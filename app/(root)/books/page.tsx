@@ -48,7 +48,7 @@ export default async function Books({ searchParams }: SearchParamProps) {
   // Fetch favorites data
   let favorites: string[] = [];
   if (userId) {
-    const favoriteBooks = await getFavorites(userId);
+    const favoriteBooks = await getFavorites(userId, );
     favorites = favoriteBooks.map((favorite: IBook) => favorite._id);
   }
 

@@ -9,9 +9,21 @@ export function cn(...inputs: ClassValue[]) {
 export const convertFileToUrl = (file: File) => URL.createObjectURL(file)
  
 export const handleError = (error: unknown) => {
-  console.error(error)
-  throw new Error(typeof error === 'string' ? error : JSON.stringify(error))
+  console.error("Complete Error Object:", error); // Log the entire error object
+
+  if (error instanceof Error) {
+      console.error(`Error: ${error.message}`);
+      throw new Error(error.message);
+  } else if (typeof error === 'string') {
+      console.error(`Error: ${error}`);
+      throw new Error(error);
+  } else {
+      const errorMessage = JSON.stringify(error);
+      console.error(`Error: ${errorMessage}`);
+      throw new Error(errorMessage);
+  }
 }
+
 
 interface UrlQueryParams {
   params: string
