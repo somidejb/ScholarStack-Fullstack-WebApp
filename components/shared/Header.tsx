@@ -11,8 +11,11 @@ import { usePathname } from 'next/navigation'; // Use next/navigation instead
 const Header = () => {
   const pathname = usePathname(); // Get the current pathname
 
+  // Ensure pathname is safely handled
+  const safePathname: string = pathname || '';
+
   return (
-    <header className="w-full border-b h-[64px] md:h-[85px] lg:h-[87px]  bg-[#31457b] relative">
+    <header className="w-full border-b h-[64px] md:h-[85px] lg:h-[87px] bg-[#31457b] relative">
       <div className="px-4 sm:px-6 md:px-8 lg:px-10 h-full w-full flex justify-between items-center relative z-50">
         <div className="flex items-center">
           <Link href="/" className="flex items-center gap-2">
@@ -30,7 +33,8 @@ const Header = () => {
 
         <SignedIn>
           <nav className="hidden md:flex items-center gap-4 lg:gap-6">
-            <NavItems pathname={pathname} />
+            {/* Conditional rendering and type assertion combined */}
+            {pathname !== null && <NavItems pathname={safePathname} />}
           </nav>
         </SignedIn>
 
