@@ -1,27 +1,71 @@
-import React from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEllipsis, faArrowLeft } from "@fortawesome/free-solid-svg-icons";
-
-interface Chat {
-  name: string;
-  message: string;
-}
+import ChatBox from "@/components/shared/ChatBox";
+import { IChat } from "@/lib/mongodb/database/models/chat.model";
+import { pusherClient } from "@/lib/pusher";
+import { toPusherKey } from "@/lib/utils";
+import { IMessage } from "@/lib/mongodb/database/models/message.model";
+import Link from "next/link";
+import { format } from 'date-fns';
 
 interface ChatWindowProps {
-  selectedChat: Chat | null;
+  selectedChat: IChat | null;
+  userId: string;
   onBack?: () => void;
+  onSendMessage: (message: string) => void;
   className?: string;
+  messages: IMessage[];
 }
 
-const ChatWindow: React.FC<ChatWindowProps> = ({ selectedChat, onBack, className }) => {
-  if (!selectedChat) {
-    return (
-      <div className={`flex-grow p-4 overflow-y-auto ${className}`}>
-        Select a chat to start messaging
-      </div>
-    );
-  }
+const ChatWindow = ({
+  selectedChat,
+  onBack,
+  userId,
+  onSendMessage,
+  className,
+  messages,
+}: ChatWindowProps) => {
+  console.log("messages from the chat window: ", messages);
+  const [chatMessages, setChatMessages] = useState<IMessage[]>(messages || []);
+  const bottomRef = useRef<HTMLDivElement>(null);
+  const chatContainerRef = useRef<HTMLDivElement>(null);
 
+  useEffect(() => {
+    if (selectedChat) {
+      setChatMessages(messages);
+    }
+  }, [selectedChat, messages]);
+
+  useEffect(() => {
+    if (selectedChat?._id) {
+      pusherClient.subscribe(selectedChat._id);
+    }
+
+    const messageHandler = (message: IMessage) => {
+      setChatMessages((prevMessages) => [...prevMessages, message]);
+    };
+
+    pusherClient.bind("new-message", messageHandler);
+    return () => {
+      if (selectedChat?._id) {
+        pusherClient.unsubscribe(selectedChat._id);
+      }
+      pusherClient.unbind("new-message", messageHandler);
+    };
+  }, []);
+
+  useEffect(() => {
+    const footerHeight = 216.8; // Known footer height
+    if (chatContainerRef.current) {
+      chatContainerRef.current.scrollTo({
+        top: chatContainerRef.current.scrollHeight - footerHeight,
+        behavior: "smooth",
+      });
+    }
+  }, [chatMessages]);
+
+  console.log("Chat Messages:", chatMessages);
   return (
     <div className={`flex flex-col h-full ${className}`}>
       <div className="border-b p-4 flex items-center">
@@ -35,12 +79,14 @@ const ChatWindow: React.FC<ChatWindowProps> = ({ selectedChat, onBack, className
             />
           </button>
         )}
-        <img
-          src="/profile.jpg"
-          alt="Profile"
-          className="h-8 w-8 rounded-full mr-2"
-        />
-        <h3 className="text-lg font-semibold">{selectedChat.name}</h3>
+        <Link href={`/profile/${selectedChat?.members[0]?._id}`}>
+          <img
+            src={selectedChat?.members[0]?.photo}
+            alt={`${selectedChat?.members[0]?.username}'s avatar`}
+            className="w-10 h-10 rounded-full mr-2"
+          />
+        </Link>
+        <h3 className="text-lg font-semibold">{selectedChat?.members[0]?.username}</h3>
         <FontAwesomeIcon
           icon={faEllipsis}
           height={15}
@@ -49,40 +95,32 @@ const ChatWindow: React.FC<ChatWindowProps> = ({ selectedChat, onBack, className
           className="ml-auto"
         />
       </div>
-      <div className="flex-grow p-4 overflow-y-auto bg-white">
-        <div className="flex flex-col space-y-4">
-          <div className="text-sm">
-            <div className="flex flex-row items-start text-sm">
-              <img
-                src="/profile.jpg"
-                alt="Profile"
-                className="h-5 w-5 rounded-full"
-              />
-              <p className="ml-2">{selectedChat.name}</p>
-            </div>
-            <div className="flex items-start">
-              <div className="bg-gray-200 p-2 rounded-lg">
-                <p className="text-sm">{selectedChat.message}</p>
+      <div ref={chatContainerRef} className="flex-grow p-4 overflow-y-auto bg-white">
+        <div className="flex flex-col space-y-4 py-1">
+          {chatMessages.map((msg, index) => (
+            msg?.sender?._id !== userId ? (
+              <div key={index} className="flex justify-start items-start flex-col">
+                <div className="flex items-center">
+                  <img src={msg?.sender?.photo} alt="profile photo" className="w-8 h-8 rounded-full"/>
+                  <p className = "text-xs font-bold pl-2">{msg?.sender?.username} &#160; &#183; &#160; {format(new Date(msg?.createdAt), "p")}</p>
+                </div>
+                <div className="ml-10 bg-gray-200 p-2 rounded-lg">
+                  <p className="text-sm">{msg.text}</p>
+                </div>
               </div>
-            </div>
-          </div>
-          <div className="text-sm">
-            <div className="flex flex-col items-end">
-              <div className="flex flex-row items-center">
-                <p className="pt-2">You</p>
-                <img
-                  src="/profile.jpg"
-                  alt="Profile"
-                  className="h-5 w-5 rounded-full ml-2"
-                />
+            ) : (
+              <div key={index} className="flex justify-end items-end flex-col">
+                <p className="text-xs font-bold">{format(new Date(msg?.createdAt), "p")}</p>
+                <div className="bg-indigo-100 p-2 rounded-lg">
+                  <p className="text-sm ">{msg.text}</p>
+                </div>
               </div>
-              <div className="bg-indigo-100 p-2 rounded-lg">
-                <p className="text-sm">Hey</p>
-              </div>
-            </div>
-          </div>
+            )
+          ))}
+          <div ref={bottomRef}></div>
         </div>
       </div>
+      <ChatBox onSendMessage={onSendMessage} className="w-full" />
     </div>
   );
 };

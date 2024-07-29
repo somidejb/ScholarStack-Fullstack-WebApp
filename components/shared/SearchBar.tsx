@@ -39,7 +39,7 @@ const SearchBar = () => {
     }, [search, pathname, router, searchParams, query]);
 
     return (
-        <div className=" mt-[150px] flex bg-[#F6F4F4] px-[5px] md:px-[15px] min-h-[54px] rounded-[20px] justify-between w-[250px] md:w-[530px] lg:w-[700px] xl:w-[900px] drop-shadow-lg">
+        <div className="relative mt-[25px] flex bg-[#F6F4F4] px-[5px] md:px-[15px] min-h-[54px] rounded-[20px] justify-between w-[250px] md:w-[530px] lg:w-[700px] xl:w-[900px] drop-shadow-lg">
             <Input
                 type="text"
                 value={search}
@@ -47,7 +47,13 @@ const SearchBar = () => {
                 onChange={(e) => setSearch(e.target.value)}
                 className="h-full bg-[#F6F4F4] rounded-[20px] border-none focus-visible:ring-offset-0 focus-visible:ring-transparent focus:ring-transparent"
             />
-            
+            <Image
+                src="/assets/icons/search.png"
+                alt="Search Icon"
+                width={20}
+                height={20}
+                className="object-contain cursor-pointer"
+            />
         </div>
     );
 };

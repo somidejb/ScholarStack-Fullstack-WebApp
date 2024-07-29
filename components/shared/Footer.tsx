@@ -4,7 +4,11 @@ import { FaEnvelope, FaTwitter, FaFacebookSquare, FaInstagramSquare } from 'reac
 const Footer = () => {
   return (
     <footer className="text-white py-4 bg-[#31457b] rounded-sm">
+<<<<<<< HEAD
       <div className="flex justify-between">
+=======
+      <div className="flex justify-between ">
+>>>>>>> 5fd023ca60559b4073af29ce2b01665f198f0a5d
         <div className="p-1 ml-1">
           <h2 className="font-inter font-bold text-white text-base leading-7 lg:text-[40px] lg:mb-3">ScholarStack</h2>
           <p className='text-nowrap font-inter font-normal text-white text-xs md:text-[12px] tracking-tighter lg:text-[15px]'>
@@ -13,8 +17,13 @@ const Footer = () => {
             discovers their next adventure!
           </p>
         </div>
+<<<<<<< HEAD
         <div className="p-2 px-2 mr-1 font-inter font-semibold text-white text-base leading-24">
           <h2>Help & Contacts</h2>
+=======
+        <div className="p-2 mr-1 font-inter font-semibold text-white text-base leading-24">
+          <h2>Help & Contacts </h2>
+>>>>>>> 5fd023ca60559b4073af29ce2b01665f198f0a5d
           <div className="flex items-center hover:cursor-pointer">
             <FaEnvelope />
             <p className="ml-2 font-inter font-normal text-white text-xs leading-24">scholarstack@gmail.com</p>
@@ -47,11 +56,14 @@ const Footer = () => {
           </div>
         </div>
       </div>
+<<<<<<< HEAD
       <div className="flex justify-between items-center px-2">
         <a href="/about" className="font-inter text-xs font-bold text-white md:text-[12px] tracking-tighter lg:text-[20px] hover:underline hover:text-gray-300 transition-colors duration-300">
           About Us
         </a>
       </div>
+=======
+>>>>>>> 5fd023ca60559b4073af29ce2b01665f198f0a5d
       <hr className="border-blue-300 my-4" />
       <div className="p-2 text-center">
         <p className="text-[#FFFFFF]">

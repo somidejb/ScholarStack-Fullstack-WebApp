@@ -4,7 +4,7 @@ import { handleError } from "../utils"
 import { connectToDatabase } from "../mongodb/database";
 import Category from "../mongodb/database/models/category.model";
 
-export const getAllCategories = async () => {
+export async function getAllCategories(){
     try {
         await connectToDatabase();
 

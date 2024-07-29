@@ -140,7 +140,7 @@ p{
     box-shadow: 0px 4px 4px rgba(25, 4, 229, 0.7), inset 0px 4px 4px rgba(0, 0, 0, 0.25);
   }
   .p-card{
-    @apply pl-[3px] text-[8px] md:text-[12px] lg:text-[14px] xl:text-[16px] tracking-widest leading-[12px] md:leading-[16px] lg:leading-[18px] xl:leading-[23px];
+    @apply pl-[3px] text-[8px] md:text-[12px] lg:text-[13px] tracking-widest leading-[12px] md:leading-[16px] lg:leading-[20px];
   }
   .card-center{
     @apply px-[34px] md:px-[85px] lg:px-[105px] xl:px-[124px];
@@ -171,6 +171,12 @@ p{
   }
   .field-div{
     @apply mt-5 flex flex-col gap-5 md:flex-row !important;
+  }
+  .custom-mobHeight{
+    height: calc(100vh - 64px);
+  }
+  .custom-medHeight{
+    height: calc(100vh - 85px);
   }
 
 }
@@ -205,4 +211,17 @@ p{
 
 .cl-footerActionLink{
   @apply font-bold;
+}
+
+/* styles.css or global.css */
+.bg-pastel-green {
+  background-color: #d4f8e8; /* Light pastel green */
+}
+
+.bg-pastel-red {
+  background-color: #f8d4d4; /* Light pastel red */
+}
+
+.transition {
+  transition: transform 0.5s ease-in-out, opacity 0.5s ease-in-out;
 }

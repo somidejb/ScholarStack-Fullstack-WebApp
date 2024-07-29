@@ -1,16 +1,45 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPaperPlane } from "@fortawesome/free-solid-svg-icons";
 
-const ChatBox = () => {
+interface ChatBoxProps {
+  onSendMessage: (message: string) => void;
+  className?: string;
+}
+
+const ChatBox = ({ onSendMessage, className }: ChatBoxProps) => {
+  const [message, setMessage] = useState('');
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setMessage(e.target.value);
+  };
+
+  const handleSend = () => {
+    if (message.trim() !== '') {
+      console.log("Message:", message);
+      onSendMessage(message);
+      setMessage('');
+    }
+  };
+
+  const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      handleSend();
+    }
+  };
+
   return (
-    <div className="p-3 border-t border-gray-300 flex items-center">
-      <input 
-        type="text" 
-        placeholder="Write a message" 
-        className="flex-grow p-2 border rounded-full mr-2 shadow-md"
+    <div className={`p-4 border-t border-gray-300 ${className} flex items-center`}>
+      <input
+        type="text"
+        value={message}
+        onChange={handleInputChange}
+        onKeyPress={handleKeyPress}
+        className="w-full p-2 border rounded-lg"
+        placeholder="Write a message"
+        required
       />
-      <button className="p-2">
+      <button onClick={handleSend} className="p-2">
         <FontAwesomeIcon
           icon={faPaperPlane}
           height={18}

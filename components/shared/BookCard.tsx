@@ -1,5 +1,5 @@
-"use client";
-import { useState } from 'react';
+"use client"
+import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { FiEdit, FiTrash2, FiEye, FiMoreHorizontal } from 'react-icons/fi';
@@ -37,7 +37,7 @@ const BookCard = ({ userId, bookId, title, imageUrl, author, price, salePrice, f
   };
 
   return (
-    <div className="relative rounded-[15px] w-full lg:rounded-[30px] flex h-[135px] md:h-[180px] lg:h-[287px] xl:h-[394px] lg:min-w-[194px] xl:min-w-[258px] min-w-[104px] md:min-w-[130px] flex-col card-shadow mb-1">
+    <div className="relative rounded-[15px] w-full lg:rounded-[30px] flex h-[135px] md:h-[180px] lg:h-[230px] xl:h-[300px] lg:min-w-[170px] lg:max-w-[200px] xl:min-w-[220px] xl:max-w-[250px] min-w-[104px] md:min-w-[130px] md:max-w-[150px] flex-col card-shadow mb-1">
       <div className="flex flex-col items-start justify-center w-full h-full px-[7px] lg:px-[18px] xl:px-[25px] pt-[10px] md:pt-[13px]">
         <Link href={{ pathname: `books/${bookId}`, query: { favorite: favorite.toString() } }} className="rounded-[10px] w-full h-[90px] md:h-[120px] lg:h-[210px] xl:h-[300px] overflow-hidden flex-center book-shadow">
           <Image src={imageUrl} alt={title} width={216} height={301} className="object-contain" />
@@ -50,11 +50,11 @@ const BookCard = ({ userId, bookId, title, imageUrl, author, price, salePrice, f
           <div className="flex p-card gap-1">
             {salePrice ? (
               <>
-                <p className="font-normal text-red-400">{`$ ${salePrice}`}</p>
-                <p className="font-normal text-gray-400 line-through">{price === "0" ? "Free" : `$ ${price}`}</p>
+                <p className="font-medium text-red-400">{`$ ${salePrice}`}</p>
+                <p className="font-medium text-gray-400 line-through">{price === "0" ? "Free" : `$ ${price}`}</p>
               </>
             ) : (
-              <p className="font-normal">{price === "0" ? "Free" : `$ ${price}`}</p>
+              <p className="font-medium">{price === "0" ? "Free" : `$ ${price}`}</p>
             )}
           </div>
           <Image 

@@ -3,6 +3,13 @@ import Banner from '@/components/shared/Banner';
 import { Collection } from '@/components/shared/Collection';
 import { auth } from '@clerk/nextjs/server';
 import { IBook } from '@/lib/mongodb/database/models/book.model';
+import type { Metadata } from 'next';
+
+
+export const metadata: Metadata = {
+  title: "Home | Scholar Stack",
+  description: "Welcome to Scholar Stack, a platform for sharing and discovering books.",
+}
 
 const Home = async () => {
   const { sessionClaims } = auth();
@@ -28,15 +35,15 @@ const Home = async () => {
       const daysDifference = timeDifference / (1000 * 3600 * 24);
       return daysDifference <= 30; // e.g., books uploaded in the last 30 days
     })
-    .sort(sortByDateDesc);
+    .sort(sortByDateDesc).slice(0, 12);
 
   const booksOnSale = books
     .filter(book => book.salePrice !== undefined && book.salePrice !== "")
-    .sort(sortByDateDesc);
+    .sort(sortByDateDesc).slice(0, 12);
 
   const freeBooks = books
     .filter(book => book.isBookFree)
-    .sort(sortByDateDesc);
+    .sort(sortByDateDesc).slice(0, 12);
 
   return (
     <>

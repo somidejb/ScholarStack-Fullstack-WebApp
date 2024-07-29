@@ -1,11 +1,16 @@
 import React from 'react';
 import Image from 'next/image';
 import { IoChevronBack, IoChevronForward, IoClose } from 'react-icons/io5';
+<<<<<<< HEAD
 
+=======
+ 
+>>>>>>> 5fd023ca60559b4073af29ce2b01665f198f0a5d
 type ImageModalProps = {
   isOpen: boolean;
   onClose: () => void;
   images: string[];
+<<<<<<< HEAD
   selectedIndex: number; 
   onSelect: (index: number) => void;
 };
@@ -13,18 +18,35 @@ type ImageModalProps = {
 const ImageModal: React.FC<ImageModalProps> = ({ isOpen, onClose, images, selectedIndex, onSelect }) => {
   if (!isOpen) return null;
 
+=======
+  selectedIndex: number;
+  onSelect: (index: number) => void;
+};
+ 
+const ImageModal: React.FC<ImageModalProps> = ({ isOpen, onClose, images, selectedIndex, onSelect }) => {
+  if (!isOpen) return null;
+ 
+>>>>>>> 5fd023ca60559b4073af29ce2b01665f198f0a5d
   const handlePrev = () => {
     if (selectedIndex > 0) {
       onSelect(selectedIndex - 1);
     }
   };
+<<<<<<< HEAD
 
+=======
+ 
+>>>>>>> 5fd023ca60559b4073af29ce2b01665f198f0a5d
   const handleNext = () => {
     if (selectedIndex < images.length - 1) {
       onSelect(selectedIndex + 1);
     }
   };
+<<<<<<< HEAD
 
+=======
+ 
+>>>>>>> 5fd023ca60559b4073af29ce2b01665f198f0a5d
   return (
     <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50 backdrop-filter backdrop-blur-sm">
       <div className="relative bg-white bg-opacity-90 p-4 rounded-lg shadow-lg w-full max-w-md sm:max-w-lg md:max-w-xl lg:max-w-2xl">
@@ -76,5 +98,10 @@ const ImageModal: React.FC<ImageModalProps> = ({ isOpen, onClose, images, select
     </div>
   );
 };
+<<<<<<< HEAD
 
 export default ImageModal;
+=======
+ 
+export default ImageModal;
+>>>>>>> 5fd023ca60559b4073af29ce2b01665f198f0a5d

@@ -14,8 +14,11 @@ const inter = Inter({ subsets: ["latin"],
  });
 
 export const metadata: Metadata = {
-  title: "BukBlend",
+  title: "Scholar Stack",
   description: "Streamline textbook transactions for students with our easy-to-use online marketplace. Buy and sell textbooks effortlessly, connecting with fellow students hassle-free",
+  icons: {
+    icon: "/assets/images/mobilelogo.png"
+  }
 };
 
 export default function RootLayout({
