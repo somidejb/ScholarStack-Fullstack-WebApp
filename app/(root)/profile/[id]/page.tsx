@@ -5,6 +5,7 @@ import { IBook } from '@/lib/mongodb/database/models/book.model';
 import { getUserByClerkId, updateUserLocation } from '@/lib/actions/user.actions';
 import Profile from '@/components/shared/Profile';
 import { daysSincePosted } from '@/lib/actions/datePosted';
+import { fetchAllOrders } from '@/lib/actions/order.actions'; // Assuming this action exists
 
 const ProfilePage = async ({ params }: { params: { id: string } }) => {
   const { id } = params;
@@ -47,14 +48,21 @@ const ProfilePage = async ({ params }: { params: { id: string } }) => {
     }
 
     const userBooks = books.filter(book => String(book.bookOwner?._id) === String(dbUserId));
-
-
     const userFavorites = books.filter(book => userDetails.favorites.includes(book._id));
-
     const modalBooks = userBooks.filter(book => {
       const daysPosted = daysSincePosted(new Date(book.postedAt));
       return daysPosted === 21;
     });
+
+    let completedListingsCount = 0;
+    try {
+      const orders = await fetchAllOrders();
+      console.log('Fetched Orders:', orders); // Log the fetched orders to inspect their structure
+      completedListingsCount = orders.filter((order: { seller: { _id: any; }; }) => String(order.seller._id) === String(dbUserId)).length;
+      console.log('Filtered Completed Listings:', completedListingsCount); // Log the filtered completed listings count
+    } catch (error) {
+      console.error('Error fetching orders:', error);
+    }
 
     const userProps = {
       user: {
@@ -72,6 +80,8 @@ const ProfilePage = async ({ params }: { params: { id: string } }) => {
       userFavorites,
       userId: targetClerkId,
       modalBooks,
+      bookCount: userBooks.length,
+      completedListingsCount,
     };
 
     return <Profile clerkId={user.id} {...userProps} />;

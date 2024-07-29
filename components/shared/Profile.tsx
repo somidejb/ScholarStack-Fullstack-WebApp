@@ -2,7 +2,6 @@
 
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
-import Link from "next/link";
 import { Collection } from "./Collection";
 import NoActiveListings from "./NoActiveListing";
 import { IBook } from "@/lib/mongodb/database/models/book.model";
@@ -45,6 +44,8 @@ interface ProfileProps {
   userFavorites: IBook[];
   userId: string;
   clerkId: string;
+  bookCount: number;  // Adding book count prop
+  completedListingsCount: number; // Adding completed listings count prop
 }
 
 const Profile: React.FC<ProfileProps> = ({
@@ -54,6 +55,8 @@ const Profile: React.FC<ProfileProps> = ({
   userFavorites,
   userId,
   clerkId,
+  bookCount,  // Destructuring book count prop
+  completedListingsCount, // Destructuring completed listings count prop
 }) => {
   const [isActive, setIsActive] = useState(false);
   const [name, setName] = useState(user.fullName);
@@ -324,11 +327,11 @@ const Profile: React.FC<ProfileProps> = ({
       <div className="flex justify-between px-4 py-4 bg-[#081F5C] mb-[130px]">
         <div>
           <p className="text-white">Listings Completed</p>
-          <p className="text-white font-semibold text-2xl">37</p>
+          <p className="text-white font-semibold text-2xl">{completedListingsCount}</p>
         </div>
         <div>
           <p className="text-white">Ongoing Listings</p>
-          <p className="text-white font-semibold text-2xl">04</p>
+          <p className="text-white font-semibold text-2xl">{bookCount}</p>
         </div>
         <div>
           <p className="text-white">Joined ScholarStack</p>

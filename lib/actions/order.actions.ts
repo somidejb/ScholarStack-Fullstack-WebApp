@@ -135,6 +135,7 @@ export async function fetchAllOrders() {
 
     const orders = await populateOrder(Order.find({})).lean();
     return JSON.parse(JSON.stringify(orders));
+    console.log(orders);
   } catch (error) {
     handleError(error);
     return [];
