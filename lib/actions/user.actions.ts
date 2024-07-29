@@ -63,7 +63,6 @@ export async function getUserByClerkId(clerkId: string) {
   try {
     await connectToDatabase();
 
-    console.log(`Fetching user with clerkId: ${clerkId}`);
     const user = await User.findOne({ clerkId });
 
     if (!user) {
@@ -71,7 +70,6 @@ export async function getUserByClerkId(clerkId: string) {
       throw new Error('User not found');
     }
 
-    console.log('User found:', user);
     return user; // Returning the user document which includes the _id field
   } catch (error) {
     console.error('Error fetching user by clerkId:', error);

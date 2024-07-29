@@ -47,7 +47,7 @@ const ProfilePage = async ({ params }: { params: { id: string } }) => {
     }
 
     const userBooks = books.filter(book => String(book.bookOwner?._id) === String(dbUserId));
-    console.log('User books:', userBooks);
+
 
     const userFavorites = books.filter(book => userDetails.favorites.includes(book._id));
 

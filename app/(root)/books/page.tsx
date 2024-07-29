@@ -1,7 +1,7 @@
 import BookCard from '@/components/shared/BookCard'; // Ensure this path is correct
 import Filters from '@/components/shared/Filters';
 import SearchBar from '@/components/shared/SearchBar';
-import { getAllBooks, getFavorites } from '@/lib/actions/book.actions';
+import { getAllBooks, getFavorites2 } from '@/lib/actions/book.actions';
 import { IBook } from '@/lib/mongodb/database/models/book.model';
 import { auth } from '@clerk/nextjs/server';
 import Pagination from '@/components/shared/Pagination';
@@ -45,12 +45,12 @@ export default async function Books({ searchParams }: SearchParamProps) {
   const isNext = result?.isNext ?? false;
   const totalPages = result?.totalPages ?? 1;
 
-  // Fetch favorites data
-  let favorites: string[] = [];
-  if (userId) {
-    const favoriteBooks = await getFavorites(userId, );
-    favorites = favoriteBooks.map((favorite: IBook) => favorite._id);
-  }
+  // // Fetch favorites data
+  // let favorites: string[] = [];
+  // if (userId) {
+  //   const favoriteBooks = await getFavorites2(userId, );
+  //   favorites = favoriteBooks.map((favorite: IBook) => favorite._id);
+  // }
 
   return (
     <>
@@ -80,7 +80,7 @@ export default async function Books({ searchParams }: SearchParamProps) {
                     author={book.author}
                     price={book.price}
                     salePrice={book.salePrice}
-                    favorites={favorites}
+                    //favorites={favorites}
                     bookOwnerId={book.bookOwner._id}
                   />
                 ))}

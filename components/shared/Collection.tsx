@@ -4,7 +4,7 @@ import BookCard from "./BookCard";
 import Image from "next/image";
 import Link from "next/link";
 import { IBook } from "@/lib/mongodb/database/models/book.model";
-import { getFavorites } from '@/lib/actions/book.actions';
+import { getFavorites, getFavorites2 } from '@/lib/actions/book.actions';
 
 type CollectionProps = {
   collection_type: string;
@@ -33,7 +33,12 @@ export const Collection = ({ collection_type, books, userId, isProfilePage }: Co
   useEffect(() => {
     const fetchFavorites = async () => {
       try {
-        const favoriteBooks: IBook[] = await getFavorites(userId);
+        let favoriteBooks: IBook[];
+        if (typeof window !== "undefined" && window.location.pathname.startsWith("/profile")) {
+          favoriteBooks = await getFavorites(userId); // Use clerkId here if appropriate
+        } else {
+          favoriteBooks = await getFavorites2(userId);
+        }
         const favoriteIds = favoriteBooks.reduce<string[]>((acc, favorite) => {
           acc.push(favorite._id);
           return acc;
@@ -49,15 +54,13 @@ export const Collection = ({ collection_type, books, userId, isProfilePage }: Co
     }
   }, [userId]);
 
-
   const totalSlides = Math.ceil(books.length / cardsPerSlide);
 
   const handlePrevClick = () => {
     setCurrentSlide(currentSlide > 0 ? currentSlide - 1 : totalSlides - 1);
   };
 
-  const handleNextClick = () =>
-    setCurrentSlide((currentSlide + 1) % totalSlides);
+  const handleNextClick = () => setCurrentSlide((currentSlide + 1) % totalSlides);
 
   const renderDots = () => {
     return Array.from({ length: totalSlides }).map((_, index) => (

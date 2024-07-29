@@ -155,8 +155,37 @@ export async function getAllBooks({ query, limit = 10, page = 1, category, langu
     handleError(error);
   }
 }
+export async function getFavorites(clerkId: string) {
+  try {
+    await connectToDatabase();
 
-export async function getFavorites(userId: string) {
+    // Find the user by clerkId
+    const user = await User.findOne({ clerkId }).populate({
+      path: 'favorites',
+      populate: {
+        path: 'category language bookOwner',
+        select: '_id name',
+      },
+    });
+
+    if (!user) {
+      throw new Error('User not found');
+    }
+
+    return JSON.parse(JSON.stringify(user.favorites));
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      console.error(`Error: ${error.message}`);
+      throw new Error(error.message);
+    } else {
+      console.error(`Unexpected error: ${error}`);
+      throw new Error('An unexpected error occurred');
+    }
+  }
+}
+
+
+export async function getFavorites2(userId: string) {
   try {
     await connectToDatabase();
     const user = await User.findById(userId).populate('favorites');
@@ -167,12 +196,10 @@ export async function getFavorites(userId: string) {
     handleError(error);
   }
 }
-
 export async function addFavorite(userId: string, bookId: string) {
   try {
     await connectToDatabase();
     const user = await User.findById(userId);
-    console.log(user);
     if (!user) throw new Error('User not found');
 
     if (!user.favorites.includes(bookId)) {
