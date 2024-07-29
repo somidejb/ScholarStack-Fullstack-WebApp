@@ -3,17 +3,17 @@ import { FaEnvelope, FaTwitter, FaFacebookSquare, FaInstagramSquare } from 'reac
 
 const Footer = () => {
   return (
-    <footer className="relative bottom-0 w-full text-white bg-[#31457b] rounded-sm">
-      <div className="flex justify-between p-0">
+    <footer className="text-white py-4 bg-[#31457b] rounded-sm">
+      <div className="flex justify-between">
         <div className="p-1 ml-1">
           <h2 className="font-inter font-bold text-white text-base leading-7 lg:text-[40px] lg:mb-3">ScholarStack</h2>
-          <p className="text-nowrap font-inter font-normal text-white text-xs md:text-[12px] tracking-tighter lg:text-[15px]">
+          <p className='text-nowrap font-inter font-normal text-white text-xs md:text-[12px] tracking-tighter lg:text-[15px]'>
             Where every book finds a new <br />
             home and every reader <br />
             discovers their next adventure!
           </p>
         </div>
-        <div className="p-2 mr-1 font-inter font-semibold text-white text-base leading-24">
+        <div className="p-2 px-2 mr-1 font-inter font-semibold text-white text-base leading-24">
           <h2>Help & Contacts</h2>
           <div className="flex items-center hover:cursor-pointer">
             <FaEnvelope />
@@ -24,7 +24,7 @@ const Footer = () => {
               href="https://www.facebook.com/ScholarStack"
               target="_blank"
               rel="noopener noreferrer"
-              className="hover:cursor-pointer"
+              className="hover:cursor-pointer hover:text-blue-500 transition-colors duration-300"
             >
               <FaFacebookSquare />
             </a>
@@ -32,7 +32,7 @@ const Footer = () => {
               href="https://www.instagram.com/ScholarStack"
               target="_blank"
               rel="noopener noreferrer"
-              className="hover:cursor-pointer"
+              className="hover:cursor-pointer hover:text-pink-500 transition-colors duration-300"
             >
               <FaInstagramSquare />
             </a>
@@ -40,15 +40,20 @@ const Footer = () => {
               href="https://www.twitter.com/ScholarStack"
               target="_blank"
               rel="noopener noreferrer"
-              className="hover:cursor-pointer"
+              className="hover:cursor-pointer hover:text-blue-400 transition-colors duration-300"
             >
               <FaTwitter />
             </a>
           </div>
         </div>
       </div>
-      <hr className="border-blue-300 " />
-      <div className="text-center">
+      <div className="flex justify-between items-center px-2">
+        <a href="/about" className="font-inter text-xs font-bold text-white md:text-[12px] tracking-tighter lg:text-[20px] hover:underline hover:text-gray-300 transition-colors duration-300">
+          About Us
+        </a>
+      </div>
+      <hr className="border-blue-300 my-4" />
+      <div className="p-2 text-center">
         <p className="text-[#FFFFFF]">
           © All copyrights are reserved. ScholarStack 2024.
         </p>
