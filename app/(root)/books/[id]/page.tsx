@@ -37,7 +37,7 @@ const Page = async ({ params }: BookPageProps) => {
   const {sessionClaims} = auth();
   const userId = sessionClaims?.userId as string;
   const book = await fetchBookById(params.id);
-  
+
   let favorites: string[] = [];
   if (userId) {
     const favoriteBooks = await getFavorites(userId);

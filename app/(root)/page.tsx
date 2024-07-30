@@ -11,6 +11,7 @@ export const metadata: Metadata = {
   description: "Welcome to Scholar Stack, a platform for sharing and discovering books.",
 }
 
+
 const Home = async () => {
   const { sessionClaims } = auth();
   const userId = sessionClaims?.userId as string;

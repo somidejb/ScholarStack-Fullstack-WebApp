@@ -1,7 +1,5 @@
-import { Label } from "@radix-ui/react-label";
-
 export const headerLinks = [
-      {
+    {
         label: 'Home',
         route: '/'
       },
@@ -25,6 +23,7 @@ export const headerLinks = [
         label: 'Admin',
         route: '/admin'
       },
+
 ]
 
 export const books = [
@@ -36,7 +35,7 @@ export const books = [
         image: "/assets/images/book1.png",
         condition: "Good",
         description: "A comprehensive introduction to computer science concepts and programming.",
-        category: "Recently Uploaded"
+     
     },
     {
         id: 2,

@@ -105,7 +105,7 @@ const ChatList = ({ className, userId, currentUser }: ChatListProps) => {
             />
           </div>
           <div>
-            {chats.length === 0 ? (
+            {chats?.length === 0 ? (
               <div className="mt-4 flex flex-col items-center text-gray-500 font-semibold text-lg md:text-sm lg:text-lg">
                 <img src="/assets/images/no-chat.png" alt="No chats" className="w-16 h-16" />
                 <p>Find the book you're interested in</p>

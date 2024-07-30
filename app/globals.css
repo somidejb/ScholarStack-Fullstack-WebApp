@@ -212,7 +212,6 @@ p{
 .cl-footerActionLink{
   @apply font-bold;
 }
-
 /* styles.css or global.css */
 .bg-pastel-green {
   background-color: #d4f8e8; /* Light pastel green */

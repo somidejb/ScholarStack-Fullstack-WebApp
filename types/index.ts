@@ -1,5 +1,4 @@
 import { IBook } from "@/lib/mongodb/database/models/book.model";
-
 // ====== USER PARAMS
 export type CreateUserParams = {
   clerkId: string;
@@ -22,10 +21,10 @@ export type UpdateUserParams = {
   username: string;
   photo: string;
 };
-
 export type DeleteUserParams = {
   clerkId: string | undefined;
 }
+
 
 // ====== BOOK PARAMS
 export type CreateBookParams = {

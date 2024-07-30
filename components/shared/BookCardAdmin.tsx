@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { getUserById } from '@/lib/actions/user.actions';
+import { getUserById2 } from '@/lib/actions/user.actions';
 import { format } from 'date-fns';
 
 interface BookCardAdminProps {
@@ -37,7 +37,7 @@ const BookCardAdmin = ({ book, onApprove, onReject, className }: BookCardAdminPr
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const user = await getUserById(book.bookOwner._id);
+        const user = await getUserById2(book.bookOwner._id);
         setUploadedUser(user);
       } catch (error) {
         console.log('Error: ', error);

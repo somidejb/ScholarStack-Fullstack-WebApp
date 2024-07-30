@@ -79,7 +79,6 @@ export async function getMessage({ chatId, currentUserId, text, photo }: getMess
 
     }
 }
-
 export async function getMessagesByChatId(chatId: string) {
     try {
         await connectToDatabase();
