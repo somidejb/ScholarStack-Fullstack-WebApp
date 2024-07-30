@@ -45,7 +45,6 @@ const Page = async ({ params }: BookPageProps) => {
   }
 
   if (!book) {
-    console.log("No book found with id:", params.id);
     return (
       <div className="mt-[100px]">
         <p>No book found</p>
@@ -53,7 +52,6 @@ const Page = async ({ params }: BookPageProps) => {
     );
   }
  
-  console.log("Book found:", book);
  
   const bookDetails = {
     ...book,

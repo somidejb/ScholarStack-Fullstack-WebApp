@@ -64,6 +64,7 @@ const ChatCard = ({ chat, index, userId, handleSelectChat, currentUser, chats,  
             return () => {
                 pusherClient.unsubscribe(userId);
                 pusherClient.unbind("update-chat", handleChatUpdate);
+                pusherClient.unbind("new-chat", handleNewChat);
             }
         }
     }, [currentUser]);
