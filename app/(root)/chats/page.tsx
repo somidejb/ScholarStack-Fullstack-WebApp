@@ -6,7 +6,6 @@ import { getUserById } from '@/lib/actions/user.actions';
 const Chats = async() => {
   const { sessionClaims } = auth();
   const userId = sessionClaims?.userId as string;
-  console.log("user Id: ", userId);
   const currentUser = await getUserById(userId);
   return (
     <div className="bg-gray-100 custom-mobHeight md:custom-medHeight">
