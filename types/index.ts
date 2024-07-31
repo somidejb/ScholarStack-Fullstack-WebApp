@@ -68,6 +68,7 @@ export type UpdateBookParams = {
 export type DeleteBookParams = {
   bookId: string;
   path: string;
+  page: string;
 };
 
 export type GetAllBooksParams = {

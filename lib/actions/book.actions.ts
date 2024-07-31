@@ -87,14 +87,20 @@ export async function updateBook({ userId, book, path }: UpdateBookParams) {
   }
 }
 
-export async function deleteBook({ bookId, path }: DeleteBookParams) {
+export async function deleteBook({ bookId, path, page }: DeleteBookParams) {
   try {
-    await connectToDatabase();
-
-    const deletedBook = await Book.findByIdAndDelete(bookId);
-    if (deletedBook) revalidatePath(path);
+    await connectToDatabase()
+    
+    if(page === "admin"){
+      const deletedBook = await AdminBooks.findByIdAndDelete(bookId);
+      if (deletedBook) revalidatePath(path)
+    }
+    else{
+      const deletedBook = await Book.findByIdAndDelete(bookId)
+      if (deletedBook) revalidatePath(path)
+    }
   } catch (error) {
-    handleError(error);
+    handleError(error)
   }
 }
 

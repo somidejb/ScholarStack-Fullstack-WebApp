@@ -71,7 +71,7 @@ const BookCard = ({
 
   const handleConfirmDelete = async () => {
     try {
-      await deleteBook({ bookId, path: `/profile/${userId}` });
+      await deleteBook({ bookId, path: `/profile/${userId}`, page: "not admin" });
       setShowDeleteConfirmation(false);
     } catch (error) {
       console.error("Failed to delete the book:", error);
@@ -100,7 +100,7 @@ const BookCard = ({
       const newOrder = await createOrder({ userId, order, path: "/path-to-revalidate" });
 
       if (newOrder) {
-        await deleteBook({ bookId, path: "/path-to-revalidate" });
+        await deleteBook({ bookId, path: "/path-to-revalidate", page: "not admin" });
         setShowSoldConfirmation(false);
       } else {
         console.error("Failed to create order");
