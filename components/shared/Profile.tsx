@@ -1,5 +1,6 @@
 "use client";
 
+
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import { Collection } from "./Collection";
@@ -23,6 +24,7 @@ import { FaPen } from "react-icons/fa";
 import { updateUserInClerkAndDB } from "@/lib/actions/user.actions";
 import { daysSincePosted } from "@/lib/actions/datePosted";
 import Modal from "./Modal";
+import { motion } from "framer-motion";
 
 interface IUser {
   username: string;
@@ -66,6 +68,9 @@ const Profile = ({
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalBooks, setModalBooks] = useState<IBook[]>([]);
   const [lastDismissed, setLastDismissed] = useState<Date | null>(null);
+  const [isUpdating, setIsUpdating] = useState(false);
+  const [updateError, setUpdateError] = useState<string | null>(null);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -132,6 +137,8 @@ const Profile = ({
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setIsUpdating(true);
+    setUpdateError(null);
 
     const updatedProfile = {
       firstName: name.split(" ")[0],
@@ -142,18 +149,43 @@ const Profile = ({
     };
 
     try {
-      await updateUserInClerkAndDB(userId, clerkId, updatedProfile);
+      const updatedUser = await updateUserInClerkAndDB(
+        userId,
+        clerkId,
+        updatedProfile
+      );
       console.log("Profile updated successfully");
-      // You might want to refresh the page or update the state here
+
+      // Update local state with the updated profile data
+      setName(updatedUser.firstName + " " + updatedUser.lastName);
+      setUsername(updatedUser.username);
+      setBio(updatedUser.bio);
+      setLocation(updatedUser.location);
+
+      // Close the dialog
+      setIsDialogOpen(false);
     } catch (error) {
       console.error("Failed to update profile:", error);
+      setUpdateError("Failed to update profile. Please try again.");
+    } finally {
+      setIsUpdating(false);
     }
   };
 
   return (
-    <div className="mx-auto bg-white shadow-md rounded-lg mt-[50px]">
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.5 }}
+      className="mx-auto bg-white shadow-md rounded-lg"
+    >
       {/* Profile and User Details section */}
-      <div className="flex items-start">
+      <motion.div
+        initial={{ x: -200 }}
+        animate={{ x: 0 }}
+        transition={{ duration: 0.5 }}
+        className="flex items-start"
+      >
         {/* Profile section */}
         <div className="flex items-center justify-center bg-[#D6DAEA] w-[1060px] h-[497px] left-0 top-[113px]">
           <div className="flex flex-col justify-center items-center lg:mr-[30px] lg:mt-8">
@@ -170,11 +202,11 @@ const Profile = ({
               className="text-xl font-semibold mt-4 lg:mt-[30px]"
               style={{ fontFamily: "Poppins, sans-serif", fontSize: 35 }}
             >
-              {user.fullName}
+              {name}
             </div>
           </div>
           <div className="flex flex-col gap-2">
-            <Dialog>
+            <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
               <DialogTrigger asChild>
                 <Button
                   className="bg-[#081F5C] opacity-[80%] text-white px-12 py-3 rounded-md"
@@ -189,7 +221,8 @@ const Profile = ({
                 <DialogHeader>
                   <DialogTitle>Edit profile</DialogTitle>
                   <DialogDescription>
-                    Make changes to your profile here. Click save when you're done.
+                    Make changes to your profile here. Click save when you're
+                    done.
                   </DialogDescription>
                 </DialogHeader>
                 <form onSubmit={handleSubmit} className="grid gap-4 py-4">
@@ -238,9 +271,12 @@ const Profile = ({
                     />
                   </div>
                   <DialogFooter>
-                    <Button type="submit">Save changes</Button>
+                    <Button type="submit" disabled={isUpdating}>
+                      {isUpdating ? "Saving..." : "Save changes"}
+                    </Button>
                   </DialogFooter>
                 </form>
+                {updateError && <p className="text-red-500">{updateError}</p>}
               </DialogContent>
             </Dialog>
             <Button
@@ -254,77 +290,100 @@ const Profile = ({
           </div>
         </div>
         {/* User details section */}
-        <div
-          className="space-y-2 ml-2 mr-5 mt-20 lg:mr-10"
+        <motion.div
+          initial={{ y: -200 }}
+          animate={{ y: 0 }}
+          transition={{ duration: 0.5 }}
+          className="space-y-2 ml-2 mr-5 lg:mr-10"
           style={{ fontFamily: "Poppins, sans-serif" }}
         >
-          <div>
-            <p className="text-[#000000]" style={{ fontSize: 25 }}>
-              Username
-            </p>
-            <p className="text-[#081F5C] opacity-[60%]" style={{ fontSize: 20 }}>
-              {user.username}
-            </p>
-          </div>
-          <div>
-            <p className="text-[#000000]" style={{ fontSize: 25 }}>
-              Bio
-            </p>
-            <p className="text-[#081F5C] opacity-[60%]" style={{ fontSize: 20 }}>
-              {userDetails.Bio}
-            </p>
-          </div>
-          <div>
-            <p className="text-[#000000]" style={{ fontSize: 25 }}>
-              Location
-            </p>
-            <p className="text-[#081F5C] opacity-[60%]" style={{ fontSize: 20 }}>
-              {userDetails.Location}
-            </p>
-          </div>
-          <div>
-            <p style={{ fontSize: 25 }}>Status</p>
-            <div className="flex items-center space-x-2">
-              <Switch
-                id="active-mode"
-                checked={isActive}
-                onChange={handleToggle}
-              />
-              <Label htmlFor="active-mode">Active</Label>
+          <div
+            className="space-y-2 ml-2 mr-5 lg:mr-10"
+            style={{ fontFamily: "Poppins, sans-serif" }}
+          >
+            <div>
+              <p className="text-[#000000]" style={{ fontSize: 25 }}>
+                Username
+              </p>
+              <p
+                className="text-[#081F5C] opacity-[60%]"
+                style={{ fontSize: 20 }}
+              >
+                {username}
+              </p>
+            </div>
+            <div>
+              <p className="text-[#000000]" style={{ fontSize: 25 }}>
+                Bio
+              </p>
+              <p
+                className="text-[#081F5C] opacity-[60%]"
+                style={{ fontSize: 20 }}
+              >
+                {bio}
+              </p>
+            </div>
+            <div>
+              <p className="text-[#000000]" style={{ fontSize: 25 }}>
+                Location
+              </p>
+              <p
+                className="text-[#081F5C] opacity-[60%]"
+                style={{ fontSize: 20 }}
+              >
+                {location}
+              </p>
+            </div>
+            <div>
+              <p style={{ fontSize: 25 }}>Status</p>
+              <div className="flex items-center space-x-2">
+                <Switch
+                  id="active-mode"
+                  checked={isActive}
+                  onChange={handleToggle}
+                />
+                <Label htmlFor="active-mode">Active</Label>
+              </div>
             </div>
           </div>
-        </div>
-      </div>
+        </motion.div>
+      </motion.div>
 
       {/* User Books Section */}
-      <div>
-        {userBooks.length > 0 ? (
-          <Collection
-            collection_type="My Listings"
-            books={userBooks}
-            userId={userId}
-            isProfilePage={true} // Pass isProfilePage as true
-          />
-        ) : (
-          <NoActiveListings />
-        )}
-      </div>
+      <motion.div
+        initial={{ y: 200 }}
+        animate={{ y: 0 }}
+        transition={{ duration: 0.5 }}
+      >
+        <Collection
+          collection_type="My Listings"
+          books={userBooks}
+          userId={userId}
+          isProfilePage={true}
+        />
+      </motion.div>
 
+    
       {/* Favorite Books Section */}
-      <div>
-        {userFavorites.length > 0 ? (
-          <Collection
-            collection_type="My Favorite Books"
-            books={userFavorites}
-            userId={clerkId}
-          />
-        ) : (
-          <p className="text-gray-600">You have no favorite books listed.</p>
-        )}
-      </div>
+      <motion.div
+        initial={{ y: 200 }}
+        animate={{ y: 0 }}
+        transition={{ duration: 0.5 }}
+      >
+        <Collection
+          collection_type="My Favorite Books"
+          books={userFavorites}
+          userId={userId}
+        />
+      </motion.div>
 
       {/* Stats section */}
-      <div className="flex justify-between px-4 py-4 bg-[#081F5C] mb-[130px]">
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.5 }}
+        className="flex justify-between px-4 py-4 mt-5 bg-[#081F5C]"
+      >
         <div>
           <p className="text-white">Listings Completed</p>
           <p className="text-white font-semibold text-2xl">{completedListingsCount}</p>
@@ -339,7 +398,7 @@ const Profile = ({
             {formatDate(user.joinedAt)}
           </p>
         </div>
-      </div>
+      </motion.div>
 
       <Modal
         isOpen={isModalOpen}
@@ -348,8 +407,9 @@ const Profile = ({
         userId={userId}
         handleNotSold={handleNotSold}
       />
-    </div>
+    </motion.div>
   );
 };
 
 export default Profile;
+

@@ -8,6 +8,7 @@ import { CreateBookParams, DeleteBookParams, GetAllBooksParams, UpdateBookParams
 import User from '../mongodb/database/models/user.model'
 import Book from '../mongodb/database/models/book.model'
 import Language from '../mongodb/database/models/language.model'
+import AdminBooks from '../mongodb/database/models/adminbooks.model'
 
 const getCategoryByName = async (name: string) => {
   return Category.findOne({ name: { $regex: name, $options: 'i' } });
@@ -17,24 +18,29 @@ const getLanguageByName = async (name: string) => {
   return Language.findOne({ name: { $regex: name, $options: 'i' } });
 };
 
-export async function createBook({ userId, book, path }: CreateBookParams) {
+export async function createBook({ userId, book, path, page}: CreateBookParams) {
   try {
-    await connectToDatabase();
-
+    await connectToDatabase()
+    
     const owner = await User.findById(userId);
+
     if (!owner) throw new Error('Book Owner not found');
+    
+    if(page === "admin"){
+      const newBook = await AdminBooks.create({ ...book, category: book.categoryId, language: book.languageId, bookOwner: userId })
+      revalidatePath(path)
 
-    const newBook = await Book.create({
-      ...book,
-      category: book.categoryId,
-      language: book.languageId,
-      bookOwner: userId,
-    });
-    revalidatePath(path);
+      return JSON.parse(JSON.stringify(newBook))
+    }
+    else{
+      const newBook = await Book.create({ ...book, category: book.categoryId, language: book.languageId, bookOwner: userId })
+      revalidatePath(path)
 
-    return JSON.parse(JSON.stringify(newBook));
+      return JSON.parse(JSON.stringify(newBook))
+    }
+
   } catch (error) {
-    handleError(error);
+    handleError(error)
   }
 }
 

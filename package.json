@@ -6,9 +6,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint",
-    "test": "jest",
-    "test-watch": "jest --watchAll"
+    "lint": "next lint"
   },
   "dependencies": {
     "@clerk/clerk-sdk-node": "^5.0.14",
@@ -33,6 +31,8 @@
     "axios": "^1.7.2",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
+    "dialog": "^0.3.1",
+    "framer-motion": "^11.3.17",
     "cmdk": "^1.0.0",
     "date-fns": "^3.6.0",
     "ipinfo": "^1.5.1",

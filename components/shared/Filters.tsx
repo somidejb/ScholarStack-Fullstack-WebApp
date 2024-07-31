@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import { ChangeEvent, ReactEventHandler, useEffect, useState } from 'react';
 import { getAllCategories } from '@/lib/actions/category.actions';
@@ -10,7 +10,7 @@ import { Checkbox } from '../ui/checkbox';
 import { prices } from '@/constants';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { formUrlQuery, removeKeysFromQuery } from '@/lib/utils';
-
+import { motion } from 'framer-motion';
 
 const toTitleCase = (str: string) => {
     return str.replace(/\w\S*/g, (txt) => txt.charAt(0).toUpperCase() + txt.substring(1).toLowerCase());
@@ -27,36 +27,18 @@ const Filters = () => {
 
     const handleCheckboxChange = (checked: boolean, name: string, type: 'category' | 'language' | 'price') => {
         if (type === 'category') {
-            setCheckedCategories(prev => {
-                if (checked) {
-                    return [...prev, name];
-                } else {
-                    return prev.filter(n => n !== name);
-                }
-            });
+            setCheckedCategories(prev => checked ? [...prev, name] : prev.filter(n => n !== name));
         } else if (type === 'language') {
-            setCheckedLanguages(prev => {
-                if (checked) {
-                    return [...prev, name];
-                } else {
-                    return prev.filter(n => n !== name);
-                }
-            });
+            setCheckedLanguages(prev => checked ? [...prev, name] : prev.filter(n => n !== name));
         } else if (type === 'price') {
-            setCheckedPrices(prev => {
-                if (checked) {
-                    return [...prev, name];
-                } else {
-                    return prev.filter(n => n !== name);
-                }
-            });
+            setCheckedPrices(prev => checked ? [...prev, name] : prev.filter(n => n !== name));
         }
     };
 
     useEffect(() => {
         const delayDebounceFn = setTimeout(() => {
             const filterValues = [];
-    
+
             if (checkedCategories.length > 0) {
                 filterValues.push(`categories=${checkedCategories.join('_with_')}`);
             }
@@ -66,9 +48,9 @@ const Filters = () => {
             if (checkedPrices.length > 0) {
                 filterValues.push(`price=${checkedPrices.join('_with_')}`);
             }
-    
+
             const filters = filterValues.join('_AND_');
-    
+
             if (filters) {
                 const newUrl = formUrlQuery({
                     params: searchParams?.toString(),
@@ -86,10 +68,10 @@ const Filters = () => {
                 }
             }
         }, 300);
-    
+
         return () => clearTimeout(delayDebounceFn);
     }, [checkedCategories, checkedLanguages, checkedPrices, pathname, router, searchParams]);
-    
+
     const [categories, setCategories] = useState<ICategory[]>([]);
     const [showMoreCategories, setShowMoreCategories] = useState<number>(5);
     const [languages, setLanguages] = useState<ILanguage[]>([]);
@@ -140,7 +122,13 @@ const Filters = () => {
     };
 
     return (
-        <div className="flex flex-col rounded-[15px] w-[140px] md:w-[190px] text-nowrap xl:w-[211px] overflow-x-auto border py-[20px] card-shadow" style={{ height: 'fit-content' }}>
+        <motion.div 
+            initial={{ opacity: 0, x: -50 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.5 }}
+            className="flex flex-col rounded-[15px] w-[140px] md:w-[190px] text-nowrap xl:w-[211px] overflow-x-auto border py-[20px] card-shadow" 
+            style={{ height: 'fit-content' }}
+        >
             <div className="flex-center gap-1 mb-4">
                 <div className="w-[15px] md:w-[30px]">
                     <Image 
@@ -157,16 +145,22 @@ const Filters = () => {
                 <h3 className="font-semibold md:text-lg xl:text-xl">Categories</h3>
                 <ul>
                     {categories.slice(0, showMoreCategories).map((category) => (
-                        <li key={category._id} className="mt-1 md:mt-0">
+                        <motion.li 
+                            key={category._id} 
+                            className="mt-1 md:mt-0"
+                            initial={{ opacity: 0, y: -10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.3, delay: 0.1 * categories.indexOf(category) }}
+                        >
                             <div className="flex items-center">
-                            <Checkbox 
-                                id={category.name} 
-                                checked={checkedCategories.includes(category.name)}
-                                onCheckedChange={(checked) => handleCheckboxChange(checked as boolean, category.name, 'category')}    
-                            />
+                                <Checkbox 
+                                    id={category.name} 
+                                    checked={checkedCategories.includes(category.name)}
+                                    onCheckedChange={(checked) => handleCheckboxChange(checked as boolean, category.name, 'category')}    
+                                />
                                 <label htmlFor={category.name} className="ml-2 md:text-base text-xs">{category.name}</label>
                             </div>
-                        </li>
+                        </motion.li>
                     ))}
                 </ul>
                 {showMoreCategories < categories.length ? (
@@ -183,16 +177,22 @@ const Filters = () => {
                 <h3 className="font-semibold md:text-lg xl:text-xl">Languages</h3>
                 <ul>
                     {languages.map((language) => (
-                        <li key={language._id} className="mt-1 md:mt-0">
+                        <motion.li 
+                            key={language._id} 
+                            className="mt-1 md:mt-0"
+                            initial={{ opacity: 0, y: -10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.3, delay: 0.1 * languages.indexOf(language) }}
+                        >
                             <div className="flex items-center">
-                            <Checkbox 
-                                id={language.name} 
-                                checked={checkedLanguages.includes(language.name)}
-                                onCheckedChange={(checked) => handleCheckboxChange(checked as boolean, language.name, 'language')}     
-                            />
-                                <label className="ml-2 md:text-base text-xs">{language.name}</label>
+                                <Checkbox 
+                                    id={language.name} 
+                                    checked={checkedLanguages.includes(language.name)}
+                                    onCheckedChange={(checked) => handleCheckboxChange(checked as boolean, language.name, 'language')}     
+                                />
+                                <label htmlFor={language.name} className="ml-2 md:text-base text-xs">{language.name}</label>
                             </div>
-                        </li>
+                        </motion.li>
                     ))}
                 </ul>
             </div>
@@ -200,20 +200,26 @@ const Filters = () => {
                 <h3 className="font-semibold md:text-lg xl:text-xl">Price</h3>
                 <ul>
                     {prices.map((price) => (
-                        <li key={price.label} className="mt-1 md:mt-0">
+                        <motion.li 
+                            key={price.label} 
+                            className="mt-1 md:mt-0"
+                            initial={{ opacity: 0, y: -10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.3, delay: 0.1 * prices.indexOf(price) }}
+                        >
                             <div className="flex items-center">
                                 <Checkbox 
                                     id={price.label} 
                                     checked={checkedPrices.includes(price.label)}
                                     onCheckedChange={(checked) => handleCheckboxChange(checked as boolean, price.label, 'price')} 
                                 />
-                                <label className="ml-2 md:text-base text-xs">{price.label}</label>
+                                <label htmlFor={price.label} className="ml-2 md:text-base text-xs">{price.label}</label>
                             </div>
-                        </li>
+                        </motion.li>
                     ))}
                 </ul>
             </div>
-        </div>
+        </motion.div>
     );
 };
 

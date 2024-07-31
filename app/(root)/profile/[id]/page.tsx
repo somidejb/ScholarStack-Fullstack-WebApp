@@ -3,9 +3,9 @@ import { currentUser } from '@clerk/nextjs/server';
 import { fetchAllBooks } from '@/lib/actions/book.actions';
 import { IBook } from '@/lib/mongodb/database/models/book.model';
 import { getUserByClerkId, updateUserLocation } from '@/lib/actions/user.actions';
-import Profile from '@/components/shared/Profile';
 import { daysSincePosted } from '@/lib/actions/datePosted';
 import { fetchAllOrders } from '@/lib/actions/order.actions'; // Assuming this action exists
+import Profile from '@/components/shared/Profile';
 
 const ProfilePage = async ({ params }: { params: { id: string } }) => {
   const { id } = params;

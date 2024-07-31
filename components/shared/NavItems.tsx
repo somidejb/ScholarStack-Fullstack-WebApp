@@ -14,11 +14,17 @@ const NavItems = ({ pathname }: { pathname: string }) => {
     }
   }, [user]);
 
+  useEffect(() => {
+    if (user) {
+      setProfileLink(`/profile/${user.id}`);
+    }
+  }, [user]);
+
   return (
     <ul className="flex flex-col md:flex-row gap-8 tracking-widest md:gap-8 lg:gap-12">
       {headerLinks.map((link) => (
         <Link key={link.route} href={link.label === 'Profile' ? profileLink : link.route}>
-          <li className={`flex items-center justify-between cursor-pointer ${pathname === link.route ? 'bg-blue-800 p-2 rounded-lg text-white' : 'text-black'}`}>
+          <li className={`flex items-center justify-between cursor-pointer ${pathname === link.route ? ' text-white' : 'text-black'}`}>
             <h2 className="text-lg font-medium md:text-white">
               {link.label}
             </h2>
