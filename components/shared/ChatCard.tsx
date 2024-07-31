@@ -5,6 +5,7 @@ import { pusherClient } from '@/lib/pusher';
 import { formatDateTime, toPusherKey } from '@/lib/utils';
 import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 
 interface ChatCardProps {
     chat: IChat;
@@ -70,23 +71,35 @@ const ChatCard = ({ chat, index, userId, handleSelectChat, currentUser, chats,  
     }, [currentUser]);
 
     return (
-        <div
-            key={index}
-            className="flex justify-between items-center p-2 cursor-pointer"
-            onClick={() => handleSelectChat(chat)}
-        >
-            <div className="flex items-center">
-                <img src={otherMember[0]?.photo} alt={`${otherMember[0]?.username}'s avatar`} className="chat-avatar w-10 h-10 rounded-full mr-2" />
-                <div>
-                    <h3 className="text-sm">{otherMember[0]?.username}</h3>
-                    {!lastMessage ? ( <p className={`text-xs ${seen ? "text-gray-500" : "text-gray-500 font-bold"}`}>Started a chat</p>):
-                    (<p className={`text-xs text-gray-500 ${!seen && "font-bold"}`}>{lastMessage?.text}</p>)}
+        <AnimatePresence>
+            <motion.div
+                key={index}
+                className="flex justify-between items-center p-2 cursor-pointer"
+                onClick={() => handleSelectChat(chat)}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: 20 }}
+            >
+                <div className="flex items-center">
+                    <img src={otherMember[0]?.photo} alt={`${otherMember[0]?.username}'s avatar`} className="chat-avatar w-10 h-10 rounded-full mr-2" />
+                    <div>
+                        <h3 className="text-sm">{otherMember[0]?.username}</h3>
+                        {!lastMessage ? ( 
+                            <p className={`text-xs ${seen ? "text-gray-500" : "text-gray-500 font-bold"}`}>
+                                Started a chat
+                            </p>
+                        ) : (
+                            <p className={`text-xs text-gray-500 ${!seen && "font-bold"}`}>
+                                {lastMessage?.text}
+                            </p>
+                        )}
+                    </div>
                 </div>
-            </div>
-            <p className="text-xs text-gray-500">
-                {!lastMessage ? timeOnly : lastMessageTime}
-            </p>
-        </div>
+                <p className="text-xs text-gray-500">
+                    {!lastMessage ? timeOnly : lastMessageTime}
+                </p>
+            </motion.div>
+        </AnimatePresence>
     );
 };
 
