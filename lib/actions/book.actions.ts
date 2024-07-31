@@ -213,6 +213,22 @@ export async function addFavorite(userId: string, bookId: string) {
     throw error; // Rethrow the error to be handled by the calling function
   }
 }
+
+export async function removeFavorite(userId: string, bookId: string) {
+  try {
+    await connectToDatabase()
+    const user = await User.findById(userId)
+    if (!user) throw new Error('User not found')
+ 
+    user.favorites.pull(bookId)
+    await user.save()
+ 
+    return JSON.parse(JSON.stringify(user))
+  } catch (error) {
+    handleError(error)
+  }
+}
+
 export async function addFavorite2(userId: string, bookId: string, ) {
   try {
     await connectToDatabase();
@@ -294,3 +310,19 @@ export async function getUserEmailById(userId: string): Promise<string | null> {
     return null; // Return null in case of error
   }
 }
+
+export const fetchAllBooksAdmin = async () => {
+  try {
+    const books = await Book.find({}, 'title price postedAt imageURLs bookOwner').populate('bookOwner', 'firstName lastName');
+    return books.map(book => ({
+      title: book.title,
+      price: book.price,
+      datePosted: new Date(book.postedAt).toLocaleDateString(),
+      bookImage: book.imageURLs[0], 
+      postedBy: `${book.bookOwner.firstName} ${book.bookOwner.lastName}`
+    }));
+  } catch (error) {
+    console.error('Error fetching books:', error);
+    throw new Error('Failed to fetch books');
+  }
+};

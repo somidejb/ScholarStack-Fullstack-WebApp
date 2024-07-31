@@ -9,20 +9,15 @@ import Message from "../mongodb/database/models/message.model"
 import { pusherServer } from "../pusher"
 
 
-export async function getChats({ userId, members }: CreateChatParams) {
-    try {
-        await connectToDatabase();
-        
-        // Ensure user exists
-        const user = await User.findById(userId);
-        if (!user) throw new Error(`User with ID ${userId} not found`);
-
-        const query = { members: { $all: [userId, ...members], $size: 2 } };
+export async function getChats({userId, members} : CreateChatParams){
+    try{
+        await connectToDatabase()
+        const query = {members: {$all : [userId, ...members], $size: 2}}
 
         let chat = await Chat.findOne(query);
-
-        if (!chat) {
-            chat = await Chat.create({ members: [userId, ...members] });
+        console.log("Chat created from the getChat action: ",chat)
+        if(!chat){
+            chat = await Chat.create({members: [userId, ...members]});
             await chat.save();
 
             const updateAllMembers = chat.members.map(async(memberId: string) => {
@@ -39,7 +34,8 @@ export async function getChats({ userId, members }: CreateChatParams) {
             })
         };
         return JSON.parse(JSON.stringify(chat));
-    } catch (error) {
+    }
+    catch(error){
         handleError(error);
     }
 }

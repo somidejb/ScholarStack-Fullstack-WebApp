@@ -5,7 +5,7 @@ import Image from 'next/image';
 import { FaMapMarkerAlt } from 'react-icons/fa';
 import Link from 'next/link';
 import { getChats } from '@/lib/actions/chat.actions';
-import { fetchBooksByCategory } from '@/lib/actions/book.actions';
+import { fetchBooksByCategory, removeFavorite2 } from '@/lib/actions/book.actions';
 import { IBook } from '@/lib/mongodb/database/models/book.model';
 import { useRouter } from 'next/navigation';
 import ImageModal from './ImageModal'; // Adjust the import path as necessary

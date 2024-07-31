@@ -1,7 +1,4 @@
-
-
 "use client";
-
 import React from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
@@ -11,7 +8,7 @@ const Sidebar = () => {
   const pathname = usePathname();
 
   return (
-    <div className="w-64 bg-white h-screen shadow-md md:w-48">
+    <div className="hidden md:block w-64 bg-white h-screen shadow-md ">
       <div className="p-9 md:p-4">
         <h2 className="text-2xl font-semibold text-blue-900 mb-5">Administration</h2>
         <nav>
