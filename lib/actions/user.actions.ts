@@ -279,3 +279,15 @@ export async function getUsersByJoinDate(startDate: Date, endDate: Date) {
     throw error;
   }
 }
+
+export async function getUsersByUsername(username: string) {
+  try {
+    await connectToDatabase();
+
+    const users = await User.find({ username: { $regex: username, $options: 'i' } }); // Case-insensitive search
+    return JSON.parse(JSON.stringify(users));
+  } catch (error) {
+    handleError(error);
+    throw error;  // rethrow error after handling it
+  }
+}
