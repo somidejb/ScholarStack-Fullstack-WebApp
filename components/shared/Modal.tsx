@@ -44,7 +44,7 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, books, userId, handleNot
       const newOrder = await createOrder({ userId, order, path: '/path-to-revalidate' });
 
       if (newOrder) {
-        await deleteBook({ bookId, path: '/path-to-revalidate' });
+        await deleteBook({ bookId, path: '/path-to-revalidate', page: 'not admin' });
         onClose();
       } else {
         console.error('Failed to create order');
