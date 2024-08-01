@@ -1,4 +1,4 @@
-"use server"
+"use server";
 
 import { CreateChatParams } from "@/types"
 import { connectToDatabase } from "../mongodb/database"
@@ -9,15 +9,20 @@ import Message from "../mongodb/database/models/message.model"
 import { pusherServer } from "../pusher"
 
 
-export async function getChats({userId, members} : CreateChatParams){
-    try{
-        await connectToDatabase()
-        const query = {members: {$all : [userId, ...members], $size: 2}}
+export async function getChats({ userId, members }: CreateChatParams) {
+    try {
+        await connectToDatabase();
+        
+        // Ensure user exists
+        const user = await User.findById(userId);
+        if (!user) throw new Error(`User with ID ${userId} not found`);
+
+        const query = { members: { $all: [userId, ...members], $size: 2 } };
 
         let chat = await Chat.findOne(query);
-        console.log("Chat created from the getChat action: ",chat)
-        if(!chat){
-            chat = await Chat.create({members: [userId, ...members]});
+
+        if (!chat) {
+            chat = await Chat.create({ members: [userId, ...members] });
             await chat.save();
 
             const updateAllMembers = chat.members.map(async(memberId: string) => {
@@ -34,28 +39,29 @@ export async function getChats({userId, members} : CreateChatParams){
             })
         };
         return JSON.parse(JSON.stringify(chat));
-    }
-    catch(error){
+    } catch (error) {
         handleError(error);
     }
 }
 
-export async function getChatByChatId(chatId: string){
-    try{
+export async function getChatByChatId(chatId: string) {
+    try {
         await connectToDatabase();
-        const chat = await Chat.findById(chatId).populate({
-            path: "members",
-            model: User,
-        }).populate({
-            path: "messages",
-            model: Message,
-            populate: {path: "sender seenBy", model: User},
-        }).exec();
+        const chat = await Chat.findById(chatId)
+            .populate({
+                path: "members",
+                model: User,
+            })
+            .populate({
+                path: "messages",
+                model: Message,
+                populate: { path: "sender seenBy", model: User },
+            })
+            .exec();
 
-        if(!chat) throw new Error('Chat not found');
+        if (!chat) throw new Error('Chat not found');
         return JSON.parse(JSON.stringify(chat));
-    }
-    catch(error){
+    } catch (error) {
         handleError(error);
     }
 }
@@ -63,6 +69,11 @@ export async function getChatByChatId(chatId: string){
 export async function addToSeenBy(chatId: string | undefined, userId: string) {
     try {
         await connectToDatabase();
+
+        // Ensure user exists
+        const user = await User.findById(userId);
+        if (!user) throw new Error(`User with ID ${userId} not found`);
+
         await Message.updateMany(
             { chat: chatId },
             { $addToSet: { seenBy: userId } },

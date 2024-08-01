@@ -1,4 +1,5 @@
 "use client";
+
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import { useUser } from "@clerk/nextjs";
@@ -7,7 +8,6 @@ import NoActiveListings from "./NoActiveListing";
 import { IBook } from "@/lib/mongodb/database/models/book.model";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
-//import "@fontsource/poppins";
 import { Mail } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -22,12 +22,15 @@ import {
 import { Input } from "@/components/ui/input";
 import { FaPen } from "react-icons/fa";
 import { updateUserInClerkAndDB } from "@/lib/actions/user.actions";
+import { daysSincePosted } from "@/lib/actions/datePosted";
+import Modal from "./Modal";
 
 interface IUser {
   username: string;
   fullName: string;
   imageUrl: string;
   joinedAt: string;
+  email: string;
 }
 
 interface IUserDetails {
@@ -39,36 +42,89 @@ interface ProfileProps {
   user: IUser;
   userDetails: IUserDetails;
   userBooks: IBook[];
+  userFavorites: IBook[];
   userId: string;
   clerkId: string;
+  bookCount: number;  // Adding book count prop
+  completedListingsCount: number; // Adding completed listings count prop
 }
 
 const Profile: React.FC<ProfileProps> = ({
   user,
   userDetails,
   userBooks,
+  userFavorites,
   userId,
   clerkId,
+  bookCount,  // Destructuring book count prop
+  completedListingsCount, // Destructuring completed listings count prop
 }) => {
-  const { user: clerkUser } = useUser();
   const [isActive, setIsActive] = useState(false);
   const [name, setName] = useState(user.fullName);
   const [username, setUsername] = useState(user.username);
   const [bio, setBio] = useState(userDetails.Bio);
   const [location, setLocation] = useState(userDetails.Location);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [modalBooks, setModalBooks] = useState<IBook[]>([]);
+  const [lastDismissed, setLastDismissed] = useState<Date | null>(null);
 
   useEffect(() => {
-    const savedState = localStorage.getItem("activeMode");
-    if (savedState !== null) {
-      setIsActive(JSON.parse(savedState));
-    } else {
-      setIsActive(true);
-      localStorage.setItem("activeMode", JSON.stringify(true));
+    if (typeof window !== "undefined") {
+      const activeMode = JSON.parse(localStorage.getItem("activeMode") || "false");
+      setIsActive(activeMode);
     }
   }, []);
 
+  const openModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
+
+  useEffect(() => {
+    const now = new Date();
+
+    if (lastDismissed) {
+      const daysSinceDismissed = Math.floor(
+        (now.getTime() - lastDismissed.getTime()) / (1000 * 60 * 60 * 24)
+      );
+      if (daysSinceDismissed < 7) return; // Don't open the modal if it has been dismissed within the last 7 days
+    }
+
+    const shouldOpenModal = userBooks.some((book) => {
+      const daysPosted = daysSincePosted(new Date(book.postedAt));
+      return daysPosted % 7 === 0; 
+    });
+
+    if (shouldOpenModal) {
+      setModalBooks(
+        userBooks.filter((book) => {
+          const daysPosted = daysSincePosted(new Date(book.postedAt));
+          return daysPosted % 7 === 0;  
+        })
+      );
+      openModal();
+    }
+  }, [userBooks, lastDismissed]);
+
+  const formatDate = (dateString: string) => {
+    const options: Intl.DateTimeFormatOptions = {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    };
+    return new Date(dateString).toLocaleDateString(undefined, options);
+  };
+
+  const handleNotSold = () => {
+    setLastDismissed(new Date());
+    setIsModalOpen(false);
+  };
+
   const handleToggle = () => {
-    setIsActive((prevState) => {
+    setIsActive((prevState: any) => {
       const newState = !prevState;
       localStorage.setItem("activeMode", JSON.stringify(newState));
       return newState;
@@ -79,8 +135,8 @@ const Profile: React.FC<ProfileProps> = ({
     e.preventDefault();
 
     const updatedProfile = {
-      firstName: name.split(' ')[0],
-      lastName: name.split(' ')[1] || '',
+      firstName: name.split(" ")[0],
+      lastName: name.split(" ")[1] || "",
       username: username,
       bio: bio,
       location: location,
@@ -95,27 +151,20 @@ const Profile: React.FC<ProfileProps> = ({
     }
   };
 
-  const formatDate = (dateString: string) => {
-    const options: Intl.DateTimeFormatOptions = {
-      year: "numeric",
-      month: "long",
-      day: "numeric",
-    };
-    return new Date(dateString).toLocaleDateString(undefined, options);
-  };
-
   return (
     <div className="mx-auto bg-white shadow-md rounded-lg mt-[50px]">
+      {/* Profile and User Details section */}
       <div className="flex items-start">
-        <div className="flex items-center justify-center bg-[#D6DAEA] w-[1060px] h-[497px] left-0 top-[113px] ">
+        {/* Profile section */}
+        <div className="flex items-center justify-center bg-[#D6DAEA] w-[1060px] h-[497px] left-0 top-[113px]">
           <div className="flex flex-col justify-center items-center lg:mr-[30px] lg:mt-8">
             <div className="relative w-36 h-36 md:w-[118px] md:h-[127px] lg:w-[346px] lg:h-[321px]">
               <Image
                 src={user.imageUrl || "/assets/images/profile-icon.png"}
                 alt="Profile Picture"
                 className="rounded-full"
-                layout="fill"
-                objectFit="cover"
+                fill
+                style={{ objectFit: "cover" }}
               />
             </div>
             <div
@@ -205,7 +254,7 @@ const Profile: React.FC<ProfileProps> = ({
             </Button>
           </div>
         </div>
-
+        {/* User details section */}
         <div
           className="space-y-2 ml-2 mr-5 mt-20 lg:mr-10"
           style={{ fontFamily: "Poppins, sans-serif" }}
@@ -214,10 +263,7 @@ const Profile: React.FC<ProfileProps> = ({
             <p className="text-[#000000]" style={{ fontSize: 25 }}>
               Username
             </p>
-            <p
-              className="text-[#081F5C] opacity-[60%]"
-              style={{ fontSize: 20 }}
-            >
+            <p className="text-[#081F5C] opacity-[60%]" style={{ fontSize: 20 }}>
               {user.username}
             </p>
           </div>
@@ -225,10 +271,7 @@ const Profile: React.FC<ProfileProps> = ({
             <p className="text-[#000000]" style={{ fontSize: 25 }}>
               Bio
             </p>
-            <p
-              className="text-[#081F5C] opacity-[60%]"
-              style={{ fontSize: 20 }}
-            >
+            <p className="text-[#081F5C] opacity-[60%]" style={{ fontSize: 20 }}>
               {userDetails.Bio}
             </p>
           </div>
@@ -236,43 +279,60 @@ const Profile: React.FC<ProfileProps> = ({
             <p className="text-[#000000]" style={{ fontSize: 25 }}>
               Location
             </p>
-            <p
-              className="text-[#081F5C] opacity-[60%]"
-              style={{ fontSize: 20 }}
-            >
+            <p className="text-[#081F5C] opacity-[60%]" style={{ fontSize: 20 }}>
               {userDetails.Location}
             </p>
           </div>
           <div>
             <p style={{ fontSize: 25 }}>Status</p>
             <div className="flex items-center space-x-2">
-              <Switch id="active-mode" checked={isActive} onChange={handleToggle} />
+              <Switch
+                id="active-mode"
+                checked={isActive}
+                onChange={handleToggle}
+              />
               <Label htmlFor="active-mode">Active</Label>
             </div>
           </div>
         </div>
       </div>
 
-      <div className="px-20 py-20">
+      {/* User Books Section */}
+      <div>
         {userBooks.length > 0 ? (
           <Collection
             collection_type="My Listings"
             books={userBooks}
             userId={userId}
+            isProfilePage={true} // Pass isProfilePage as true
           />
         ) : (
           <NoActiveListings />
         )}
       </div>
 
+      {/* Favorite Books Section */}
+      <div>
+        {userFavorites.length > 0 ? (
+          <Collection
+            collection_type="My Favorite Books"
+            books={userFavorites}
+            userId={clerkId}
+          />
+        ) : (
+          <p className="text-gray-600">You have no favorite books listed.</p>
+        )}
+      </div>
+
+      {/* Stats section */}
       <div className="flex justify-between px-4 py-4 bg-[#081F5C] mb-[130px]">
         <div>
           <p className="text-white">Listings Completed</p>
-          <p className="text-white font-semibold text-2xl"></p>
+          <p className="text-white font-semibold text-2xl">{completedListingsCount}</p>
         </div>
         <div>
           <p className="text-white">Ongoing Listings</p>
-          <p className="text-white font-semibold text-2xl">04</p>
+          <p className="text-white font-semibold text-2xl">{bookCount}</p>
         </div>
         <div>
           <p className="text-white">Joined ScholarStack</p>
@@ -281,6 +341,14 @@ const Profile: React.FC<ProfileProps> = ({
           </p>
         </div>
       </div>
+
+      <Modal
+        isOpen={isModalOpen}
+        onClose={closeModal}
+        books={modalBooks}
+        userId={userId}
+        handleNotSold={handleNotSold}
+      />
     </div>
   );
 };

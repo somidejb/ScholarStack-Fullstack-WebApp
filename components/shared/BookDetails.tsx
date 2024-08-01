@@ -1,14 +1,14 @@
 "use client";
-import { Collection } from '@/components/shared/Collection';
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { FaMapMarkerAlt } from 'react-icons/fa';
 import Link from 'next/link';
 import { getChats } from '@/lib/actions/chat.actions';
+import { fetchBooksByCategory } from '@/lib/actions/book.actions';
 import { IBook } from '@/lib/mongodb/database/models/book.model';
 import { useRouter } from 'next/navigation';
- 
 import ImageModal from './ImageModal'; // Adjust the import path as necessary
+import { Collection } from '@/components/shared/Collection';
 import { addFavorite, removeFavorite } from '@/lib/actions/book.actions';
 
 type Book = {
@@ -21,17 +21,23 @@ type Book = {
   salePrice?: string;
   location: string; // Add the 'location' property
 };
- 
+
 type BookDetailsProps = {
   book: IBook;
   userId: string;
   bookOwner: string;
   favorites: string[];
 };
- 
 
 const BookDetails: React.FC<BookDetailsProps> = ({ book, userId, bookOwner, favorites }) => {
   const [favorite, setFavorite] = useState(favorites?.includes(book?._id));
+  console.log("userID:", userId, "bookId:", bookOwner);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedImageIndex, setSelectedImageIndex] = useState<number | null>(null);
+  const [similarBooks, setSimilarBooks] = useState<IBook[]>([]);
+  const router = useRouter();
+
+  const hasImages = book.imageURLs && book.imageURLs.length > 0;
 
   useEffect(() => {
     setFavorite(favorites?.includes(book?._id));
@@ -47,17 +53,27 @@ const BookDetails: React.FC<BookDetailsProps> = ({ book, userId, bookOwner, favo
   };
 
   const members: string[] = [bookOwner];
-  const router = useRouter();
+
+  useEffect(() => {
+    const fetchSimilarBooks = async () => {
+      if (book.category && typeof book.category === 'object' && '_id' in book.category) {
+        const books = await fetchBooksByCategory(book.category._id);
+        setSimilarBooks(books);
+      } else if (typeof book.category === 'string') {
+        const books = await fetchBooksByCategory(book.category);
+        setSimilarBooks(books);
+      }
+    };
+  
+    fetchSimilarBooks();
+  }, [book.category]);
+  
   const createChat = async () => {
-    const chat = await getChats({userId, members});
-    if(chat){
-      router.push(`/chats`);    
+    const chat = await getChats({ userId, members: [bookOwner] });
+    if (chat) {
+      router.push(`/chats`);
     }
   };
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedImageIndex, setSelectedImageIndex] = useState<number | null>(null);
-
-  const hasImages = book.imageURLs && book.imageURLs.length > 0;
 
   const handleImageClick = (index: number) => {
     setSelectedImageIndex(index);
@@ -72,11 +88,10 @@ const BookDetails: React.FC<BookDetailsProps> = ({ book, userId, bookOwner, favo
   const navigateBack = () => {
     window.history.back(); // Navigate back using browser history
   };
- 
+
   return (
     <div className="p-2 lg:p-10 lg:mt-2 lg:ml-20">
       <div className="font-sans">
-        {/* Button to navigate back to the previous page */}
         <button onClick={navigateBack} className="flex items-center text-indigo-900 left-5 hover:big mb-4">
           <Image
             src="/assets/icons/back.svg"
@@ -92,7 +107,7 @@ const BookDetails: React.FC<BookDetailsProps> = ({ book, userId, bookOwner, favo
             <div className="transition-transform duration-300 ease-in-out transform hover:scale-110 space-x-2 mr-2 mb-2 border border-gray-300 rounded shadow-2xl w-[150px] h-[200px] sm:w-[180px] sm:h-[240px] md:w-[290px] md:h-[400px] lg:w-[370px] lg:h-[500px] xl:w-[446px] xl:h-[600px] relative">
               {hasImages ? (
                 <Image
-                  src={book.imageURLs[0]} // Fixed to use the correct image URL
+                  src={book.imageURLs[0]}
                   alt={book.title}
                   layout="fill"
                   objectFit="cover"
@@ -163,11 +178,13 @@ const BookDetails: React.FC<BookDetailsProps> = ({ book, userId, bookOwner, favo
           onSelect={setSelectedImageIndex}
         />
       )}
-      {/* <div className="text-lg text-gray-600 mt-10">
-        <Collection collection_type="Similar to this..." books={[]} userId={''} />
-      </div> */}
+      {similarBooks.length > 0 && (
+        <div className="text-lg text-gray-600 mt-10">
+          <Collection collection_type="Similar to this..." books={similarBooks} userId={userId} />
+        </div>
+      )}
     </div>
   );
 };
- 
+
 export default BookDetails;

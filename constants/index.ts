@@ -1,5 +1,3 @@
-import { Label } from "@radix-ui/react-label";
-
 export const headerLinks = [
       {
         label: 'Home',
@@ -36,7 +34,7 @@ export const books = [
         image: "/assets/images/book1.png",
         condition: "Good",
         description: "A comprehensive introduction to computer science concepts and programming.",
-        category: "Recently Uploaded"
+     
     },
     {
         id: 2,

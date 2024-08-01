@@ -1,5 +1,4 @@
 import { IBook } from "@/lib/mongodb/database/models/book.model";
-
 // ====== USER PARAMS
 export type CreateUserParams = {
   clerkId: string;

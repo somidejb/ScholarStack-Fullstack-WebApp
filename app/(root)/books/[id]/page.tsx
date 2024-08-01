@@ -1,6 +1,6 @@
 import React from "react";
 import BookDetails from "@/components/shared/BookDetails";
-import { fetchBookById, getFavorites } from "@/lib/actions/book.actions";
+import { fetchBookById, getFavorites2 } from "@/lib/actions/book.actions";
 import { Metadata } from "next";
 import { auth } from "@clerk/nextjs/server";
 import { IBook } from "@/lib/mongodb/database/models/book.model";
@@ -40,7 +40,7 @@ const Page = async ({ params }: BookPageProps) => {
   
   let favorites: string[] = [];
   if (userId) {
-    const favoriteBooks = await getFavorites(userId);
+    const favoriteBooks = await getFavorites2(userId);
     favorites = favoriteBooks.map((favorite: IBook) => favorite._id);
   }
 

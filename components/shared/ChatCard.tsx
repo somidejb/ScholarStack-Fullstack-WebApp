@@ -1,4 +1,4 @@
-import { getUserById } from '@/lib/actions/user.actions';
+import { getUserById2 } from '@/lib/actions/user.actions';
 import { IChat } from '@/lib/mongodb/database/models/chat.model';
 import { IUser } from '@/lib/mongodb/database/models/user.model';
 import { pusherClient } from '@/lib/pusher';

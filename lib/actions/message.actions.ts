@@ -51,25 +51,23 @@ export async function getMessage({ chatId, currentUserId, text, photo }: getMess
             path: "members",
             model: User,
         }).exec();
-        
+
         /*Trigger a pusher event about a specific chat about a new message */
         await pusherServer.trigger(chatId, "new-message", newMessage)
-        //await pusherServer.trigger(toPusherKey(`chat:${chatId}`), "incoming-message", newMessage)
 
         if (!updatedChat) throw new Error('Message not sent');
-
         const lastMessage = updatedChat.messages[updatedChat.messages.length - 1];
-        console.log("Last message from getMessage(): ",lastMessage)
+        console.log("Last message:", lastMessage);
         
         updatedChat.members.forEach(async (member: any) => {
             try{
                 await pusherServer.trigger(member._id.toString(), "update-chat", {
-                  id: chatId,
-                  messages: [lastMessage],
+                    id: chatId,
+                    messages: [lastMessage],
                 });
             }
             catch (error) {
-                console.error("Error sending pusher update event:", error);
+                console.error("Error sending pusher update:", error);
             }
         })
 
