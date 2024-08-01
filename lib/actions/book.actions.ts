@@ -246,6 +246,21 @@ export async function removeFavorite2(clerkId: string, bookId: string) {
   }
 }
 
+export async function removeFavorite(userId: string, bookId: string) {
+  try {
+    await connectToDatabase()
+    const user = await User.findById(userId)
+    if (!user) throw new Error('User not found')
+ 
+    user.favorites.pull(bookId)
+    await user.save()
+ 
+    return JSON.parse(JSON.stringify(user))
+  } catch (error) {
+    handleError(error)
+  }
+}
+
 export async function fetchAllBooks() {
   try {
     await connectToDatabase();

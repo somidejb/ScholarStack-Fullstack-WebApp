@@ -1,10 +1,10 @@
 "use client";
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { FiEdit, FiTrash2, FiEye, FiMoreHorizontal } from 'react-icons/fi';
 import { createOrder } from '@/lib/actions/order.actions';
-import { deleteBook, addFavorite, addFavorite2, removeFavorite2 } from '@/lib/actions/book.actions';
+import { deleteBook, addFavorite, addFavorite2, removeFavorite2, removeFavorite } from '@/lib/actions/book.actions';
 
 type BookCardProps = {
   userId: string;
@@ -36,10 +36,18 @@ const BookCard = ({
   const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
   const [showSoldConfirmation, setShowSoldConfirmation] = useState(false);
 
+  useEffect(() => {
+    setFavorite(favorites?.includes(bookId) ?? false);
+  }, [favorites, bookId]);
+
   const toggleFavorite = async () => {
     const profilePath = `/profile/${userId}`;
     if (favorite) {
-      await addFavorite(userId, bookId);
+      if (typeof window !== 'undefined' && window.location.pathname === profilePath) {
+        await removeFavorite2(userId, bookId);
+      } else {
+        await removeFavorite(userId, bookId);
+      }
     } else {
       if (typeof window !== 'undefined' && window.location.pathname === profilePath) {
         await addFavorite2(userId, bookId);
@@ -49,7 +57,6 @@ const BookCard = ({
     }
     setFavorite(!favorite);
   };
-
   const toggleMenu = () => {
     setMenuOpen(!menuOpen);
   };
