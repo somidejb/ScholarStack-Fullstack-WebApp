@@ -19,13 +19,16 @@ interface ChatListProps {
 
 const ChatList = ({ className, userId, currentUser }: ChatListProps) => {
   const [chats, setChats] = useState<IChat[]>([]);
+  const [filteredChats, setFilteredChats] = useState<IChat[]>([]);
   const [selectedChat, setSelectedChat] = useState<IChat | null>(null);
   const [messages, setMessages] = useState<{ [key: string]: any[] }>({});
+  const [searchQuery, setSearchQuery] = useState("");
 
   const getChats = async () => {
     try {
       const chats = await getChatsById(userId);
       setChats(chats);
+      setFilteredChats(chats);
       console.log("Chats:", chats);
     } catch (error) {
       console.error("Error fetching chats:", error);
@@ -81,11 +84,27 @@ const ChatList = ({ className, userId, currentUser }: ChatListProps) => {
       console.log("Messages in the handle select chat:", messages);
     }
   };
+
   useEffect(() => {
     if (currentUser) {
       getChats();
     }
   }, [currentUser]);
+
+  const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const query = e.target.value.toLowerCase();
+    setSearchQuery(query);
+    if (query.trim() !== "") {
+      const filtered = chats.filter((chat) =>
+        chat.members.some((member) =>
+          member.username.toLowerCase().includes(query)
+        )
+      );
+      setFilteredChats(filtered);
+    } else {
+      setFilteredChats(chats);
+    }
+  };
 
   return (
     <div className="h-full flex flex-grow overflow-hidden p-4 gap-4">
@@ -100,12 +119,14 @@ const ChatList = ({ className, userId, currentUser }: ChatListProps) => {
               <IoIosAddCircleOutline size={20} />
             </div>
             <input
-              placeholder="Search chat.."
+              placeholder="Search chat..."
               className="px-5 py-2.5 border w-full rounded-2xl bg-white outline-none"
+              value={searchQuery}
+              onChange={handleSearch}
             />
           </div>
           <div>
-            {chats?.length === 0 ? (
+            {filteredChats.length === 0 ? (
               <div className="mt-4 flex flex-col items-center text-gray-500 font-semibold text-lg md:text-sm lg:text-lg">
                 <img src="/assets/images/no-chat.png" alt="No chats" className="w-16 h-16" />
                 <p>Find the book you're interested in</p>
@@ -114,7 +135,7 @@ const ChatList = ({ className, userId, currentUser }: ChatListProps) => {
                 <Link href="/books" className="my-1 rounded-md bg-[#31457B] p-2 text-white text-sm">Explore Books</Link>
               </div>
             ) : (
-              chats.map((chat, index) => (
+              filteredChats.map((chat, index) => (
                 <ChatCard
                   key={index}
                   chat={chat}

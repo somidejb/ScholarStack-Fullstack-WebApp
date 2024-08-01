@@ -37,7 +37,7 @@
     "dialog": "^0.3.1",
     "eslint-plugin-jest-dom": "^5.4.0",
     "eslint-plugin-testing-library": "^6.2.2",
-    "framer-motion": "^11.3.17",
+    "framer-motion": "^11.3.19",
     "ipinfo": "^1.5.1",
     "lucide-react": "^0.365.0",
     "mongodb": "^6.7.0",
