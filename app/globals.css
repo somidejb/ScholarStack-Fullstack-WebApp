@@ -212,3 +212,16 @@ p{
 .cl-footerActionLink{
   @apply font-bold;
 }
+
+/* styles.css or global.css */
+.bg-pastel-green {
+  background-color: #d4f8e8; /* Light pastel green */
+}
+
+.bg-pastel-red {
+  background-color: #f8d4d4; /* Light pastel red */
+}
+
+.transition {
+  transition: transform 0.5s ease-in-out, opacity 0.5s ease-in-out;
+}

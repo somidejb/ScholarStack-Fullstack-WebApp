@@ -13,9 +13,9 @@ const AdminPage = async () => {
   const totalSubs = await countAllUsers();
 
   return (
-    <div className="flex bg-slate-100  ">
+    <div className="flex flex-col md:flex-row bg-slate-100 min-h-screen">
       <Sidebar />
-      <div className="flex-grow p-8 ">
+      <div className="flex-grow p-4 md:p-2">
         <Dashboard books={books} path="/profile" totalSubs={totalSubs}/>
       </div>
     </div>
