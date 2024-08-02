@@ -44,7 +44,7 @@ const Banner = () => {
         <div className="w-full h-full flex items-center justify-between pl-[7%]">
           <div className="flex flex-col gap-[30px] md:gap-[45px] lg:gap-[55px]">
             <h1
-              className="banner-h1-shadow md:text-[27px] lg:text-[45px] leading-[54px] md:leading-[55px] lg:leading-[75px] tracking-widest font-bold text-[22px]"
+              className="banner-h1-shadow md:text-[27px] lg:text-[45px] leading-[54px] md:leading-[55px] lg:leading-[75px] tracking-widest font-bold text-[18px]"
             >
               Get your new Books
               <span><br />at the best price</span>
