@@ -4,8 +4,8 @@ import React from "react";
 
 const NoSimilarBooks: React.FC = () => {
   return (
-    <div className="text-center py-10">
-      <h3 className="text-lg font-bold mb-2">
+    <div className="text-center py-10 px-4 sm:px-6 lg:px-8">
+      <h3 className="text-gray-600 font-bold mb-2 text-base sm:text-lg lg:text-xl">
       No similar books have been posted yet. Check back soon!
       </h3>
       <Link

@@ -322,32 +322,32 @@ const Profile = ({
       </div>
 
       {/* User Books Section */}
-      <div>
-        {userBooks.length > 0 ? (
-          <Collection
-            collection_type="My Listings"
-            books={userBooks}
-            userId={userId}
-            isProfilePage={true} // Pass isProfilePage as true
-          />
-        ) : (
-          <NoActiveListings />
-        )}
-      </div>
+      <motion.div
+        initial={{ y: 200 }}
+        animate={{ y: 0 }}
+        transition={{ duration: 0.5 }}
+      >
+        <Collection
+          collection_type="My Listings"
+          books={userBooks}
+          userId={userId}
+          isProfilePage={true}
+        />
+      </motion.div>
 
       {/* Favorite Books Section */}
-      <div>
-        {userFavorites.length > 0 ? (
-          <Collection
-            collection_type="My Favorite Books"
-            books={userFavorites}
-            userId={clerkId}
-          />
-        ) : (
-          <p className="text-gray-600">You have no favorite books listed.</p>
-        )}
-      </div>
-
+      <motion.div
+        initial={{ y: 200 }}
+        animate={{ y: 0 }}
+        transition={{ duration: 0.5 }}
+      >
+        <Collection
+          collection_type="My Favorite Books"
+          books={userFavorites}
+          userId={userId}
+        />
+      </motion.div>
+      
       {/* Stats section */}
       <div className="flex justify-between px-4 py-4 bg-[#081F5C] mt-5">
         <div>
