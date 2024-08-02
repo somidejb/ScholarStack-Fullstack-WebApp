@@ -45,20 +45,26 @@ const ChatCard = ({
   )?._id;
   console.log('present user Id: ', userId);
   console.log('Other member:', otherMember);
-  console.log('Other member photo:', otherMember[0]?.photo);
+  console.log('Other member photo:', otherMember?.[0]?.photo);
+
   const formattedCreatedDate = formatDateTime(new Date(chat?.createdAt));
   const formattedLastDate = formatDateTime(new Date(chat?.lastMessageAt));
   const { timeOnly: lastMessageTime } = formattedLastDate;
   const { timeOnly } = formattedCreatedDate;
   const router = useRouter();
 
-  if (!otherMember) {
-    return null; // or a loading indicator
-  }
+  // Use a state variable to manage the loading state for conditional rendering
+  const [loading, setLoading] = useState(true);
 
-  console.log('set chats type: ', typeof setChats);
-
+  // Move the check for otherMember to an effect or after hooks to prevent early return
   useEffect(() => {
+    // If otherMember is empty, don't do anything and return
+    if (!otherMember || otherMember.length === 0) {
+      return;
+    }
+
+    setLoading(false); // Mark loading as false once otherMember is determined
+
     pusherClient.subscribe(userId);
 
     const handleChatUpdate = (updatedChat: any) => {
@@ -72,6 +78,7 @@ const ChatCard = ({
         })
       );
     };
+
     const handleNewChat = (newChat: any) => {
       setChats((allChats) => [...allChats, newChat]);
     };
@@ -84,7 +91,15 @@ const ChatCard = ({
       pusherClient.unbind('update-chat', handleChatUpdate);
       pusherClient.unbind('new-chat', handleNewChat);
     };
-  }, [currentUser]);
+  }, [userId, setChats, otherMember]); // Make sure to include necessary dependencies
+
+  // Early return if loading or otherMember is not available
+  if (loading || !otherMember || otherMember.length === 0) {
+    return <div>Loading...</div>; // or a loading indicator
+  }
+
+  console.log('set chats type: ', typeof setChats);
+
   return (
     <AnimatePresence>
       <motion.div
