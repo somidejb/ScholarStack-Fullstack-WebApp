@@ -42,31 +42,31 @@ const ChatCard = ({ chat, index, userId, handleSelectChat, currentUser, chats,  
     console.log("set chats type: ", typeof setChats);
 
     useEffect(() => {
-        if(currentUser){
-            pusherClient.subscribe(userId);
+        if(!currentUser) return;
+        pusherClient.subscribe(userId);
 
-            const handleChatUpdate = (updatedChat: any) => {
-                setChats((allChats : any) => allChats.map((chat : IChat) => {
-                    if(chat._id === updatedChat.id){
-                        return { ...chat, messages: updatedChat.messages};
-                    }else{
-                        return chat;
-                    }
-                }))
-            }
-            const handleNewChat = (newChat: any) => {
-                setChats((allChats) => [...allChats, newChat]);
-            }
-
-            pusherClient.bind("update-chat", handleChatUpdate);
-            pusherClient.bind("new-chat", handleNewChat);
-
-            return () => {
-                pusherClient.unsubscribe(userId);
-                pusherClient.unbind("update-chat", handleChatUpdate);
-                pusherClient.unbind("new-chat", handleNewChat);
-            }
+        const handleChatUpdate = (updatedChat: any) => {
+            setChats((allChats : any) => allChats.map((chat : IChat) => {
+                if(chat._id === updatedChat.id){
+                    return { ...chat, messages: updatedChat.messages};
+                }else{
+                    return chat;
+                }
+            }))
         }
+        const handleNewChat = (newChat: any) => {
+            setChats((allChats) => [...allChats, newChat]);
+        }
+
+        pusherClient.bind("update-chat", handleChatUpdate);
+        pusherClient.bind("new-chat", handleNewChat);
+
+        return () => {
+            pusherClient.unsubscribe(userId);
+            pusherClient.unbind("update-chat", handleChatUpdate);
+            pusherClient.unbind("new-chat", handleNewChat);
+        }
+        
     }, [currentUser]);
 
     return (
