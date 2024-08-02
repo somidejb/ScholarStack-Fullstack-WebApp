@@ -59,9 +59,6 @@ const ChatCard = ({
   console.log('set chats type: ', typeof setChats);
 
   useEffect(() => {
-    if (!currentUser) return;
-    else{
-
     pusherClient.subscribe(userId);
 
     const handleChatUpdate = (updatedChat: any) => {
@@ -87,7 +84,7 @@ const ChatCard = ({
       pusherClient.unbind('update-chat', handleChatUpdate);
       pusherClient.unbind('new-chat', handleNewChat);
     };
-  }}, [currentUser, userId, setChats]);
+  }, [currentUser]);
   return (
     <AnimatePresence>
       <motion.div
