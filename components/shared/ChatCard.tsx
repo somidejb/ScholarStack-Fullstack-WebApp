@@ -53,8 +53,6 @@ const ChatCard = ({
   const { timeOnly } = formattedCreatedDate;
   const router = useRouter();
 
-  // Use a state variable to manage the loading state for conditional rendering
-  const [loading, setLoading] = useState(true);
 
   // Move the check for otherMember to an effect or after hooks to prevent early return
   useEffect(() => {
@@ -63,7 +61,6 @@ const ChatCard = ({
       return;
     }
 
-    setLoading(false); // Mark loading as false once otherMember is determined
 
     pusherClient.subscribe(userId);
 
@@ -92,11 +89,6 @@ const ChatCard = ({
       pusherClient.unbind('new-chat', handleNewChat);
     };
   }, [userId, setChats, otherMember]); // Make sure to include necessary dependencies
-
-  // Early return if loading or otherMember is not available
-  if (loading || !otherMember || otherMember.length === 0) {
-    return <div>Loading...</div>; // or a loading indicator
-  }
 
   console.log('set chats type: ', typeof setChats);
 
