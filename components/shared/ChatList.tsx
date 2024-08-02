@@ -10,7 +10,7 @@ import { addToSeenBy } from "@/lib/actions/chat.actions";
 import { IChat } from "@/lib/mongodb/database/models/chat.model";
 import { IUser } from "@/lib/mongodb/database/models/user.model";
 import Link from "next/link";
-import {motion, AnimatePresence} from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 
 interface ChatListProps {
   className?: string;
@@ -114,10 +114,12 @@ const ChatList = ({ className, userId, currentUser }: ChatListProps) => {
                 exit={{ opacity: 0, y: 20 }}
               >
                 <img src="/assets/images/no-chat.png" alt="No chats" className="w-16 h-16" />
-                <p>Find the book you're interested in</p>
+                <p>Find the book you&apos;re interested in</p>
                 <p>Click on Message Seller to start a chat</p>
                 <p>Happy browsing!</p>
-                <Link href="/books" className="my-1 rounded-md bg-[#31457B] p-2 text-white text-sm">Explore Books</Link>
+                <Link href="/books" className="my-1 rounded-md bg-[#31457B] p-2 text-white text-sm">
+                  Explore Books
+                </Link>
               </motion.div>
             ) : (
               chats.map((chat, index) => (

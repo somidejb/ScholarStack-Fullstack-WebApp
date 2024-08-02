@@ -1,5 +1,4 @@
-import { Schema, model, models } from "mongoose";
-import Document from "next/document";
+import { Document, Schema, model, models } from "mongoose";
 
 
 export interface ICategory extends Document {

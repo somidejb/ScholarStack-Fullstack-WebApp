@@ -1,5 +1,4 @@
-import { Schema, model, models } from "mongoose";
-import Document from "next/document";
+import { Schema, model, models, Document } from "mongoose";
 
 
 export interface ILanguage extends Document {

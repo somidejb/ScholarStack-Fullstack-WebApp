@@ -1,6 +1,4 @@
-import { Schema, model, models } from "mongoose";
-import Document from "next/document";
-import { send } from "process";
+import { Schema, model, models, Document } from "mongoose";
 
 
 export interface IMessage extends Document {
