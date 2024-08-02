@@ -24,6 +24,7 @@ import { FaPen } from "react-icons/fa";
 import { updateUserInClerkAndDB } from "@/lib/actions/user.actions";
 import { daysSincePosted } from "@/lib/actions/datePosted";
 import Modal from "./Modal";
+import {motion} from 'framer-motion';
 
 interface IUser {
   username: string;
@@ -49,7 +50,7 @@ interface ProfileProps {
   completedListingsCount: number; // Adding completed listings count prop
 }
 
-const Profile: React.FC<ProfileProps> = ({
+const Profile = ({
   user,
   userDetails,
   userBooks,
@@ -58,7 +59,7 @@ const Profile: React.FC<ProfileProps> = ({
   clerkId,
   bookCount,  // Destructuring book count prop
   completedListingsCount, // Destructuring completed listings count prop
-}) => {
+}: ProfileProps) => {
   const [isActive, setIsActive] = useState(false);
   const [name, setName] = useState(user.fullName);
   const [username, setUsername] = useState(user.username);
@@ -67,6 +68,9 @@ const Profile: React.FC<ProfileProps> = ({
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalBooks, setModalBooks] = useState<IBook[]>([]);
   const [lastDismissed, setLastDismissed] = useState<Date | null>(null);
+  const [isUpdating, setIsUpdating] = useState(false);
+  const [updateError, setUpdateError] = useState<string | null>(null);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -133,7 +137,9 @@ const Profile: React.FC<ProfileProps> = ({
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
+    setIsUpdating(true);
+    setUpdateError(null);
+  
     const updatedProfile = {
       firstName: name.split(" ")[0],
       lastName: name.split(" ")[1] || "",
@@ -141,22 +147,37 @@ const Profile: React.FC<ProfileProps> = ({
       bio: bio,
       location: location,
     };
-
+  
     try {
-      await updateUserInClerkAndDB(userId, clerkId, updatedProfile);
+      const updatedUser = await updateUserInClerkAndDB(
+        userId,
+        clerkId,
+        updatedProfile
+      );
       console.log("Profile updated successfully");
-      // You might want to refresh the page or update the state here
+  
+      // Update local state with the updated profile data
+      setName(updatedUser.firstName + " " + updatedUser.lastName);
+      setUsername(updatedUser.username);
+      setBio(updatedUser.bio);
+      setLocation(updatedUser.location);
+  
+      // Close the dialog
+      setIsDialogOpen(false);
     } catch (error) {
       console.error("Failed to update profile:", error);
+      setUpdateError("Failed to update profile. Please try again.");
+    } finally {
+      setIsUpdating(false);
     }
   };
 
   return (
-    <div className="mx-auto bg-white shadow-md rounded-lg mt-[50px]">
+    <div className="mx-auto bg-white shadow-md rounded-lg">
       {/* Profile and User Details section */}
-      <div className="flex items-start">
+      <div className="flex items-start w-full">
         {/* Profile section */}
-        <div className="flex items-center justify-center bg-[#D6DAEA] w-[1060px] h-[497px] left-0 top-[113px]">
+        <div className="flex max-sm:flex-col items-center justify-center bg-[#D6DAEA] w-full h-[497px] left-0 top-[113px] gap-2 px-2">
           <div className="flex flex-col justify-center items-center lg:mr-[30px] lg:mt-8">
             <div className="relative w-36 h-36 md:w-[118px] md:h-[127px] lg:w-[346px] lg:h-[321px]">
               <Image
@@ -167,18 +188,18 @@ const Profile: React.FC<ProfileProps> = ({
                 style={{ objectFit: "cover" }}
               />
             </div>
-            <div
-              className="text-xl font-semibold mt-4 lg:mt-[30px]"
-              style={{ fontFamily: "Poppins, sans-serif", fontSize: 35 }}
+            <p
+              className="text-xl md:text-[35px] font-semibold mt-3 lg:mt-[30px]"
+              style={{ fontFamily: "Poppins, sans-serif" }}
             >
               {user.fullName}
-            </div>
+            </p>
           </div>
           <div className="flex flex-col gap-2">
-            <Dialog>
+            <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
               <DialogTrigger asChild>
                 <Button
-                  className="bg-[#081F5C] opacity-[80%] text-white px-12 py-3 rounded-md"
+                  className="bg-[#081F5C] opacity-[80%] text-white max-sm:px-8 px-12 py-3 rounded-md"
                   size="lg"
                   style={{ fontFamily: "Poppins, sans-serif" }}
                 >
@@ -239,9 +260,12 @@ const Profile: React.FC<ProfileProps> = ({
                     />
                   </div>
                   <DialogFooter>
-                    <Button type="submit">Save changes</Button>
+                  <Button type="submit" disabled={isUpdating}>
+                      {isUpdating ? "Saving..." : "Save changes"}
+                    </Button>
                   </DialogFooter>
                 </form>
+                {updateError && <p className="text-red-500">{updateError}</p>}
               </DialogContent>
             </Dialog>
             <Button
@@ -256,7 +280,7 @@ const Profile: React.FC<ProfileProps> = ({
         </div>
         {/* User details section */}
         <div
-          className="space-y-2 ml-2 mr-5 mt-20 lg:mr-10"
+          className="max-w-full flex flex-col gap-2 mx-2 mt-20 lg:mr-10"
           style={{ fontFamily: "Poppins, sans-serif" }}
         >
           <div>
@@ -264,7 +288,7 @@ const Profile: React.FC<ProfileProps> = ({
               Username
             </p>
             <p className="text-[#081F5C] opacity-[60%]" style={{ fontSize: 20 }}>
-              {user.username}
+              {username}
             </p>
           </div>
           <div>
@@ -272,7 +296,7 @@ const Profile: React.FC<ProfileProps> = ({
               Bio
             </p>
             <p className="text-[#081F5C] opacity-[60%]" style={{ fontSize: 20 }}>
-              {userDetails.Bio}
+              {bio}
             </p>
           </div>
           <div>
@@ -280,7 +304,7 @@ const Profile: React.FC<ProfileProps> = ({
               Location
             </p>
             <p className="text-[#081F5C] opacity-[60%]" style={{ fontSize: 20 }}>
-              {userDetails.Location}
+              {location}
             </p>
           </div>
           <div>
@@ -325,18 +349,18 @@ const Profile: React.FC<ProfileProps> = ({
       </div>
 
       {/* Stats section */}
-      <div className="flex justify-between px-4 py-4 bg-[#081F5C] mb-[130px]">
+      <div className="flex justify-between px-4 py-4 bg-[#081F5C] mt-5">
         <div>
           <p className="text-white">Listings Completed</p>
-          <p className="text-white font-semibold text-2xl">{completedListingsCount}</p>
+          <p className="text-white font-semibold text-l">{completedListingsCount}</p>
         </div>
         <div>
           <p className="text-white">Ongoing Listings</p>
-          <p className="text-white font-semibold text-2xl">{bookCount}</p>
+          <p className="text-white font-semibold text-l">{bookCount}</p>
         </div>
         <div>
           <p className="text-white">Joined ScholarStack</p>
-          <p className="text-white font-semibold text-2xl">
+          <p className="text-white font-semibold text-l">
             {formatDate(user.joinedAt)}
           </p>
         </div>

@@ -52,6 +52,21 @@ const Filters = () => {
             });
         }
     };
+    useEffect(() => {
+        const getLanguages = async () => {
+            const languageList = await getAllLanguages();
+
+            if (languageList) {
+                const titleCasedLanguages = languageList.map((language: ILanguage) => ({
+                    ...language,
+                    name: toTitleCase(language.name),
+                }));
+                setLanguages(titleCasedLanguages);
+            }
+        };
+
+        getLanguages();
+    }, []);
 
     useEffect(() => {
         const delayDebounceFn = setTimeout(() => {
@@ -108,22 +123,6 @@ const Filters = () => {
         };
 
         getCategories();
-    }, []);
-
-    useEffect(() => {
-        const getLanguages = async () => {
-            const languageList = await getAllLanguages();
-
-            if (languageList) {
-                const titleCasedLanguages = languageList.map((language: ILanguage) => ({
-                    ...language,
-                    name: toTitleCase(language.name),
-                }));
-                setLanguages(titleCasedLanguages);
-            }
-        };
-
-        getLanguages();
     }, []);
 
     const handleShowMore = () => {
