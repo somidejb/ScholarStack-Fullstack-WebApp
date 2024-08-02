@@ -59,38 +59,32 @@ const ChatCard = ({
   console.log('set chats type: ', typeof setChats);
 
   useEffect(() => {
-    // Check if currentUser is present before executing the effect logic
-    if (!currentUser) return;
+    if(currentUser){
+        pusherClient.subscribe(userId);
 
-    pusherClient.subscribe(userId);
+        const handleChatUpdate = (updatedChat: any) => {
+            setChats((allChats : any) => allChats.map((chat : IChat) => {
+                if(chat._id === updatedChat.id){
+                    return { ...chat, messages: updatedChat.messages};
+                }else{
+                    return chat;
+                }
+            }))
+        }
+        const handleNewChat = (newChat: any) => {
+            setChats((allChats) => [...allChats, newChat]);
+        }
 
-    const handleChatUpdate = (updatedChat: any) => {
-      setChats((allChats: any) =>
-        allChats.map((chat: IChat) => {
-          if (chat._id === updatedChat.id) {
-            return { ...chat, messages: updatedChat.messages };
-          } else {
-            return chat;
-          }
-        })
-      );
-    };
+        pusherClient.bind("update-chat", handleChatUpdate);
+        pusherClient.bind("new-chat", handleNewChat);
 
-    const handleNewChat = (newChat: any) => {
-      setChats((allChats) => [...allChats, newChat]);
-    };
-
-    pusherClient.bind('update-chat', handleChatUpdate);
-    pusherClient.bind('new-chat', handleNewChat);
-
-    // Cleanup function to unsubscribe and unbind handlers
-    return () => {
-      pusherClient.unsubscribe(userId);
-      pusherClient.unbind('update-chat', handleChatUpdate);
-      pusherClient.unbind('new-chat', handleNewChat);
-    };
-  }, [currentUser, userId, setChats]);
-
+        return () => {
+            pusherClient.unsubscribe(userId);
+            pusherClient.unbind("update-chat", handleChatUpdate);
+            pusherClient.unbind("new-chat", handleNewChat);
+        }
+    }
+    }, [currentUser]);
   return (
     <AnimatePresence>
       <motion.div
