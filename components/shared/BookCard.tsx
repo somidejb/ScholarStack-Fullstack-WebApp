@@ -18,6 +18,7 @@ type BookCardProps = {
   favorites?: string[];
   bookOwnerId: string;
   isProfilePage?: boolean;
+  fewBooks?: boolean;
 };
 
 const BookCard = ({
@@ -31,6 +32,7 @@ const BookCard = ({
   favorites,
   bookOwnerId,
   isProfilePage,
+  fewBooks
 }: BookCardProps) => {
   const [favorite, setFavorite] = useState(favorites?.includes(bookId) ?? false);
   const [menuOpen, setMenuOpen] = useState(false);
@@ -211,8 +213,8 @@ const BookCard = ({
         )}
 
         {isProfilePage && userId !== bookOwnerId && (
-          <div className="w-full flex justify-center mt-1">
-            <button className="tracking-widest align-center font-sans w-full px-2 py-0.5 lg:py-2 shadow-xl bg-gradient-to-r bg-[#155387] text-white text-[9px] font-bold rounded-lg hover:bg-gradient-to-r hover:from-red-900 hover:to-red-800" onClick={handleMarkAsSoldClick}>
+          <div className="w-full flex justify-center mt-1 lg:mb-2">
+            <button className="tracking-widest align-center font-sans w-full px-2 py-0.5 lg:py-2 shadow-xl bg-gradient-to-r bg-[#155387] text-white text-[9px] font-bold rounded-full hover:bg-gradient-to-r hover:from-red-900 hover:to-red-800" onClick={handleMarkAsSoldClick}>
               Mark as Sold
             </button>
           </div>
