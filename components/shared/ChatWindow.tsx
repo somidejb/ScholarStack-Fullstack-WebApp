@@ -8,7 +8,6 @@ import { toPusherKey } from "@/lib/utils";
 import { IMessage } from "@/lib/mongodb/database/models/message.model";
 import Link from "next/link";
 import { format } from 'date-fns';
-import { motion } from "framer-motion";
 
 interface ChatWindowProps {
   selectedChat: IChat | null;
@@ -97,34 +96,29 @@ const ChatWindow = ({
         />
       </div>
       <div ref={chatContainerRef} className="flex-grow p-4 overflow-y-auto bg-white">
-        <motion.div
-          className="flex flex-col space-y-4 py-1"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-        >
+        <div className="flex flex-col space-y-4 py-1">
           {chatMessages.map((msg, index) => (
             msg?.sender?._id !== userId ? (
-              <motion.div key={index} className="flex justify-start items-start flex-col" initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.5 }}>
+              <div key={index} className="flex justify-start items-start flex-col">
                 <div className="flex items-center">
                   <img src={msg?.sender?.photo} alt="profile photo" className="w-8 h-8 rounded-full"/>
-                  <p className="text-xs font-bold pl-2">{msg?.sender?.username} &#160; &#183; &#160; {format(new Date(msg?.createdAt), "p")}</p>
+                  <p className = "text-xs font-bold pl-2">{msg?.sender?.username} &#160; &#183; &#160; {format(new Date(msg?.createdAt), "p")}</p>
                 </div>
                 <div className="ml-10 bg-gray-200 p-2 rounded-lg">
                   <p className="text-sm">{msg.text}</p>
                 </div>
-              </motion.div>
+              </div>
             ) : (
-              <motion.div key={index} className="flex justify-end items-end flex-col" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.5 }}>
+              <div key={index} className="flex justify-end items-end flex-col">
                 <p className="text-xs font-bold">{format(new Date(msg?.createdAt), "p")}</p>
                 <div className="bg-indigo-100 p-2 rounded-lg">
                   <p className="text-sm ">{msg.text}</p>
                 </div>
-              </motion.div>
+              </div>
             )
           ))}
           <div ref={bottomRef}></div>
-        </motion.div>
+        </div>
       </div>
       <ChatBox onSendMessage={onSendMessage} className="w-full" />
     </div>

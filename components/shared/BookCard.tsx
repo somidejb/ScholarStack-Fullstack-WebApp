@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { FiEdit, FiTrash2, FiEye, FiMoreHorizontal } from 'react-icons/fi';
@@ -32,13 +32,15 @@ const BookCard = ({
   favorites,
   bookOwnerId,
   isProfilePage,
-  fewBooks
 }: BookCardProps) => {
   const [favorite, setFavorite] = useState(favorites?.includes(bookId) ?? false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
   const [showSoldConfirmation, setShowSoldConfirmation] = useState(false);
 
+  useEffect(() => {
+    setFavorite(favorites?.includes(bookId) ?? false);
+  }, [favorites, bookId]);
   const toggleFavorite = async () => {
     const profilePath = `/profile/${userId}`;
     if (favorite) {
