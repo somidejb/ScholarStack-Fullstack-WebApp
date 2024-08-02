@@ -78,7 +78,7 @@ export const Collection = ({ collection_type, books, userId, isProfilePage }: Co
   };
 
   return (
-<section className="mt-[60px] items-center flex flex-col ml">
+<section className="mt-[60px] items-center flex flex-col w-full">
   <h2 className="text-center leading-[27px] md:leading-[36px] lg:leading-[73px] text-[22px] md:text-[30px] lg:text-[42px] tracking-widest font-normal">
     {collection_type}
   </h2>
@@ -94,22 +94,18 @@ export const Collection = ({ collection_type, books, userId, isProfilePage }: Co
         height={24}
       />
     </div>
-    <div className="flex overflow-hidden w-full justify-center items-center">
-      {books.length === 0 ? (
-        collection_type === "My Favorite Books" ? (
-          <div className="text-center mt-[20px] text-[18px] md:text-[24px] lg:text-[30px] text-gray-500">
-            <NoFavoriteBooks />
-          </div>
+    {books.length === 0 ? (
+      <div className="flex justify-center items-center w-full">
+        {collection_type === "My Favorite Books" ? (
+          <NoFavoriteBooks />
         ) : collection_type === "Similar to this..." ? (
-          <div className="text-center mt-[20px] text-[18px] md:text-[24px] lg:text-[30px] text-gray-500">
-            <NoSimilarBooks />
-          </div>
+          <NoSimilarBooks />
         ) : (
-          <div className="text-center mt-[20px] text-[18px] md:text-[24px] lg:text-[30px] text-gray-500">
-            <NoActiveListings />
-          </div>
-        )
-      ) : (
+          <NoActiveListings />
+        )}
+      </div>
+    ) : (
+      <div className="flex overflow-hidden w-full">
         <div
           className="flex gap-[22px] md:gap-[36px] transition-transform duration-500"
           style={{
@@ -136,8 +132,8 @@ export const Collection = ({ collection_type, books, userId, isProfilePage }: Co
             </div>
           ))}
         </div>
-      )}
-    </div>
+      </div>
+    )}
     <div
       onClick={handleNextClick}
       className="absolute right-[12px] md:right-[30px] lg:right-[45px] z-10 cursor-pointer"
