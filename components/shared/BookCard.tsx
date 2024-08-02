@@ -122,7 +122,7 @@ const BookCard = ({
         isProfilePage && userId !== bookOwnerId ?
         "h-[180px] md:h-[230px] lg:h-[280px] xl:h-[350px]" :
         "h-[135px] md:h-[180px] lg:h-[230px] xl:h-[300px]"
-      } lg:min-w-[170px] lg:max-w-[200px] xl:min-w-[220px] xl:max-w-[250px] min-w-[104px] md:min-w-[130px] md:max-w-[150px] flex-col card-shadow mb-1`}
+      } lg:min-w-[170px] lg:max-w-[200px] xl:min-w-[220px] xl:max-w-[250px] min-w-[104px] md:min-w-[130px] md:max-w-[150px] flex-col card-shadow mb-1 max-md:max-w-[110px]`}
       initial="hidden"
       animate="visible"
       variants={fadeIn}
