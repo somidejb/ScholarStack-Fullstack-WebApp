@@ -1,3 +1,4 @@
+"use client";
 import React from "react";
 import Image from "next/image";
 import Link from "next/link";
@@ -5,15 +6,19 @@ import MobileNav from "./MobileNav";
 import NavItems from "./NavItems";
 import { SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
 import { Button } from "../ui/button";
+import { usePathname } from 'next/navigation'; // Use next/navigation instead
 
-// The Header component is responsible for rendering the top navigation bar
 const Header = () => {
+  const pathname = usePathname(); // Get the current pathname
+
+  // Ensure pathname is safely handled
+  const safePathname: string = pathname || '';
+
   return (
-    <header className="w-full border-b h-[64px] md:h-[85px] lg:h-[87px] xl:h-[111px] bg-[#31457b] relative">
+    <header className="w-full border-b h-[64px] md:h-[85px] bg-[#31457b] relative">
       <div className="px-4 sm:px-6 md:px-8 lg:px-10 h-full w-full flex justify-between items-center relative z-50">
         <div className="flex items-center">
           <Link href="/" className="flex items-center gap-2">
-            {/* The Scholar Stack logo is displayed */}
             <Image
               src="/assets/images/scholarstacklogo.png"
               alt="ScholarStackLogo"
@@ -26,10 +31,10 @@ const Header = () => {
           </Link>
         </div>
 
-        {/* The navigation items are displayed for medium and larger devices */}
         <SignedIn>
           <nav className="hidden md:flex items-center gap-4 lg:gap-6">
-            <NavItems pathname={""} />
+            {/* Conditional rendering and type assertion combined */}
+            {pathname !== null && <NavItems pathname={safePathname} />}
           </nav>
         </SignedIn>
 

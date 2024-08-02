@@ -1,217 +1,105 @@
-"use client";
+import BookCard from '@/components/shared/BookCard'; // Ensure this path is correct
+import Filters from '@/components/shared/Filters';
+import SearchBar from '@/components/shared/SearchBar';
+import { getAllBooks, getFavorites2 } from '@/lib/actions/book.actions';
+import { IBook } from '@/lib/mongodb/database/models/book.model';
+import { auth } from '@clerk/nextjs/server';
+import Pagination from '@/components/shared/Pagination';
+import { SearchParamProps } from '@/types';
+import Link from 'next/link';
+import { Metadata } from 'next';
 
-import Image from 'next/image';
-import React, { useState } from 'react';
+export const metadata: Metadata = {
+  title: "Books | Scholar Stack",
+}
 
-const Books = () => {
-  const [showMoreCategories, setShowMoreCategories] = useState(false);
-  const [showMoreLanguages, setShowMoreLanguages] = useState(false);
-  const [showMorePrices, setShowMorePrices] = useState(false);
+export default async function Books({ searchParams }: SearchParamProps) {
+  const page = Number(searchParams?.page) || 1;
+  const searchText = (searchParams?.query as string) || "";
+  const filters = (searchParams?.Filters as string) || "";
+
+  // Parse the Filters parameter manually
+  const parsedFilters: Record<string, string> = filters
+    .split('_AND_')
+    .reduce((acc, filter) => {
+      const [key, value] = filter.split('=');
+      if (key && value) {
+        acc[key] = value;
+      }
+      return acc;
+    }, {} as Record<string, string>);
+
+  const category = parsedFilters.categories || "";
+  const language = parsedFilters.languages || "";
+  const price = parsedFilters.price || "";
+
+  const { sessionClaims } = auth();
+  const userId = sessionClaims?.userId as string;
+
+  // Fetch books data
+  const result = await getAllBooks({
+    query: searchText,
+    category,
+    language,
+    price,
+    page: searchParams.page ? +searchParams.page : 1,
+    limit: 16,
+  });
+
+  const books = result?.data ?? [];
+  const isNext = result?.isNext ?? false;
+  const totalPages = result?.totalPages ?? 1;
+
+  // Fetch favorites data
+  let favorites: string[] = [];
+  if (userId) {
+    const favoriteBooks = await getFavorites2(userId);
+    favorites = favoriteBooks.map((favorite: IBook) => favorite._id);
+  }
 
   return (
-    <div>
-      {/* Side Navbar and Search Bar */}
+    <>
       <div className="flex">
-        <div className="rounded-3xl bg-white w-50 p-4 border flex-shrink-0 mt-3 mb-3 ml-2 shadow-lg" style={{ height: 'fit-content' }}>
-          <div className="flex items-center mb-4">
-            <span className="text-blue-800 text-xl ml-4">Filters</span>
-          </div>
-          <div className="mb-4">
-            <h3 className="font-semibold">Categories</h3>
-            <ul>
-              <li>
-                <label className="flex items-center">
-                  <input type="checkbox" className="form-checkbox" style={{ accentColor: '#1D4ED8' }} />
-                  <span className="ml-2">Fiction</span>
-                </label>
-              </li>
-              <li>
-                <label className="flex items-center">
-                  <input type="checkbox" className="form-checkbox" style={{ accentColor: '#1D4ED8' }} />
-                  <span className="ml-2">Business</span>
-                </label>
-              </li>
-              <li>
-                <label className="flex items-center">
-                  <input type="checkbox" className="form-checkbox" style={{ accentColor: '#1D4ED8' }} />
-                  <span className="ml-2">Law</span>
-                </label>
-              </li>
-              <li>
-                <label className="flex items-center">
-                  <input type="checkbox" className="form-checkbox" style={{ accentColor: '#1D4ED8' }} />
-                  <span className="ml-2">Health & Fitness</span>
-                </label>
-              </li>
-              {showMoreCategories && (
-                <>
-                  <li>
-                    <label className="flex items-center">
-                      <input type="checkbox" className="form-checkbox" style={{ accentColor: '#1D4ED8' }} />
-                      <span className="ml-2">Comics</span>
-                    </label>
-                  </li>
-                  <li>
-                    <label className="flex items-center">
-                      <input type="checkbox" className="form-checkbox" style={{ accentColor: '#1D4ED8' }} />
-                      <span className="ml-2">Biology</span>
-                    </label>
-                  </li>
-                  <li>
-                    <label className="flex items-center">
-                      <input type="checkbox" className="form-checkbox" style={{ accentColor: '#1D4ED8' }} />
-                      <span className="ml-2">Math</span>
-                    </label>
-                  </li>
-                  <li>
-                    <label className="flex items-center">
-                      <input type="checkbox" className="form-checkbox" style={{ accentColor: '#1D4ED8' }} />
-                      <span className="ml-2">Physics</span>
-                    </label>
-                  </li>
-                  <li>
-                    <label className="flex items-center">
-                      <input type="checkbox" className="form-checkbox" style={{ accentColor: '#1D4ED8' }} />
-                      <span className="ml-2">Art & Music</span>
-                    </label>
-                  </li>
-                </>
-              )}
-            </ul>
-            <button onClick={() => setShowMoreCategories(!showMoreCategories)} className="text-blue-600">
-              {showMoreCategories ? 'Show less' : 'See more...'}
-            </button>
-          </div>
-          <div className="mb-4">
-            <h3 className="font-semibold">Others</h3>
-            <ul>
-              <li>
-                <label className="flex items-center">
-                  <input type="checkbox" className="form-checkbox" style={{ accentColor: '#1D4ED8' }} defaultChecked />
-                  <span className="ml-2">English</span>
-                </label>
-              </li>
-              <li>
-                <label className="flex items-center">
-                  <input type="checkbox" className="form-checkbox" style={{ accentColor: '#1D4ED8' }} />
-                  <span className="ml-2">France</span>
-                </label>
-              </li>
-              <li>
-                <label className="flex items-center">
-                  <input type="checkbox" className="form-checkbox" style={{ accentColor: '#1D4ED8' }} />
-                  <span className="ml-2">Spanish</span>
-                </label>
-              </li>
-              <li>
-                <label className="flex items-center">
-                  <input type="checkbox" className="form-checkbox" style={{ accentColor: '#1D4ED8' }} />
-                  <span className="ml-2">Mandarin</span>
-                </label>
-              </li>
-              {showMoreLanguages && (
-                <>
-                  <li>
-                    <label className="flex items-center">
-                      <input type="checkbox" className="form-checkbox" style={{ accentColor: '#1D4ED8' }} />
-                      <span className="ml-2">Portuguese</span>
-                    </label>
-                  </li>
-                  <li>
-                    <label className="flex items-center">
-                      <input type="checkbox" className="form-checkbox" style={{ accentColor: '#1D4ED8' }} />
-                      <span className="ml-2">Japanese</span>
-                    </label>
-                  </li>
-                  <li>
-                    <label className="flex items-center">
-                      <input type="checkbox" className="form-checkbox" style={{ accentColor: '#1D4ED8' }} />
-                      <span className="ml-2">Korean</span>
-                    </label>
-                  </li>
-                  <li>
-                    <label className="flex items-center">
-                      <input type="checkbox" className="form-checkbox" style={{ accentColor: '#1D4ED8' }} />
-                      <span className="ml-2">Italian</span>
-                    </label>
-                  </li>
-                  <li>
-                    <label className="flex items-center">
-                      <input type="checkbox" className="form-checkbox" style={{ accentColor: '#1D4ED8' }} />
-                      <span className="ml-2">Russian</span>
-                    </label>
-                  </li>
-                  <li>
-                    <label className="flex items-center">
-                      <input type="checkbox" className="form-checkbox" style={{ accentColor: '#1D4ED8' }} />
-                      <span className="ml-2">Hindi</span>
-                    </label>
-                  </li>
-                  <li>
-                    <label className="flex items-center">
-                      <input type="checkbox" className="form-checkbox" style={{ accentColor: '#1D4ED8' }} />
-                      <span className="ml-2">Arabic</span>
-                    </label>
-                  </li>
-                </>
-              )}
-            </ul>
-            <button onClick={() => setShowMoreLanguages(!showMoreLanguages)} className="text-blue-600">
-              {showMoreLanguages ? 'Show less' : 'See more...'}
-            </button>
-          </div>
-          <div className="mb-4">
-            <h3 className="font-semibold">Price</h3>
-            <ul>
-              <li>
-                <label className="flex items-center bg-white">
-                  <input type="checkbox" className="form-checkbox" style={{ accentColor: '#1D4ED8' }} />
-                  <span className="ml-2">Under $5</span>
-                </label>
-              </li>
-              <li>
-                <label className="flex items-center">
-                  <input type="checkbox" className="form-checkbox" style={{ accentColor: '#1D4ED8' }} />
-                  <span className="ml-2">$5 - $10</span>
-                </label>
-              </li>
-              <li>
-                <label className="flex items-center">
-                  <input type="checkbox" className="form-checkbox" style={{ accentColor: '#1D4ED8' }} defaultChecked />
-                  <span className="ml-2">$10 - $25</span>
-                </label>
-              </li>
-              <li>
-                <label className="flex items-center">
-                  <input type="checkbox" className="form-checkbox" style={{ accentColor: '#1D4ED8' }} />
-                  <span className="ml-2">$25 - $50</span>
-                </label>
-              </li>
-              {showMorePrices && (
-                <li>
-                  <label className="flex items-center">
-                    <input type="checkbox" className="form-checkbox" style={{ accentColor: '#1D4ED8' }} />
-                    <span className="ml-2">Above $50</span>
-                  </label>
-                </li>
-              )}
-            </ul>
-            <button onClick={() => setShowMorePrices(!showMorePrices)} className="text-blue-600">
-              {showMorePrices ? 'Show less' : 'See more...'}
-            </button>
-          </div>
-        </div>
-        <div className="flex-1 p-4">
-          <div className="flex justify-center relative">
-            <input type="text" placeholder="Search here..." className="border p-2 w-full max-w-lg rounded-3xl pr-12 bg-D9D9D9 shadow-md" />
-            <svg className="w-6 h-6 text-gray-500 absolute right-4 top-1/2 transform -translate-y-1/2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-4.35-4.35M17 11A6 6 0 1111 5a6 6 0 016 6z"></path>
-            </svg>
-          </div>
+        <Filters />
+        <div className="w-full flex flex-col items-center justify-center">
+          <SearchBar />
+          {books.length === 0 ? (
+            <div className="text-center mt-10">
+              <img src="/assets/icons/no-result.png" alt="No result found" className="mx-auto" />
+              <h2 className="font-bold md:text-[30px]">Oops! No result found</h2>
+              <p className="font-semibold text-gray-700">We&apos;re sorry we don&apos;t have what you are looking for</p>
+              <Link
+                href="/books/upload"
+                className="mt-4 font-bold inline-block bg-[#31457B] text-white px-4 py-2 rounded-full hover:bg-blue-600 transition duration-200"
+              >
+                Upload Book
+              </Link>
+            </div>
+          ) : (
+            <>
+              <div className="px-[30px] grid gap-x-[35px] md:gap-x-[30px] lg:gap-x-[40px] xl:gap-x-[60px] gap-y-[20px] grid-cols-2 sm:grid-cols-4 lg:grid-cols-4 mb-6 mt-5 md:mt-10">
+                {books.map((book: IBook) => (
+                  <BookCard
+                    key={book._id}
+                    userId={userId}
+                    bookId={book._id}
+                    title={book.title}
+                    imageUrl={book.imageURLs[1]}
+                    author={book.author}
+                    price={book.price}
+                    salePrice={book.salePrice}
+                    favorites={favorites}
+                    bookOwnerId={book.bookOwner._id}
+                  />
+                ))}
+              </div>
+              <div className="mt-10 mb-5">
+                <Pagination pageNumber={page} isNext={isNext} />
+              </div>
+            </>
+          )}
         </div>
       </div>
-    </div>
-  );
-};
-
-export default Books;
+    </>
+  );  
+}

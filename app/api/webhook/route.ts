@@ -1,7 +1,7 @@
 import { Webhook } from 'svix'
 import { headers } from 'next/headers'
 import { WebhookEvent, clerkClient } from '@clerk/nextjs/server'
-import { createUser, updateUser } from '@/lib/actions/user.actions'
+import { createUser, deleteUser, updateUser } from '@/lib/actions/user.actions'
 import { NextResponse } from 'next/server'
 
 export async function POST(req: Request) {
@@ -55,7 +55,6 @@ export async function POST(req: Request) {
   // For this guide, you simply log the payload to the console
   const { id } = evt.data;
   const eventType = evt.type;
-  console.log(`Received event ${eventType} with ID ${id}`);
   
   if(eventType === 'user.created') {
     const {id, email_addresses, first_name, last_name, username, image_url} = evt.data;
@@ -89,10 +88,18 @@ export async function POST(req: Request) {
         lastName: last_name!,
         photo: image_url,
     }
-    const updatedUser = await updateUser(id, user, `/profile/${id}`);
+    const updatedUser = await updateUser(id, user);
 
     return NextResponse.json({ message: 'User updated', user: updatedUser})
   }
+
+  // if(eventType === 'user.deleted') {
+  //   const {id} = evt.data;
+
+  //   const deletedUser = await deleteUser({clerkId: id});
+
+  //   return NextResponse.json({ message: 'User deleted', user: deletedUser})
+  // }
 
 
   return new Response('', { status: 200 })

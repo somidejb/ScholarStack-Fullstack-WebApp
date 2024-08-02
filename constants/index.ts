@@ -1,5 +1,5 @@
 export const headerLinks = [
-    {
+      {
         label: 'Home',
         route: '/'
       },
@@ -18,8 +18,11 @@ export const headerLinks = [
       {
         label: 'Chats',
         route: '/chats'
-      }
-
+      },
+      {
+        label: 'Admin',
+        route: '/admin'
+      },
 ]
 
 export const books = [
@@ -31,7 +34,7 @@ export const books = [
         image: "/assets/images/book1.png",
         condition: "Good",
         description: "A comprehensive introduction to computer science concepts and programming.",
-        category: "Recently Uploaded"
+     
     },
     {
         id: 2,
@@ -115,4 +118,97 @@ export const books = [
         condition: "Excellent",
         description: "Comprehensive coverage of deep learning techniques using Python.",
     }
+];
+
+export const sampleMessages = 
+  {
+    "David Carlson": [
+      { sender: "David Carlson", content: "Hey, How are you?", avatar: "/assets/images/p1.png" },
+    ],
+    "Lily Bloom": [
+      { sender: "Lily Bloom", content: "You in Sunridge, right?", avatar: "/assets/images/p5.png" },
+    ],
+    "Josh Seary": [
+      { sender: "Josh Seary", content: "Hey, we meeting tmrw for book...", avatar: "/assets/images/p2.png" },
+    ],
+    "Chris Brown": [
+      { sender: "Chris Brown", content: "Hey, so when did u bought this...", avatar: "/assets/images/p3.png" },
+    ],
+    "Lei Wong": [
+      { sender: "Lei Wong", content: "I would love to buy this book", avatar: "/assets/images/p4.png" },
+    ],
+  };
+
+export const chatsContacts = 
+[
+  { 
+    name: "David Carlson", 
+    message: "Hey, How are you?", 
+    time: "3:20PM", 
+    avatar: "assets/images/p1.png", 
+    isOpened: false 
+  },
+  { name: "Lily Bloom", 
+    message: "You in Sunridge, right?", 
+    time: "9:20PM", 
+    avatar: "assets/images/p5.png", 
+    isOpened: false 
+  },
+  {
+    name: "Josh Seary",
+    message: "Hey, we meeting tmrw for book...",
+    time: "3:29PM",
+    avatar: "assets/images/p2.png",
+    isOpened: false,
+  },
+  {
+    name: "Chris Brown",
+    message: "Hey, so when did u bought this...",
+    time: "8:00PM",
+    avatar: "assets/images/p3.png",
+    isOpened: false,
+  },
+  {
+    name: "Lei Wong",
+    message: "I would love to buy this book",
+    time: "11:20AM",
+    avatar: "assets/images/p4.png",
+    isOpened: false,
+  },
+];
+  
+export const bookDefaultValues = {
+    title: "",
+    author: "",
+    description: "",
+    imageURLs: [],
+    categoryId: "",
+    languageId: "",
+    isBookFree: false,
+    price: "0",
+    salePrice: "",
+    location: "",
+}
+
+export const prices = [
+  {
+    label: 'Free',
+    value: 'free'
+  },
+  {
+    label: '$5 - $10',
+    value: '5to10'
+  },
+  {
+    label: '$10 - $25',
+    value: '10to25'
+  },
+  {
+    label: '$25 - $50',
+    value: '25to50'
+  },
+  {
+    label: 'Above $50',
+    value: 'above50'
+  }
 ];

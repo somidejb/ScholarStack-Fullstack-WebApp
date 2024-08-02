@@ -1,149 +1,140 @@
+import { IBook } from "@/lib/mongodb/database/models/book.model";
 // ====== USER PARAMS
 export type CreateUserParams = {
-    clerkId: string
-    firstName: string
-    lastName: string
-    username: string
-    email: string
-    photo: string
-  }
-  
-  export type UpdateUserParams = {
-    firstName: string
-    lastName: string
-    username: string
-    photo: string
-  }
-  
-  // ====== EVENT PARAMS
-  export type CreateEventParams = {
-    userId: string
-    event: {
-      title: string
-      description: string
-      location: string
-      imageUrl: string
-      startDateTime: Date
-      endDateTime: Date
-      categoryId: string
-      price: string
-      isFree: boolean
-      url: string
-    }
-    path: string
-  }
-  
-  export type UpdateEventParams = {
-    userId: string
-    event: {
-      _id: string
-      title: string
-      imageUrl: string
-      description: string
-      location: string
-      startDateTime: Date
-      endDateTime: Date
-      categoryId: string
-      price: string
-      isFree: boolean
-      url: string
-    }
-    path: string
-  }
-  
-  export type DeleteEventParams = {
-    eventId: string
-    path: string
-  }
-  
-  export type GetAllEventsParams = {
-    query: string
-    category: string
-    limit: number
-    page: number
-  }
-  
-  export type GetEventsByUserParams = {
-    userId: string
-    limit?: number
-    page: number
-  }
-  
-  export type GetRelatedEventsByCategoryParams = {
-    categoryId: string
-    eventId: string
-    limit?: number
-    page: number | string
-  }
-  
-  export type Event = {
-    _id: string
-    title: string
-    description: string
-    price: string
-    isFree: boolean
-    imageUrl: string
-    location: string
-    startDateTime: Date
-    endDateTime: Date
-    url: string
-    organizer: {
-      _id: string
-      firstName: string
-      lastName: string
-    }
-    category: {
-      _id: string
-      name: string
-    }
-  }
-  
-  // ====== CATEGORY PARAMS
-  export type CreateCategoryParams = {
-    categoryName: string
-  }
-  
-  // ====== ORDER PARAMS
-  export type CheckoutOrderParams = {
-    eventTitle: string
-    eventId: string
-    price: string
-    isFree: boolean
-    buyerId: string
-  }
-  
-  export type CreateOrderParams = {
-    stripeId: string
-    eventId: string
-    buyerId: string
-    totalAmount: string
-    createdAt: Date
-  }
-  
-  export type GetOrdersByEventParams = {
-    eventId: string
-    searchString: string
-  }
-  
-  export type GetOrdersByUserParams = {
-    userId: string | null
-    limit?: number
-    page: string | number | null
-  }
-  
-  // ====== URL QUERY PARAMS
-  export type UrlQueryParams = {
-    params: string
-    key: string
-    value: string | null
-  }
-  
-  export type RemoveUrlQueryParams = {
-    params: string
-    keysToRemove: string[]
-  }
-  
-  export type SearchParamProps = {
-    params: { id: string }
-    searchParams: { [key: string]: string | string[] | undefined }
-  }
+  clerkId: string;
+  firstName: string;
+  lastName: string;
+  username: string;
+  email: string;
+  photo: string;
+};
+
+export type CreateChatParams = {
+  userId: string;
+  members: string[];
+  path?: string;
+}
+
+export type UpdateUserParams = {
+  firstName: string;
+  lastName: string;
+  username: string;
+  photo: string;
+};
+
+export type DeleteUserParams = {
+  clerkId: string | undefined;
+}
+
+// ====== BOOK PARAMS
+export type CreateBookParams = {
+  userId: string;
+  book: {
+    title: string;
+    author: string;
+    description: string;
+    postedAt: Date;
+    imageURLs: string[];
+    categoryId: string;
+    languageId: string;
+    isFree?: boolean;
+    price?: string;
+    salePrice?: string;
+    location: string;
+  };
+  path: string;
+  page: string;
+};
+
+export type UpdateBookParams = {
+  userId: string;
+  book: {
+    _id: string;
+    title: string;
+    author: string;
+    description: string;
+    postedAt: Date;
+    imageURLs: string[];
+    categoryId: string;
+    languageId: string;
+    isFree?: boolean;
+    price?: string;
+    salePrice?: string;
+    location: string;
+  };
+  path: string;
+};
+
+export type DeleteBookParams = {
+  bookId: string;
+  path: string;
+  page: string;
+};
+
+export type GetAllBooksParams = {
+  query: any;
+  limit?: number;
+  page: number;
+  category?: string;
+  language?: string;
+  price?: string;
+};
+
+// ====== ORDER PARAMS
+export type CreateOrderParams = {
+  userId: string;
+  order: {
+    seller: string;
+    book: string;
+    price: number;
+    orderDate?: Date;
+  };
+  path: string;
+};
+
+export type UpdateOrderParams = {
+  userId: string;
+  order: {
+    _id: string;
+    seller?: string;
+    book?: string;
+    price?: number;
+    orderDate?: Date;
+  };
+  path: string;
+};
+
+export type DeleteOrderParams = {
+  orderId: string;
+  path: string;
+};
+
+export type GetAllOrdersParams = {
+  query?: any;
+  limit?: number;
+  page?: number;
+};
+
+// ====== URL QUERY PARAMS
+export type UrlQueryParams = {
+  params: string;
+  key: string;
+  value: string | null;
+};
+
+export type RemoveUrlQueryParams = {
+  params: string;
+  keysToRemove: string[];
+};
+
+export type SearchParamProps = {
+  params: { id: string };
+  searchParams: { [key: string]: string | string[] | undefined };
+};
+
+// ====== CUSTOM PARAMS
+export type GetOrdersByUserParams = {
+  userId: string | null;
+  limit?: number;
+  page: string | number | null;
+};
