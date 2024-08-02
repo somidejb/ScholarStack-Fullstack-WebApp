@@ -26,6 +26,7 @@ import { createBook, updateBook } from '@/lib/actions/book.actions'
 import { IBook } from '@/lib/mongodb/database/models/book.model'
 import { bookDefaultValues } from '@/constants'
 import { createAdminBook } from '@/lib/actions/admin.action'
+import { motion } from 'framer-motion'
 
 
 type BookFormProps = {
@@ -116,6 +117,25 @@ const BookForm = ({userId, type, book, bookId} : BookFormProps) => {
         }
     }
 
+    const formVariants = {
+        hidden: {
+            opacity: 0,
+            y: 0, 
+          },
+          visible: {
+            opacity: 1,
+            y: 0,
+            transition: {
+              duration: 0.7, 
+            },
+          },
+        };
+
+    const buttonVariants = {
+        hidden: { opacity: 0, scale: 0.95 },
+        visible: { opacity: 1, scale: 1 },
+    };
+
     return (
         <section className="form-shadow mx-[11px] lg:mx-[150px] rounded-[40px] mb-[50px]">
             <Form {...form}>
@@ -126,12 +146,14 @@ const BookForm = ({userId, type, book, bookId} : BookFormProps) => {
                             name="title"
                             render={({ field }) => (
                                 <FormItem className="w-full">
-                                    <FormLabel className="input-label">*Book Title</FormLabel>
-                                    <FormControl>
+                                <FormLabel className="input-label">*Book Title</FormLabel>
+                                <FormControl>
+                                    <motion.div variants={formVariants} initial="hidden" animate="visible">
                                         <Input {...field} className="input-field" />
-                                    </FormControl>
-                                    <FormMessage />
-                                </FormItem>
+                                    </motion.div>
+                                </FormControl>
+                                <FormMessage />
+                            </FormItem>
                             )}
                         />
                         <FormField
@@ -141,7 +163,9 @@ const BookForm = ({userId, type, book, bookId} : BookFormProps) => {
                                 <FormItem className="w-full">
                                     <FormLabel className="input-label">*Book Author</FormLabel>
                                     <FormControl>
-                                        <Input {...field} className="input-field" />
+                                        <motion.div variants={formVariants} initial="hidden" animate="visible">
+                                            <Input {...field} className="input-field" />
+                                        </motion.div>
                                     </FormControl>
                                     <FormMessage />
                                 </FormItem>
@@ -153,7 +177,7 @@ const BookForm = ({userId, type, book, bookId} : BookFormProps) => {
                             control={form.control}
                             name="description"
                             render={({ field }) => (
-                                <FormItem className="w-full">
+                                <FormItem className="w-full">                                   
                                     <FormLabel className="input-label">*Book Description</FormLabel>
                                     <FormControl className="h-[250px]">
                                         <Textarea {...field} className="textarea" />
@@ -169,11 +193,13 @@ const BookForm = ({userId, type, book, bookId} : BookFormProps) => {
                                 <FormItem className="w-full">
                                     <FormLabel className="input-label">*Upload Picture</FormLabel>
                                     <FormControl className="h-[250px]">
-                                        <FileUploader
-                                            onFieldChange={field.onChange}
-                                            imageURLs={field.value || []}
-                                            setFiles={setFiles}
-                                        />
+                                        <motion.div variants={formVariants} initial="hidden" animate="visible">
+                                            <FileUploader
+                                                onFieldChange={field.onChange}
+                                                imageURLs={field.value || []}
+                                                setFiles={setFiles}
+                                            />
+                                        </motion.div>
                                     </FormControl>
                                     <FormMessage />
                                 </FormItem>
@@ -188,7 +214,9 @@ const BookForm = ({userId, type, book, bookId} : BookFormProps) => {
                                 <FormItem className="w-full">
                                     <FormLabel className="input-label">*Category</FormLabel>
                                     <FormControl>
-                                        <CategoryDropdown onChangeHandler={field.onChange} value={field.value} />
+                                        <motion.div variants={formVariants} initial="hidden" animate="visible">
+                                            <CategoryDropdown onChangeHandler={field.onChange} value={field.value} />
+                                        </motion.div>
                                     </FormControl>
                                     <FormMessage />
                                 </FormItem>
@@ -201,13 +229,16 @@ const BookForm = ({userId, type, book, bookId} : BookFormProps) => {
                                 <FormItem className="w-full">
                                     <FormLabel className="input-label">*Language</FormLabel>
                                     <FormControl>
-                                        <LanguageDropdown onChangeHandler={field.onChange} value={field.value} />
+                                        <motion.div variants={formVariants} initial="hidden" animate="visible">
+                                            <LanguageDropdown onChangeHandler={field.onChange} value={field.value} />
+                                        </motion.div>
                                     </FormControl>
                                     <FormMessage />
                                 </FormItem>
                             )}
                         />
                     </div>
+                    
                     <div className="field-div mb-5">
                         <FormField
                             control={form.control}
@@ -281,21 +312,23 @@ const BookForm = ({userId, type, book, bookId} : BookFormProps) => {
                             <FormItem className="w-full">
                                 <FormLabel className="input-label">*Location</FormLabel>
                                 <FormControl>
-                                    <Input {...field} 
-                                        className="input-field"
-                                    />
+                                    <motion.div variants={formVariants} initial="hidden" animate="visible">
+                                        <Input {...field} className="input-field" />
+                                    </motion.div>
                                 </FormControl>
                                 <FormMessage />
                             </FormItem>
                         )}
                     />
-                    <Button 
-                        type="submit" 
-                        disabled={form.formState.isSubmitting}
-                        className="mt-10 w-full h-[50px] bg-[#31457B] text-white font-bold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline"
-                    >
-                        {form.formState.isSubmitting ? 'Submitting...' : `${type} Book`}
-                    </Button>
+                    <motion.div variants={buttonVariants} initial="hidden" animate="visible">
+                        <Button
+                            type="submit"
+                            disabled={form.formState.isSubmitting}
+                            className="mt-10 w-full h-[50px] bg-[#31457B] text-white font-bold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline"
+                        >
+                            {form.formState.isSubmitting ? 'Submitting...' : `${type} Book`}
+                        </Button>
+                    </motion.div>
                 </form>
             </Form>
             <p className="flex-center"> Marked with * are important</p>

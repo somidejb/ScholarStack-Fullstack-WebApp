@@ -10,6 +10,7 @@ import { addToSeenBy } from "@/lib/actions/chat.actions";
 import { IChat } from "@/lib/mongodb/database/models/chat.model";
 import { IUser } from "@/lib/mongodb/database/models/user.model";
 import Link from "next/link";
+import {motion, AnimatePresence} from "framer-motion";
 
 interface ChatListProps {
   className?: string;
@@ -104,30 +105,41 @@ const ChatList = ({ className, userId, currentUser }: ChatListProps) => {
               className="px-5 py-2.5 border w-full rounded-2xl bg-white outline-none"
             />
           </div>
-          <div>
-            {chats.length === 0 ? (
-              <div className="mt-4 flex flex-col items-center text-gray-500 font-semibold text-lg md:text-sm lg:text-lg">
+          <AnimatePresence>
+            {chats?.length === 0 ? (
+              <motion.div
+                className="mt-4 flex flex-col items-center text-gray-500 font-semibold text-lg md:text-sm lg:text-lg"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: 20 }}
+              >
                 <img src="/assets/images/no-chat.png" alt="No chats" className="w-16 h-16" />
                 <p>Find the book you're interested in</p>
                 <p>Click on Message Seller to start a chat</p>
                 <p>Happy browsing!</p>
                 <Link href="/books" className="my-1 rounded-md bg-[#31457B] p-2 text-white text-sm">Explore Books</Link>
-              </div>
+              </motion.div>
             ) : (
               chats.map((chat, index) => (
-                <ChatCard
+                <motion.div
                   key={index}
-                  chat={chat}
-                  index={index}
-                  userId={userId}
-                  handleSelectChat={handleSelectChat}
-                  currentUser={currentUser}
-                  chats={chats}
-                  setChats={setChats}
-                />
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: 20 }}
+                >
+                  <ChatCard
+                    chat={chat}
+                    index={index}
+                    userId={userId}
+                    handleSelectChat={handleSelectChat}
+                    currentUser={currentUser}
+                    chats={chats}
+                    setChats={setChats}
+                  />
+                </motion.div>
               ))
             )}
-          </div>
+          </AnimatePresence>
         </div>
       </div>
       <div className={`flex flex-col flex-grow ${selectedChat ? "block" : "hidden"} md:block`}>

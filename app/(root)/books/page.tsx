@@ -67,16 +67,19 @@ export default async function Books({ searchParams }: SearchParamProps) {
             <div className="text-center mt-10">
               <img src="/assets/icons/no-result.png" alt="No result found" className="mx-auto" />
               <h2 className="font-bold md:text-[30px]">Oops! No result found</h2>
-              <p className="font-semibold text-gray-700">We're sorry we don't have what you are looking for</p>
-              <Link href="/books/upload" className="mt-4 font-bold inline-block bg-[#31457B] text-white px-4 py-2 rounded-full hover:bg-blue-600 transition duration-200">
-                  Upload Book
+              <p className="font-semibold text-gray-700">We&apos;re sorry we don&apos;t have what you are looking for</p>
+              <Link
+                href="/books/upload"
+                className="mt-4 font-bold inline-block bg-[#31457B] text-white px-4 py-2 rounded-full hover:bg-blue-600 transition duration-200"
+              >
+                Upload Book
               </Link>
             </div>
           ) : (
             <>
               <div className="px-[30px] grid gap-x-[35px] md:gap-x-[30px] lg:gap-x-[40px] xl:gap-x-[60px] gap-y-[20px] grid-cols-2 sm:grid-cols-4 lg:grid-cols-4 mb-6 mt-5 md:mt-10">
                 {books.map((book: IBook) => (
-                  <BookCard 
+                  <BookCard
                     key={book._id}
                     userId={userId}
                     bookId={book._id}
@@ -91,15 +94,12 @@ export default async function Books({ searchParams }: SearchParamProps) {
                 ))}
               </div>
               <div className="mt-10 mb-5">
-                <Pagination 
-                  pageNumber={page}
-                  isNext={isNext}
-                />
+                <Pagination pageNumber={page} isNext={isNext} />
               </div>
             </>
           )}
         </div>
       </div>
     </>
-  );
+  );  
 }
