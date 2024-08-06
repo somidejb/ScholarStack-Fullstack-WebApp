@@ -12,6 +12,7 @@ import { motion } from 'framer-motion';
 import ImageModal from './ImageModal'; // Adjust the import path as necessary
 import { Collection } from '@/components/shared/Collection';
 import { addFavorite, removeFavorite } from '@/lib/actions/book.actions';
+import { getLanguageById } from '@/lib/actions/language.actions';
 
 type Book = {
   _id: string;
@@ -29,11 +30,11 @@ type BookDetailsProps = {
   userId: string;
   bookOwner: string;
   favorites: string[];
+  language: string;
 };
 
-const BookDetails: React.FC<BookDetailsProps> = ({ book, userId, bookOwner, favorites }) => {
+const BookDetails = ({ book, userId, bookOwner, favorites, language } : BookDetailsProps) => {
   const [favorite, setFavorite] = useState(favorites?.includes(book?._id));
-  console.log("userID:", userId, "bookId:", bookOwner);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedImageIndex, setSelectedImageIndex] = useState<number | null>(null);
   const [similarBooks, setSimilarBooks] = useState<IBook[]>([]);
@@ -93,7 +94,7 @@ const BookDetails: React.FC<BookDetailsProps> = ({ book, userId, bookOwner, favo
 
   return (
     <motion.div
-      className="p-2 lg:p-10 lg:mt-2 lg:ml-20"
+      className="p-2 lg:p-10 lg:mt-2"
       initial={{ opacity: 0, y: 50 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
@@ -109,7 +110,7 @@ const BookDetails: React.FC<BookDetailsProps> = ({ book, userId, bookOwner, favo
           />
           Back to Search
         </motion.button>
-        <div className="flex flex-col lg:flex-row items-start justify-start mb-10">
+        <div className="flex flex-col lg:flex-row items-start justify-center mb-10">
           <div className="w-full sm:justify-evenly lg:w-auto flex justify-center lg:justify-start mb-5 lg:mb-0">
             <motion.div
               className="transition-transform duration-300 ease-in-out transform hover:scale-110 space-x-2 mr-2 mb-2 border border-gray-300 rounded shadow-2xl w-[150px] h-[200px] sm:w-[180px] sm:h-[240px] md:w-[290px] md:h-[400px] lg:w-[370px] lg:h-[500px] xl:w-[446px] xl:h-[600px] relative"
@@ -152,18 +153,19 @@ const BookDetails: React.FC<BookDetailsProps> = ({ book, userId, bookOwner, favo
                 ))}
             </div>
             <motion.div
-              className="flex flex-col lg:justify-start lg:space-x-0 lg:space-y-2 lg:mt-0 lg:ml-5 max-w-lg text-left"
+              className="flex flex-col lg:justify-start lg:space-x-0 lg:space-y-2 lg:mt-0 lg:ml-5 max-w-lg text-left max-lg:ml-5"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.4 }}
             >
               <h1 className="text-xl md:text-3xl lg:text-4xl font-bold mb-0">{book.title}</h1>
-              <p className="text-lg sm:text-lg md:text-xl lg:text-xl mb-5 lg:mb-20">Author: {book.author}</p>
-              <p className="text-xl sm:text-lg md:text-2xl lg:text-2xl font-semibold sm:mb-5 lg:mb-0">Actual price: ${book.price}</p>
+              <p className="text-lg sm:text-lg md:text-xl lg:text-xl mb-1 lg:mb-20">Author: {book.author}</p>
+              <p className="text-xl sm:text-lg md:text-xl lg:text-xl mb-1 lg:mb-20">Language: {language}</p>
+              <p className={`text-xl sm:text-lg md:text-2xl lg:text-2xl font-semibold ${book.salePrice && "line-through"}`}>Price: ${book.price}</p>
               {book.salePrice && (
-                <p className="text-xl md:text-xl text-indigo-900 lg:text-2xl font-semibold">Sale price: ${book.salePrice}</p>
+                <p className="text-xl sm:text-lg md:text-2xl lg:text-2xl font-semibold">Sale Price: ${book.salePrice}</p>
               )}
-              <p className="text-lg text-indigo-900 md:text-2xl lg:text-xl mb-5 lg:mb-4">{book.description}</p>
+              <p className="text-lg text-indigo-900 md:text-2xl lg:text-xl mb-5 lg:mb-4 mt-5">{book.description}</p>
               <div className="flex items-center mb-2 lg:mb-10">
                 <FaMapMarkerAlt className="mr-2 text-indigo-900" size={20} />
                 <span className="text-base md:text-xl lg:text-xl">{book.location}</span>
@@ -182,11 +184,11 @@ const BookDetails: React.FC<BookDetailsProps> = ({ book, userId, bookOwner, favo
                 >
                   Favorite
                   <Image
-                    src={favorite ? "/assets/icons/favorite-red.png" : "/assets/icons/favorite.svg"} 
+                    src={favorite ? "/assets/icons/favorite-red.png" : "/assets/icons/favorite-bookDtl.png"} 
                     alt="heart"
-                    width={19}
-                    height={11}
-                    className="absolute right-6 top-1/2 transform -translate-y-1/2 object-contain w-[12px] md:w-[20px] xl:w-[24px] h-full"
+                    width={100}
+                    height={100}
+                    className="absolute right-6 top-1/2 transform -translate-y-1/2 object-contain w-[15px] xl:w-[24px] h-full"
                     onClick={toggleFavorite}
                   />
                 </motion.button>

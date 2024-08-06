@@ -4,6 +4,7 @@ import { fetchBookById, getFavorites2 } from "@/lib/actions/book.actions";
 import { Metadata } from "next";
 import { auth } from "@clerk/nextjs/server";
 import { IBook } from "@/lib/mongodb/database/models/book.model";
+import { getLanguageById } from "@/lib/actions/language.actions";
 
 type Book = {
   _id: string;
@@ -37,6 +38,10 @@ const Page = async ({ params }: BookPageProps) => {
   const {sessionClaims} = auth();
   const userId = sessionClaims?.userId as string;
   const book = await fetchBookById(params.id);
+  console.log(book);
+  console.log("language: ", book.language);
+  const languageObject = await getLanguageById(book.language.toString());
+  console.log("languageObject: ", languageObject);
   
   let favorites: string[] = [];
   if (userId) {
@@ -59,9 +64,7 @@ const Page = async ({ params }: BookPageProps) => {
   };
  
   return (
-    <div className="mt-[100px]">
-      <BookDetails book={bookDetails} userId={userId} bookOwner={book.bookOwner} favorites={favorites} />
-    </div>
+    <BookDetails book={bookDetails} userId={userId} bookOwner={book.bookOwner} favorites={favorites} language={languageObject.name} />
   );
 };
  

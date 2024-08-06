@@ -54,7 +54,8 @@ const Dashboard = ({ books, path, totalSubs } : DashboardProps) => {
       userId : bookList[index].bookOwner._id,
       book: { ...transformedBookList[index]},
       path,
-      page: 'not admin'
+      page: 'not admin',
+      bookId: bookList[index]._id
     });
     setRemovingBook(index);
     setBookList(prevBooks => {

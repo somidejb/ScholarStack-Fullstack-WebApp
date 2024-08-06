@@ -19,7 +19,7 @@ const getLanguageByName = async (name: string) => {
   return Language.findOne({ name: { $regex: name, $options: 'i' } })
 }
 
-export async function createBook({ userId, book, path, page}: CreateBookParams) {
+export async function createBook({ userId, book, path, page, bookId}: CreateBookParams) {
   try {
     await connectToDatabase()
     
@@ -35,8 +35,8 @@ export async function createBook({ userId, book, path, page}: CreateBookParams) 
     }
     else{
       const newBook = await Book.create({ ...book, category: book.categoryId, language: book.languageId, bookOwner: userId })
-      revalidatePath(path)
-
+      revalidatePath(path);
+      await AdminBooks.findByIdAndDelete(bookId);
       return JSON.parse(JSON.stringify(newBook))
     }
 

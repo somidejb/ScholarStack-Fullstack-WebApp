@@ -4,7 +4,7 @@ import React from "react";
 
 const NoFavoriteBooks: React.FC = () => {
   return (
-    <div className="text-center py-10 px-4 sm:px-6 lg:px-8">
+    <div className="text-center max-sm:py-6 py-10 px-4 sm:px-6 lg:px-8">
       <h3 className="text-gray-600 font-bold mb-2 text-base sm:text-lg lg:text-xl">
         You don&apos;t have any favorite books
       </h3>

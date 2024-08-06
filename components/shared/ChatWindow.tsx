@@ -45,13 +45,20 @@ const ChatWindow = ({
     const messageHandler = (message: IMessage) => {
       setChatMessages((prevMessages) => [...prevMessages, message]);
     };
+    const deletedMsgHandler = (messageId: string) => {
+      setChatMessages((prevMessages) =>
+        prevMessages.filter((msg) => msg._id !== messageId)
+      );
+    }
 
     pusherClient.bind("new-message", messageHandler);
+    pusherClient.bind("message-deleted", deletedMsgHandler)
     return () => {
       if (selectedChat?._id) {
         pusherClient.unsubscribe(selectedChat._id);
       }
       pusherClient.unbind("new-message", messageHandler);
+      pusherClient.unbind("message-deleted", deletedMsgHandler);
     };
   }, []);
 
@@ -79,14 +86,14 @@ const ChatWindow = ({
             />
           </button>
         )}
-        <Link href={`/profile/${selectedChat?.members[0]?._id}`}>
+        <Link href={`/profile/${selectedChat?.members[1]?.clerkId}`}>
           <img
-            src={selectedChat?.members[0]?.photo}
-            alt={`${selectedChat?.members[0]?.username}'s avatar`}
+            src={selectedChat?.members[1]?.photo}
+            alt={`${selectedChat?.members[1]?.username}'s avatar`}
             className="w-10 h-10 rounded-full mr-2"
           />
         </Link>
-        <h3 className="text-lg font-semibold">{selectedChat?.members[0]?.username}</h3>
+        <h3 className="text-lg font-semibold">{selectedChat?.members[1]?.username}</h3>
         <FontAwesomeIcon
           icon={faEllipsis}
           height={15}

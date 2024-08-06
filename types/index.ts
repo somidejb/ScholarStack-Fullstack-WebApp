@@ -44,6 +44,7 @@ export type CreateBookParams = {
   };
   path: string;
   page: string;
+  bookId?: string;
 };
 
 export type UpdateBookParams = {

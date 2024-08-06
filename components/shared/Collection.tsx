@@ -69,7 +69,7 @@ export const Collection = ({ collection_type, books, userId, isProfilePage }: Co
     return Array.from({ length: totalSlides }).map((_, index) => (
       <span
         key={index}
-        className={`h-2 w-2 md:h-3 md:w-3 rounded-full mx-1 cursor-pointer ${
+        className={`h-2 w-2 md:h-3 md:w-3 rounded-full ml-2 cursor-pointer ${
           currentSlide === index ? "bg-blue-500" : "bg-gray-500"
         }`}
         onClick={() => setCurrentSlide(index)}
@@ -78,7 +78,7 @@ export const Collection = ({ collection_type, books, userId, isProfilePage }: Co
   };
 
   return (
-<section className="mt-[60px] items-center flex flex-col w-full">
+<section className="mt-[60px] max-md:mt-[40px] items-center flex flex-col w-full">
   <h2 className="text-center leading-[27px] md:leading-[36px] lg:leading-[73px] text-[22px] md:text-[30px] lg:text-[42px] tracking-widest font-normal">
     {collection_type}
   </h2>
@@ -146,9 +146,9 @@ export const Collection = ({ collection_type, books, userId, isProfilePage }: Co
       />
     </div>
   </div>
-  <div className="flex w-full items-center mt-[24px] md:mt-[30px] card-center">
+  <div className={`${collection_type === ("My Listings" || "My Favorite Books") && books.length === 0 ? "hidden" : "flex w-full justify-between items-center mt-[24px] md:mt-[30px] card-center"}`}>
     <div className="flex justify-center flex-grow">{renderDots()}</div>
-    <Link href="/books">
+    <Link href="/books" className="ml-auto">
       <p className="cursor-pointer text-normal leading-[16px] md:leading-[23px] lg:leading-[32px] text-[11px] md:text-[16px] lg:text-[23px] tracking-widest text-[#2F27CE]">
         See more
       </p>

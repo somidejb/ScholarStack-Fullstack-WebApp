@@ -20,13 +20,16 @@ interface ChatListProps {
 
 const ChatList = ({ className, userId, currentUser }: ChatListProps) => {
   const [chats, setChats] = useState<IChat[]>([]);
+  const [filteredChats, setFilteredChats] = useState<IChat[]>([]);
   const [selectedChat, setSelectedChat] = useState<IChat | null>(null);
   const [messages, setMessages] = useState<{ [key: string]: any[] }>({});
+  const [searchQuery, setSearchQuery] = useState("");
 
   const getChats = async () => {
     try {
       const chats = await getChatsById(userId);
       setChats(chats);
+      setFilteredChats(chats);
       console.log("Chats:", chats);
     } catch (error) {
       console.error("Error fetching chats:", error);
@@ -88,6 +91,21 @@ const ChatList = ({ className, userId, currentUser }: ChatListProps) => {
     }
   }, [currentUser]);
 
+  const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const query = e.target.value.toLowerCase();
+    setSearchQuery(query);
+    if (query.trim() !== "") {
+      const filtered = chats.filter((chat) =>
+        chat.members.some((member) =>
+          member.username.toLowerCase().includes(query)
+        )
+      );
+      setFilteredChats(filtered);
+    } else {
+      setFilteredChats(chats);
+    }
+  };
+
   return (
     <div className="h-full flex flex-grow overflow-hidden p-4 gap-4">
       <div className={`w-full ${selectedChat ? "hidden" : "block"} md:block md:w-1/3`}>
@@ -103,10 +121,12 @@ const ChatList = ({ className, userId, currentUser }: ChatListProps) => {
             <input
               placeholder="Search chat.."
               className="px-5 py-2.5 border w-full rounded-2xl bg-white outline-none"
+              value={searchQuery}
+              onChange={handleSearch}
             />
           </div>
           <AnimatePresence>
-            {chats?.length === 0 ? (
+            {filteredChats?.length === 0 ? (
               <motion.div
                 className="mt-4 flex flex-col items-center text-gray-500 font-semibold text-lg md:text-sm lg:text-lg"
                 initial={{ opacity: 0, y: 20 }}
@@ -122,7 +142,7 @@ const ChatList = ({ className, userId, currentUser }: ChatListProps) => {
                 </Link>
               </motion.div>
             ) : (
-              chats.map((chat, index) => (
+              filteredChats.map((chat, index) => (
                 <motion.div
                   key={index}
                   initial={{ opacity: 0, y: 20 }}

@@ -3,7 +3,7 @@ import { Schema, model, models, Document } from "mongoose";
 
 export interface IChat extends Document {
     _id: string;
-    members: { _id: string, username: string, photo: string }[];
+    members: { _id: string, clerkId: string, username: string, photo: string }[];
     messages: { _id: string, text: string, sender: { _id: string}, seenBy: {_id: string, username: string, photo: string} }[];
     createdAt: Date;
     lastMessageAt: Date;

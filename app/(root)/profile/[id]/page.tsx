@@ -33,7 +33,6 @@ const ProfilePage = async ({ params }: { params: { id: string } }) => {
       console.error('Error fetching books:', error);
     }
 
-
     let userDetails = null;
     let dbUserId = null;
 

@@ -88,7 +88,7 @@ const BookForm = ({userId, type, book, bookId} : BookFormProps) => {
 
                 if (newBook) {
                     form.reset();
-                    router.push(`/books/${newBook._id}`);
+                    router.push(`/books`);
                 }
             } catch (error) {
                 console.log(error);

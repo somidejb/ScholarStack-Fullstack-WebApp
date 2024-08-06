@@ -2,7 +2,6 @@
 
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
-import { useUser } from "@clerk/nextjs";
 import { Collection } from "./Collection";
 import NoActiveListings from "./NoActiveListing";
 import { IBook } from "@/lib/mongodb/database/models/book.model";
@@ -24,7 +23,8 @@ import { FaPen } from "react-icons/fa";
 import { updateUserInClerkAndDB } from "@/lib/actions/user.actions";
 import { daysSincePosted } from "@/lib/actions/datePosted";
 import Modal from "./Modal";
-import {motion} from 'framer-motion';
+import { motion } from "framer-motion";
+import { useRouter } from "next/navigation";
 
 interface IUser {
   username: string;
@@ -50,7 +50,7 @@ interface ProfileProps {
   completedListingsCount: number; // Adding completed listings count prop
 }
 
-const Profile = ({
+const Profile: React.FC<ProfileProps> = ({
   user,
   userDetails,
   userBooks,
@@ -59,12 +59,12 @@ const Profile = ({
   clerkId,
   bookCount,  // Destructuring book count prop
   completedListingsCount, // Destructuring completed listings count prop
-}: ProfileProps) => {
+}) => {
+  const router = useRouter();
   const [isActive, setIsActive] = useState(false);
   const [name, setName] = useState(user.fullName);
   const [username, setUsername] = useState(user.username);
   const [bio, setBio] = useState(userDetails.Bio);
-  const [location, setLocation] = useState(userDetails.Location);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalBooks, setModalBooks] = useState<IBook[]>([]);
   const [lastDismissed, setLastDismissed] = useState<Date | null>(null);
@@ -139,15 +139,14 @@ const Profile = ({
     e.preventDefault();
     setIsUpdating(true);
     setUpdateError(null);
-  
+
     const updatedProfile = {
       firstName: name.split(" ")[0],
       lastName: name.split(" ")[1] || "",
       username: username,
       bio: bio,
-      location: location,
     };
-  
+
     try {
       const updatedUser = await updateUserInClerkAndDB(
         userId,
@@ -155,13 +154,12 @@ const Profile = ({
         updatedProfile
       );
       console.log("Profile updated successfully");
-  
+
       // Update local state with the updated profile data
       setName(updatedUser.firstName + " " + updatedUser.lastName);
       setUsername(updatedUser.username);
       setBio(updatedUser.bio);
-      setLocation(updatedUser.location);
-  
+
       // Close the dialog
       setIsDialogOpen(false);
     } catch (error) {
@@ -175,11 +173,11 @@ const Profile = ({
   return (
     <div className="mx-auto bg-white shadow-md rounded-lg">
       {/* Profile and User Details section */}
-      <div className="flex items-start w-full">
+      <div className="flex items-start">
         {/* Profile section */}
-        <div className="flex max-sm:flex-col items-center justify-center bg-[#D6DAEA] w-full h-[497px] left-0 top-[113px] gap-2 px-2">
-          <div className="flex flex-col justify-center items-center lg:mr-[30px] lg:mt-8">
-            <div className="relative w-36 h-36 md:w-[118px] md:h-[127px] lg:w-[346px] lg:h-[321px]">
+        <div className="flex flex-col md:flex-row gap-5 lg:gap-10 items-center justify-center bg-[#D6DAEA] w-[1060px] h-[497px] left-0 top-[113px]">
+          <div className="flex flex-col justify-center items-center lg:mt-8">
+            <div className="relative w-36 h-36 md:w-[250px] md:h-[250px] lg:w-[346px] lg:h-[346px]">
               <Image
                 src={user.imageUrl || "/assets/images/profile-icon.png"}
                 alt="Profile Picture"
@@ -188,19 +186,19 @@ const Profile = ({
                 style={{ objectFit: "cover" }}
               />
             </div>
-            <p
-              className="text-xl md:text-[35px] font-semibold mt-3 lg:mt-[30px]"
-              style={{ fontFamily: "Poppins, sans-serif" }}
+            <div
+              className="text-xl font-semibold mt-4 lg:mt-[30px]"
+              style={{ fontFamily: "Poppins, sans-serif", fontSize: 35 }}
             >
               {user.fullName}
-            </p>
+            </div>
           </div>
           <div className="flex flex-col gap-2">
-            <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+          <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
               <DialogTrigger asChild>
                 <Button
-                  className="bg-[#081F5C] opacity-[80%] text-white max-sm:px-8 px-12 py-3 rounded-md"
-                  size="lg"
+                  className="bg-[#081F5C] opacity-[80%] text-white max-sm:px-8 px-12 py-6 rounded-full"
+  
                   style={{ fontFamily: "Poppins, sans-serif" }}
                 >
                   <FaPen className="mr-2" />
@@ -248,19 +246,8 @@ const Profile = ({
                       className="col-span-3"
                     />
                   </div>
-                  <div className="grid grid-cols-4 items-center gap-4">
-                    <Label htmlFor="location" className="text-right">
-                      Location
-                    </Label>
-                    <Input
-                      id="location"
-                      value={location}
-                      onChange={(e) => setLocation(e.target.value)}
-                      className="col-span-3"
-                    />
-                  </div>
                   <DialogFooter>
-                  <Button type="submit" disabled={isUpdating}>
+                    <Button type="submit" disabled={isUpdating}>
                       {isUpdating ? "Saving..." : "Save changes"}
                     </Button>
                   </DialogFooter>
@@ -269,9 +256,10 @@ const Profile = ({
               </DialogContent>
             </Dialog>
             <Button
-              className="bg-[#081F5C] lg:w-[250px] opacity-[80%] text-white px-6 py-3 rounded-md"
-              size="lg"
+              className="bg-[#081F5C] lg:w-[250px] opacity-[80%] text-white px-6 py-6 rounded-full"
+
               style={{ fontFamily: "Poppins, sans-serif" }}
+              onClick={() => router.push("/chats")}
             >
               <Mail className="mr-2 h-4 w-4" />
               Inbox
@@ -280,14 +268,14 @@ const Profile = ({
         </div>
         {/* User details section */}
         <div
-          className="max-w-full flex flex-col gap-2 mx-2 mt-20 lg:mr-10"
+          className="space-y-2 ml-2 mr-5 mt-20 lg:mr-10"
           style={{ fontFamily: "Poppins, sans-serif" }}
         >
           <div>
             <p className="text-[#000000]" style={{ fontSize: 25 }}>
               Username
             </p>
-            <p className="text-[#081F5C] opacity-[60%]" style={{ fontSize: 20 }}>
+            <p className="text-[#081F5C] opacity-[60%]" style={{ fontSize: 17 }}>
               {username}
             </p>
           </div>
@@ -295,7 +283,7 @@ const Profile = ({
             <p className="text-[#000000]" style={{ fontSize: 25 }}>
               Bio
             </p>
-            <p className="text-[#081F5C] opacity-[60%]" style={{ fontSize: 20 }}>
+            <p className="text-[#081F5C] opacity-[60%]" style={{ fontSize: 17 }}>
               {bio}
             </p>
           </div>
@@ -303,8 +291,8 @@ const Profile = ({
             <p className="text-[#000000]" style={{ fontSize: 25 }}>
               Location
             </p>
-            <p className="text-[#081F5C] opacity-[60%]" style={{ fontSize: 20 }}>
-              {location}
+            <p className="text-[#081F5C] opacity-[60%]" style={{ fontSize: 17 }}>
+              {userDetails.Location}
             </p>
           </div>
           <div>
@@ -314,6 +302,7 @@ const Profile = ({
                 id="active-mode"
                 checked={isActive}
                 onChange={handleToggle}
+                className="cursor-not-allowed"
               />
               <Label htmlFor="active-mode">Active</Label>
             </div>
@@ -335,6 +324,7 @@ const Profile = ({
         />
       </motion.div>
 
+    
       {/* Favorite Books Section */}
       <motion.div
         initial={{ y: 200 }}
@@ -347,20 +337,21 @@ const Profile = ({
           userId={userId}
         />
       </motion.div>
-      
+
+
       {/* Stats section */}
-      <div className="flex justify-between px-4 py-4 bg-[#081F5C] mt-5">
+      <div className="flex justify-between px-4 py-4 bg-[#081F5C] mt-[50px]">
         <div>
           <p className="text-white">Listings Completed</p>
-          <p className="text-white font-semibold text-l">{completedListingsCount}</p>
+          <p className="text-white font-semibold text-lg">{completedListingsCount}</p>
         </div>
         <div>
           <p className="text-white">Ongoing Listings</p>
-          <p className="text-white font-semibold text-l">{bookCount}</p>
+          <p className="text-white font-semibold text-lg">{bookCount}</p>
         </div>
         <div>
           <p className="text-white">Joined ScholarStack</p>
-          <p className="text-white font-semibold text-l">
+          <p className="text-white font-semibold text-lg">
             {formatDate(user.joinedAt)}
           </p>
         </div>

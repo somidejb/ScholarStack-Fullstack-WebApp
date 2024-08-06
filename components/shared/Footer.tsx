@@ -1,3 +1,5 @@
+import Image from 'next/image';
+import Link from 'next/link';
 import React from 'react';
 import { FaEnvelope, FaTwitter, FaFacebookSquare, FaInstagramSquare } from 'react-icons/fa';
 
@@ -5,13 +7,16 @@ const Footer = () => {
   return (
     <footer className="text-white py-4 bg-[#31457b] rounded-sm">
       <div className="flex justify-between ">
-        <div className="p-1 ml-1">
-          <h2 className="font-inter font-bold text-white text-base leading-7 lg:text-[40px] lg:mb-3">ScholarStack</h2>
-          <p className='text-nowrap font-inter font-normal text-white text-xs md:text-[12px] tracking-tighter lg:text-[15px]'>
-            Where every book finds a new <br />
-            home and every reader <br />
-            discovers their next adventure!
-          </p>
+        <div className="flex items-center gap-2">
+          <Image
+            src="/assets/images/scholarstacklogo.png"
+            alt="ScholarStackLogo"
+            width={37.38}
+            height={35}
+          />
+          <h2 className="text-[20px] lg:text-[24px] text-white font-semibold font-['PT_Serif']">
+            ScholarStack
+          </h2>
         </div>
         <div className="p-2 mr-1 font-inter font-semibold text-white text-base leading-24">
           <h2>Help & Contacts </h2>
@@ -49,7 +54,7 @@ const Footer = () => {
       </div>
       <hr className="border-blue-300 my-4" />
       <div className="p-2 text-center">
-        <p className="text-[#FFFFFF]">
+        <p className="text-[#FFFFFF] text-[10px]">
           © All copyrights are reserved. ScholarStack 2024.
         </p>
       </div>

@@ -23,7 +23,6 @@ export async function updateUser(userId: string, updatedProfile: any) {
         lastName: updatedProfile.lastName,
         username: updatedProfile.username,
         bio: updatedProfile.bio,
-        location: updatedProfile.location,
       },
       { new: true, runValidators: true }
     );

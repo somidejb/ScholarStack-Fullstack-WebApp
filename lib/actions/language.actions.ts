@@ -15,3 +15,17 @@ export async function getAllLanguages(){
         handleError(error)
     }
 }
+
+export async function getLanguageById(languageId: string){
+    try {
+        await connectToDatabase();
+
+        const language = await Language.findById(languageId);
+
+        if(!language) throw new Error("Language not found");
+        return JSON.parse(JSON.stringify(language));
+    }
+    catch (error){
+        handleError(error);
+    }
+}
