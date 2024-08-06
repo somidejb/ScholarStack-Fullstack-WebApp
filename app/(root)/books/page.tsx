@@ -8,6 +8,7 @@ import Pagination from '@/components/shared/Pagination';
 import { SearchParamProps } from '@/types';
 import Link from 'next/link';
 import { Metadata } from 'next';
+import { getUserById } from '@/lib/actions/user.actions';
 
 export const metadata: Metadata = {
   title: "Books | Scholar Stack",

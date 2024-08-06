@@ -13,6 +13,13 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form"
+import {
+    AlertDialog,
+    AlertDialogContent,
+    AlertDialogHeader,
+    AlertDialogTitle,
+    AlertDialogDescription,
+  } from "@/components/ui/alert-dialog";
 import { Input } from "@/components/ui/input"
 import { bookFormSchema } from '@/lib/validator'
 import { Textarea } from '../ui/textarea'
@@ -27,6 +34,7 @@ import { IBook } from '@/lib/mongodb/database/models/book.model'
 import { bookDefaultValues } from '@/constants'
 import { createAdminBook } from '@/lib/actions/admin.action'
 import { motion } from 'framer-motion'
+import { IUser } from '@/lib/mongodb/database/models/user.model'
 
 
 type BookFormProps = {
@@ -34,9 +42,11 @@ type BookFormProps = {
     type: "Upload" | "Edit" ;
     book?: IBook;
     bookId?: string;
+    currentUser: IUser;
 }
 
-const BookForm = ({userId, type, book, bookId} : BookFormProps) => {
+const BookForm = ({userId, type, book, bookId, currentUser} : BookFormProps) => {
+    const [showAlert, setShowAlert] = useState(false);
     console.log("user Id uploading", userId)
     const [files, setFiles] = useState<File[]>([]);
     const initialValues = book && type === 'Edit' 
@@ -88,7 +98,14 @@ const BookForm = ({userId, type, book, bookId} : BookFormProps) => {
 
                 if (newBook) {
                     form.reset();
-                    router.push(`/books`);
+                    // Show the alert
+                setShowAlert(true);
+
+                // Auto-dismiss the alert after 5 seconds
+                setTimeout(() => {
+                    setShowAlert(false);
+                    router.push(`/profile/${currentUser.clerkId}`);
+                }, 5000);
                 }
             } catch (error) {
                 console.log(error);
@@ -138,6 +155,17 @@ const BookForm = ({userId, type, book, bookId} : BookFormProps) => {
 
     return (
         <section className="form-shadow mx-[11px] lg:mx-[150px] rounded-[40px] mb-[50px]">
+            <AlertDialog open={showAlert}>
+                <AlertDialogContent>
+                <AlertDialogHeader>
+                    <AlertDialogTitle>Book Pending Approval</AlertDialogTitle>
+                    <AlertDialogDescription>
+                    Your book is pending approval by admins and will be reviewed
+                    shortly.
+                    </AlertDialogDescription>
+                </AlertDialogHeader>
+                </AlertDialogContent>
+            </AlertDialog>
             <Form {...form}>
                 <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col justify-center p-[35px] lg:px-[70px]">
                     <div className="field-div">

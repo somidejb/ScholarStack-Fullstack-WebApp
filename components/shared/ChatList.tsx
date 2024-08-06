@@ -126,20 +126,18 @@ const ChatList = ({ className, userId, currentUser }: ChatListProps) => {
             />
           </div>
           <AnimatePresence>
-            {filteredChats?.length === 0 ? (
-              <motion.div
+            {filteredChats.length === 0 ? (
+              <motion.div 
                 className="mt-4 flex flex-col items-center text-gray-500 font-semibold text-lg md:text-sm lg:text-lg"
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: 20 }}
               >
                 <img src="/assets/images/no-chat.png" alt="No chats" className="w-16 h-16" />
-                <p>Find the book you&apos;re interested in</p>
+                <p>Find the book you're interested in</p>
                 <p>Click on Message Seller to start a chat</p>
                 <p>Happy browsing!</p>
-                <Link href="/books" className="my-1 rounded-md bg-[#31457B] p-2 text-white text-sm">
-                  Explore Books
-                </Link>
+                <Link href="/books" className="my-1 rounded-md bg-[#31457B] p-2 text-white text-sm">Explore Books</Link>
               </motion.div>
             ) : (
               filteredChats.map((chat, index) => (
@@ -150,13 +148,14 @@ const ChatList = ({ className, userId, currentUser }: ChatListProps) => {
                   exit={{ opacity: 0, y: 20 }}
                 >
                   <ChatCard
+                    key={index}
                     chat={chat}
                     index={index}
                     userId={userId}
                     handleSelectChat={handleSelectChat}
                     currentUser={currentUser}
-                    chats={chats}
-                    setChats={setChats}
+                    chats={filteredChats}
+                    setChats={setFilteredChats}
                   />
                 </motion.div>
               ))

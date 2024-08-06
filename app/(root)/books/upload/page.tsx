@@ -1,10 +1,13 @@
 import BookForm from '@/components/shared/BookForm'
+import { getUserById } from '@/lib/actions/user.actions';
 import { auth } from '@clerk/nextjs/server';
 import React from 'react'
  
-const UploadBook = () => {
+const UploadBook = async () => {
   const {sessionClaims} = auth();
   const userId = sessionClaims?.userId as string;
+  const currentUser = await getUserById(userId);
+  console.log("current User: ", currentUser);
   return (
     <>
       <section>
@@ -13,6 +16,7 @@ const UploadBook = () => {
       <BookForm
         userId = {userId}
         type="Upload"  
+        currentUser = {currentUser}
       />
     </>
   )
