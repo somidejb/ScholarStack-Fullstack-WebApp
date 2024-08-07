@@ -6,7 +6,11 @@ import Image from "next/image";
 import { Separator } from "@radix-ui/react-separator";
 import { usePathname } from "next/navigation"; 
 
-const MobileNav = () => {
+type MobileNavProps = {
+  userId: string;
+};
+
+const MobileNav = ({userId}: MobileNavProps) => {
   const pathname = usePathname();
 
   return (
@@ -36,7 +40,7 @@ const MobileNav = () => {
               </h2>
             </div>
           </div>
-          <NavItems pathname={pathname} /> 
+          <NavItems pathname={pathname} userId={userId} /> 
         </SheetContent>
       </Sheet>
     </nav>

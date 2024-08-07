@@ -2,13 +2,17 @@
 import React from "react";
 import Image from "next/image";
 import Link from "next/link";
-import MobileNav from "./MobileNav";
 import NavItems from "./NavItems";
 import { SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
 import { Button } from "../ui/button";
 import { usePathname } from 'next/navigation'; // Use next/navigation instead
+import MobileNav from "./MobileNav";
 
-const Header = () => {
+type HeaderProps = {
+  userId: string;
+};
+
+const Header = ({userId}:HeaderProps) => {
   const pathname = usePathname(); // Get the current pathname
 
   // Ensure pathname is safely handled
@@ -34,7 +38,7 @@ const Header = () => {
         <SignedIn>
           <nav className="hidden md:flex items-center gap-4 lg:gap-6">
             {/* Conditional rendering and type assertion combined */}
-            {pathname !== null && <NavItems pathname={safePathname} />}
+            {pathname !== null && <NavItems pathname={safePathname} userId={userId} />}
           </nav>
         </SignedIn>
 
@@ -42,7 +46,7 @@ const Header = () => {
           <SignedIn>
             <div className="flex items-center gap-3">
               <UserButton afterSignOutUrl="/" />
-              <MobileNav />
+              <MobileNav userId={userId} />
             </div>
           </SignedIn>
           <SignedOut>
