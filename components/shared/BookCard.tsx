@@ -215,7 +215,7 @@ const BookCard = ({
               </Link>
               <button
                 onClick={handleMarkAsSoldClick}
-                className="px-1.5 py-0.5 text-xs text-green-900 hover:bg-green-100 flex items-center sm:px-1 sm:py-0.5 sm:text-2xs block sm:hidden md:flex lg:hidden"
+                className="px-1.5 py-0.5 text-xs text-green-900 hover:bg-green-100 flex items-center sm:px-1 sm:py-0.5 sm:text-2xs sm:hidden md:flex lg:hidden"
               >
                 <FiCheck size={12} className="inline-block mr-1" />
                 Mark Sold
