@@ -228,10 +228,10 @@ export async function addFavorite(userId: string, bookId: string) {
     throw error; // Rethrow the error to be handled by the calling function
   }
 }
-export async function addFavorite2(userId: string, bookId: string, ) {
+export async function addFavorite2(clerkId: string, bookId: string, ) {
   try {
     await connectToDatabase();
-    const user = await User.findOne({ clerkId: userId }); // Use findOne with clerkId
+    const user = await User.findOne({ clerkId: clerkId}); // Use findOne with clerkId
     console.log(user);
     if (!user) throw new Error('User not found');
 
@@ -242,7 +242,7 @@ export async function addFavorite2(userId: string, bookId: string, ) {
 
     return JSON.parse(JSON.stringify(user));
   } catch (error) {
-    console.error(`Error adding favorite for user ${userId} and book ${bookId}:`, error);
+    console.error(`Error adding favorite for user ${clerkId} and book ${bookId}:`, error);
     throw error; // Rethrow the error to be handled by the calling function
   }
 }
