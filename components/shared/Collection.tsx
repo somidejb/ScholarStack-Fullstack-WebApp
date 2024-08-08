@@ -12,11 +12,12 @@ import NoSimilarBooks from "./NoSimilarBooks";
 type CollectionProps = {
   collection_type: string;
   books: IBook[];
+  dbUserId: string; // Ensure dbUserId is required and always a string
   userId: string;
   isProfilePage?: boolean;
 };
 
-export const Collection = ({ collection_type, books, userId, isProfilePage }: CollectionProps) => {
+export const Collection = ({ collection_type, books, userId, dbUserId, isProfilePage }: CollectionProps) => {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [cardsPerSlide, setCardsPerSlide] = useState(3);
   const [favorites, setFavorites] = useState<string[]>([]);
@@ -78,83 +79,83 @@ export const Collection = ({ collection_type, books, userId, isProfilePage }: Co
   };
 
   return (
-<section className="mt-[60px] max-md:mt-[40px] items-center flex flex-col w-full">
-  <h2 className="text-center leading-[27px] md:leading-[36px] lg:leading-[73px] text-[22px] md:text-[30px] lg:text-[42px] tracking-widest font-normal">
-    {collection_type}
-  </h2>
-  <div className="w-full card-center flex items-center mt-[8px] md:mt-[38px] relative">
-    <div
-      onClick={handlePrevClick}
-      className="absolute z-10 left-[12px] md:left-[30px] lg:left-[45px] cursor-pointer"
-    >
-      <Image
-        src="/assets/icons/left-icon.png"
-        alt="Left Arrow"
-        width={24}
-        height={24}
-      />
-    </div>
-    {books.length === 0 ? (
-      <div className="flex justify-center items-center w-full">
-        {collection_type === "My Favorite Books" ? (
-          <NoFavoriteBooks />
-        ) : collection_type === "Similar to this..." ? (
-          <NoSimilarBooks />
-        ) : (
-          <NoActiveListings />
-        )}
-      </div>
-    ) : (
-      <div className="flex overflow-hidden w-full">
+    <section className="mt-[60px] max-md:mt-[40px] items-center flex flex-col w-full">
+      <h2 className="text-center leading-[27px] md:leading-[36px] lg:leading-[73px] text-[22px] md:text-[30px] lg:text-[42px] tracking-widest font-normal">
+        {collection_type}
+      </h2>
+      <div className="w-full card-center flex items-center mt-[8px] md:mt-[38px] relative">
         <div
-          className="flex gap-[22px] md:gap-[36px] transition-transform duration-500"
-          style={{
-            transform: `translateX(-${currentSlide * (100 / totalSlides)}%)`,
-          }}
+          onClick={handlePrevClick}
+          className="absolute z-10 left-[12px] md:left-[30px] lg:left-[45px] cursor-pointer"
         >
-          {books.map((book) => (
+          <Image
+            src="/assets/icons/left-icon.png"
+            alt="Left Arrow"
+            width={24}
+            height={24}
+          />
+        </div>
+        {books.length === 0 ? (
+          <div className="flex justify-center items-center w-full">
+            {collection_type === "My Favorite Books" ? (
+              <NoFavoriteBooks />
+            ) : collection_type === "Similar to this..." ? (
+              <NoSimilarBooks />
+            ) : (
+              <NoActiveListings />
+            )}
+          </div>
+        ) : (
+          <div className="flex overflow-hidden w-full">
             <div
-              key={book._id}
-              className={`flex w-[${100 / cardsPerSlide}%]`}
+              className="flex gap-[22px] md:gap-[36px] transition-transform duration-500"
+              style={{
+                transform: `translateX(-${currentSlide * (100 / totalSlides)}%)`,
+              }}
             >
-              <BookCard
-                title={book.title}
-                imageUrl={book.imageURLs[1]}
-                author={book.author}
-                price={book.price}
-                userId={userId}
-                bookId={book._id}
-                salePrice={book.salePrice}
-                favorites={favorites}
-                bookOwnerId={book.bookOwner._id}
-                isProfilePage={isProfilePage}
-              />
+              {books.map((book) => (
+                <div
+                  key={book._id}
+                  className={`flex w-[${100 / cardsPerSlide}%]`}
+                >
+                  <BookCard
+                    title={book.title}
+                    imageUrl={book.imageURLs[1]}
+                    dbUserId={dbUserId} // Pass dbUserId as a string
+                    author={book.author}
+                    price={book.price}
+                    userId={userId}
+                    bookId={book._id}
+                    salePrice={book.salePrice}
+                    favorites={favorites}
+                    bookOwnerId={book.bookOwner._id}
+                    isProfilePage={isProfilePage}
+                  />
+                </div>
+              ))}
             </div>
-          ))}
+          </div>
+        )}
+        <div
+          onClick={handleNextClick}
+          className="absolute right-[12px] md:right-[30px] lg:right-[45px] z-10 cursor-pointer"
+        >
+          <Image
+            src="/assets/icons/right-icon.png"
+            alt="Right Arrow"
+            width={24}
+            height={24}
+          />
         </div>
       </div>
-    )}
-    <div
-      onClick={handleNextClick}
-      className="absolute right-[12px] md:right-[30px] lg:right-[45px] z-10 cursor-pointer"
-    >
-      <Image
-        src="/assets/icons/right-icon.png"
-        alt="Right Arrow"
-        width={24}
-        height={24}
-      />
-    </div>
-  </div>
-  <div className={`${collection_type === ("My Listings" || "My Favorite Books") && books.length === 0 ? "hidden" : "flex w-full justify-between items-center mt-[24px] md:mt-[30px] card-center"}`}>
-    <div className="flex justify-center flex-grow">{renderDots()}</div>
-    <Link href="/books" className="ml-auto">
-      <p className="cursor-pointer text-normal leading-[16px] md:leading-[23px] lg:leading-[32px] text-[11px] md:text-[16px] lg:text-[23px] tracking-widest text-[#2F27CE]">
-        See more
-      </p>
-    </Link>
-  </div>
-</section>
-
+      <div className={`${collection_type === ("My Listings" || "My Favorite Books") && books.length === 0 ? "hidden" : "flex w-full justify-between items-center mt-[24px] md:mt-[30px] card-center"}`}>
+        <div className="flex justify-center flex-grow">{renderDots()}</div>
+        <Link href="/books" className="ml-auto">
+          <p className="cursor-pointer text-normal leading-[16px] md:leading-[23px] lg:leading-[32px] text-[11px] md:text-[16px] lg:text-[23px] tracking-widest text-[#2F27CE]">
+            See more
+          </p>
+        </Link>
+      </div>
+    </section>
   );
 };
