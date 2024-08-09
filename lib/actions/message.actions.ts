@@ -30,7 +30,6 @@ export async function getMessage({ chatId, currentUserId, text, photo }: getMess
             photo,
             seenBy: currentUserId,
         });
-        console.log("new message from getMessage(): ",newMessage)
 
         const updatedChat = await Chat.findByIdAndUpdate(
             chatId,
@@ -57,7 +56,6 @@ export async function getMessage({ chatId, currentUserId, text, photo }: getMess
 
         if (!updatedChat) throw new Error('Message not sent');
         const lastMessage = updatedChat.messages[updatedChat.messages.length - 1];
-        console.log("Last message:", lastMessage);
         
         updatedChat.members.forEach(async (member: any) => {
             try{

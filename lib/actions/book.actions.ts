@@ -231,8 +231,7 @@ export async function addFavorite(userId: string, bookId: string) {
 export async function addFavorite2(clerkId: string, bookId: string, ) {
   try {
     await connectToDatabase();
-    const user = await User.findOne({ clerkId: clerkId}); // Use findOne with clerkId
-    console.log(user);
+    const user = await User.findOne({ clerkId: clerkId }); // Use findOne with clerkId
     if (!user) throw new Error('User not found');
 
     if (!user.favorites.includes(bookId)) {

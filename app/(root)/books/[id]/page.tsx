@@ -38,10 +38,7 @@ const Page = async ({ params }: BookPageProps) => {
   const {sessionClaims} = auth();
   const userId = sessionClaims?.userId as string;
   const book = await fetchBookById(params.id);
-  console.log(book);
-  console.log("language: ", book.language);
   const languageObject = await getLanguageById(book.language.toString());
-  console.log("languageObject: ", languageObject);
   
   let favorites: string[] = [];
   if (userId) {

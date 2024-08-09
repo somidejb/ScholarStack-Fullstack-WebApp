@@ -1,4 +1,5 @@
 "use client";
+
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import { Collection } from "./Collection";
@@ -22,6 +23,8 @@ import { FaPen } from "react-icons/fa";
 import { updateUserInClerkAndDB } from "@/lib/actions/user.actions";
 import { daysSincePosted } from "@/lib/actions/datePosted";
 import Modal from "./Modal";
+import { motion } from "framer-motion";
+import { useRouter } from "next/navigation";
 
 interface IUser {
   username: string;
@@ -46,6 +49,9 @@ interface ProfileProps {
   bookCount: number;  // Adding book count prop
   completedListingsCount: number; // Adding completed listings count prop
   dbUserId: string; // Adding dbUserId prop
+  currentUserClerkId: string;
+  currentUserDbId: string;
+  isOnline: boolean;
 }
 
 const Profile: React.FC<ProfileProps> = ({
@@ -58,22 +64,22 @@ const Profile: React.FC<ProfileProps> = ({
   bookCount,  // Destructuring book count prop
   completedListingsCount, // Destructuring completed listings count prop
   dbUserId, // Destructuring dbUserId prop
+  currentUserClerkId,
+  currentUserDbId,
+  isOnline,
 }) => {
-  const [isActive, setIsActive] = useState(false);
+  const router = useRouter();
+  const [isActive, setIsActive] = useState(isOnline);
   const [name, setName] = useState(user.fullName);
   const [username, setUsername] = useState(user.username);
   const [bio, setBio] = useState(userDetails.Bio);
-  const [location, setLocation] = useState(userDetails.Location);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalBooks, setModalBooks] = useState<IBook[]>([]);
   const [lastDismissed, setLastDismissed] = useState<Date | null>(null);
+  const [isUpdating, setIsUpdating] = useState(false);
+  const [updateError, setUpdateError] = useState<string | null>(null);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
 
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      const activeMode = JSON.parse(localStorage.getItem("activeMode") || "false");
-      setIsActive(activeMode);
-    }
-  }, []);
 
   const openModal = () => {
     setIsModalOpen(true);
@@ -124,41 +130,51 @@ const Profile: React.FC<ProfileProps> = ({
   };
 
   const handleToggle = () => {
-    setIsActive((prevState: any) => {
-      const newState = !prevState;
-      localStorage.setItem("activeMode", JSON.stringify(newState));
-      return newState;
-    });
+    setIsActive(!isActive);
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setIsUpdating(true);
+    setUpdateError(null);
 
     const updatedProfile = {
       firstName: name.split(" ")[0],
       lastName: name.split(" ")[1] || "",
       username: username,
       bio: bio,
-      location: location,
     };
 
     try {
-      await updateUserInClerkAndDB(userId, clerkId, updatedProfile);
-      console.log("Profile updated successfully");
-      // You might want to refresh the page or update the state here
+      const updatedUser = await updateUserInClerkAndDB(
+        userId,
+        clerkId,
+        updatedProfile
+      );
+
+      // Update local state with the updated profile data
+      setName(updatedUser.firstName + " " + updatedUser.lastName);
+      setUsername(updatedUser.username);
+      setBio(updatedUser.bio);
+
+      // Close the dialog
+      setIsDialogOpen(false);
     } catch (error) {
       console.error("Failed to update profile:", error);
+      setUpdateError("Failed to update profile. Please try again.");
+    } finally {
+      setIsUpdating(false);
     }
   };
 
   return (
-    <div className="mx-auto bg-white shadow-md rounded-lg mt-[50px]">
+    <div className="mx-auto bg-white shadow-md rounded-lg">
       {/* Profile and User Details section */}
       <div className="flex items-start">
         {/* Profile section */}
-        <div className="flex items-center justify-center bg-[#D6DAEA] w-[1060px] h-[497px] left-0 top-[113px]">
-          <div className="flex flex-col justify-center items-center lg:mr-[30px] lg:mt-8">
-            <div className="relative w-36 h-36 md:w-[118px] md:h-[127px] lg:w-[346px] lg:h-[321px]">
+        <div className="flex flex-col md:flex-row gap-5 lg:gap-10 items-center justify-center bg-[#D6DAEA] w-[1060px] h-[497px] left-0 top-[113px]">
+          <div className="flex flex-col justify-center items-center lg:mt-8">
+            <div className="relative w-36 h-36 md:w-[250px] md:h-[250px] lg:w-[346px] lg:h-[346px]">
               <Image
                 src={user.imageUrl || "/assets/images/profile-icon.png"}
                 alt="Profile Picture"
@@ -174,85 +190,80 @@ const Profile: React.FC<ProfileProps> = ({
               {user.fullName}
             </div>
           </div>
+          {currentUserClerkId === clerkId && (
           <div className="flex flex-col gap-2">
-            <Dialog>
-              <DialogTrigger asChild>
-                <Button
-                  className="bg-[#081F5C] opacity-[80%] text-white px-12 py-3 rounded-md"
-                  size="lg"
-                  style={{ fontFamily: "Poppins, sans-serif" }}
-                >
-                  <FaPen className="mr-2" />
-                  Edit Profile
-                </Button>
-              </DialogTrigger>
-              <DialogContent className="sm:max-w-[425px]">
-                <DialogHeader>
-                  <DialogTitle>Edit profile</DialogTitle>
-                  <DialogDescription>
-                    Make changes to your profile here. Click save when you're done.
-                  </DialogDescription>
-                </DialogHeader>
-                <form onSubmit={handleSubmit} className="grid gap-4 py-4">
-                  <div className="grid grid-cols-4 items-center gap-4">
-                    <Label htmlFor="name" className="text-right">
-                      Name
-                    </Label>
-                    <Input
-                      id="name"
-                      value={name}
-                      onChange={(e) => setName(e.target.value)}
-                      className="col-span-3"
-                    />
-                  </div>
-                  <div className="grid grid-cols-4 items-center gap-4">
-                    <Label htmlFor="username" className="text-right">
-                      Username
-                    </Label>
-                    <Input
-                      id="username"
-                      value={username}
-                      onChange={(e) => setUsername(e.target.value)}
-                      className="col-span-3"
-                    />
-                  </div>
-                  <div className="grid grid-cols-4 items-center gap-4">
-                    <Label htmlFor="bio" className="text-right">
-                      Bio
-                    </Label>
-                    <Input
-                      id="bio"
-                      value={bio}
-                      onChange={(e) => setBio(e.target.value)}
-                      className="col-span-3"
-                    />
-                  </div>
-                  <div className="grid grid-cols-4 items-center gap-4">
-                    <Label htmlFor="location" className="text-right">
-                      Location
-                    </Label>
-                    <Input
-                      id="location"
-                      value={location}
-                      onChange={(e) => setLocation(e.target.value)}
-                      className="col-span-3"
-                    />
-                  </div>
-                  <DialogFooter>
-                    <Button type="submit">Save changes</Button>
-                  </DialogFooter>
-                </form>
-              </DialogContent>
-            </Dialog>
+          <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+            <DialogTrigger asChild>
+              <Button
+                className="bg-[#081F5C] opacity-[80%] text-white max-sm:px-8 px-12 py-6 rounded-full"
+
+                style={{ fontFamily: "Poppins, sans-serif" }}
+              >
+                <FaPen className="mr-2" />
+                Edit Profile
+              </Button>
+            </DialogTrigger>
+            <DialogContent className="sm:max-w-[425px]">
+              <DialogHeader>
+                <DialogTitle>Edit profile</DialogTitle>
+                <DialogDescription>
+                  Make changes to your profile here. Click save when you&apos;re done.
+                </DialogDescription>
+              </DialogHeader>
+              <form onSubmit={handleSubmit} className="grid gap-4 py-4">
+                <div className="grid grid-cols-4 items-center gap-4">
+                  <Label htmlFor="name" className="text-right">
+                    Name
+                  </Label>
+                  <Input
+                    id="name"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    className="col-span-3"
+                  />
+                </div>
+                <div className="grid grid-cols-4 items-center gap-4">
+                  <Label htmlFor="username" className="text-right">
+                    Username
+                  </Label>
+                  <Input
+                    id="username"
+                    value={username}
+                    onChange={(e) => setUsername(e.target.value)}
+                    className="col-span-3"
+                  />
+                </div>
+                <div className="grid grid-cols-4 items-center gap-4">
+                  <Label htmlFor="bio" className="text-right">
+                    Bio
+                  </Label>
+                  <Input
+                    id="bio"
+                    value={bio}
+                    onChange={(e) => setBio(e.target.value)}
+                    className="col-span-3"
+                  />
+                </div>
+                <DialogFooter>
+                  <Button type="submit" disabled={isUpdating}>
+                    {isUpdating ? "Saving..." : "Save changes"}
+                  </Button>
+                </DialogFooter>
+              </form>
+              {updateError && <p className="text-red-500">{updateError}</p>}
+            </DialogContent>
+          </Dialog>
             <Button
-              className="bg-[#081F5C] lg:w-[250px] opacity-[80%] text-white px-6 py-3 rounded-md"
-              size="lg"
+              className="bg-[#081F5C] lg:w-[250px] opacity-[80%] text-white px-6 py-6 rounded-full"
+
               style={{ fontFamily: "Poppins, sans-serif" }}
+              onClick={() => router.push("/chats")}
             >
               <Mail className="mr-2 h-4 w-4" />
               Inbox
             </Button>
           </div>
+          )}
         </div>
         {/* User details section */}
         <div
@@ -263,23 +274,23 @@ const Profile: React.FC<ProfileProps> = ({
             <p className="text-[#000000]" style={{ fontSize: 25 }}>
               Username
             </p>
-            <p className="text-[#081F5C] opacity-[60%]" style={{ fontSize: 20 }}>
-              {user.username}
+            <p className="text-[#081F5C] opacity-[60%]" style={{ fontSize: 17 }}>
+              {username}
             </p>
           </div>
           <div>
             <p className="text-[#000000]" style={{ fontSize: 25 }}>
               Bio
             </p>
-            <p className="text-[#081F5C] opacity-[60%]" style={{ fontSize: 20 }}>
-              {userDetails.Bio}
+            <p className="text-[#081F5C] opacity-[60%]" style={{ fontSize: 17 }}>
+              {bio}
             </p>
           </div>
           <div>
             <p className="text-[#000000]" style={{ fontSize: 25 }}>
               Location
             </p>
-            <p className="text-[#081F5C] opacity-[60%]" style={{ fontSize: 20 }}>
+            <p className="text-[#081F5C] opacity-[60%]" style={{ fontSize: 17 }}>
               {userDetails.Location}
             </p>
           </div>
@@ -290,6 +301,7 @@ const Profile: React.FC<ProfileProps> = ({
                 id="active-mode"
                 checked={isActive}
                 onChange={handleToggle}
+                className="cursor-not-allowed"
               />
               <Label htmlFor="active-mode">Active</Label>
             </div>
@@ -298,50 +310,62 @@ const Profile: React.FC<ProfileProps> = ({
       </div>
 
       {/* User Books Section */}
-      <div className="px-20 py-20">
-        {userBooks.length > 0 ? (
-          <Collection
-            collection_type="My Listings"
-            books={userBooks}
-            userId={userId}
-            isProfilePage={true} // Pass isProfilePage as true
-            dbUserId={dbUserId} // Pass dbUserId
-          />
-        ) : (
-          <NoActiveListings />
-        )}
-      </div>
+      <motion.div
+        initial={{ y: 200 }}
+        animate={{ y: 0 }}
+        transition={{ duration: 0.5 }}
+      >
+        <Collection
+          collection_type="My Listings"
+          books={userBooks}
+          userId={userId}
+          isProfilePage={true}
+          dbUserId={dbUserId}
+          currentUserClerkId={currentUserClerkId}
+          username={user.username}
+          currentUserDbId={currentUserDbId}
+        />
+      </motion.div>
 
+    
       {/* Favorite Books Section */}
-      <div className="px-20 py-20">
-        {userFavorites.length > 0 ? (
+      {currentUserClerkId === clerkId && (
+        <motion.div
+          initial={{ y: 200 }}
+          animate={{ y: 0 }}
+          transition={{ duration: 0.5 }}
+        >
           <Collection
             collection_type="My Favorite Books"
             books={userFavorites}
-            userId={clerkId} dbUserId={""}          />
-        ) : (
-          <p className="text-gray-600">You have no favorite books listed.</p>
-        )}
-      </div>
+            userId={userId} dbUserId={""} 
+            currentUserClerkId={currentUserClerkId}
+            username={user.username}
+            currentUserDbId={currentUserDbId}
+          />
+        </motion.div>
+      )}
+
 
       {/* Stats section */}
-      <div className="flex justify-between px-4 py-4 bg-[#081F5C] mb-[130px]">
+      <div className="flex justify-between px-4 py-4 bg-[#081F5C] mt-[50px]">
         <div>
           <p className="text-white">Listings Completed</p>
-          <p className="text-white font-semibold text-2xl">{completedListingsCount}</p>
+          <p className="text-white font-semibold text-lg">{completedListingsCount}</p>
         </div>
         <div>
           <p className="text-white">Ongoing Listings</p>
-          <p className="text-white font-semibold text-2xl">{bookCount}</p>
+          <p className="text-white font-semibold text-lg">{bookCount}</p>
         </div>
         <div>
           <p className="text-white">Joined ScholarStack</p>
-          <p className="text-white font-semibold text-2xl">
+          <p className="text-white font-semibold text-lg">
             {formatDate(user.joinedAt)}
           </p>
         </div>
       </div>
-
+      
+      {currentUserClerkId === clerkId && (
       <Modal
         isOpen={isModalOpen}
         onClose={closeModal}
@@ -349,6 +373,7 @@ const Profile: React.FC<ProfileProps> = ({
         userId={userId}
         handleNotSold={handleNotSold}
       />
+      )}
     </div>
   );
 };

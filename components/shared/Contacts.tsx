@@ -21,7 +21,6 @@ const Contacts: React.FC = () => {
         throw new Error('Failed to fetch contacts');
       }
       const data: User[] = await res.json();
-      console.log('Fetched contacts:', data); // Add logging
       setContacts(data);
     } catch (err) {
       console.error(err);

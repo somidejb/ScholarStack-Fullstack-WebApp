@@ -134,7 +134,6 @@ export async function getChatsById(userId: string) {
       .exec();
 
     if (!allChats) throw new Error('Chats not found');
-    console.log(allChats);
     return JSON.parse(JSON.stringify(allChats));
   } catch (error) {
     handleError(error);
@@ -179,7 +178,6 @@ export async function addFavorite(clerkId: string, bookId: string) {
   try {
     await connectToDatabase();
     const user = await User.findOne({ clerkId });
-    console.log(user);
     if (!user) throw new Error('User not found');
 
     if (!user.favorites.includes(bookId)) {
@@ -219,6 +217,21 @@ export async function getUserById(userId: string) {
     return JSON.parse(JSON.stringify(user))
   } catch (error) {
     handleError(error)
+  }
+}
+
+export async function isUserOnline(clerkId: string): Promise<boolean> {
+  try {
+    const sessionListResponse = await clerkClient.sessions.getSessionList({ userId: clerkId });
+
+    const sessions = sessionListResponse.data;
+
+    const activeSessions = sessions.some(session => session.status === 'active');
+
+    return activeSessions;
+  } catch (error) {
+    console.error('Error checking user online status:', error);
+    return false; // Return false if there's an error
   }
 }
  

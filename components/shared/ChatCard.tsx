@@ -18,15 +18,11 @@ interface ChatCardProps {
 const ChatCard = ({ chat, index, userId, handleSelectChat, currentUser, chats,  setChats }: ChatCardProps) => {
     const lastMessage = chat?.messages.length > 0 ? chat.messages[chat.messages.length - 1] : undefined;
     const seen = Array.isArray(lastMessage?.seenBy) && lastMessage?.seenBy.find((member) => member._id === userId);
-    console.log("Seen:", seen);
 
     const otherMember = chat?.members?.filter((member) => member._id !== currentUser._id);
 
     // Determine the other member in the chat
     const otherMemberId = chat?.members.find((member) => member._id !== userId)?._id; 
-    console.log("present user Id: ", userId)
-    console.log("Other member:", otherMember);
-    console.log("Other member photo:", otherMember[0]?.photo);
     const formattedCreatedDate = formatDateTime(new Date(chat?.createdAt));
     const formattedLastDate = formatDateTime(new Date(chat?.lastMessageAt));
     const { timeOnly: lastMessageTime } = formattedLastDate;
@@ -37,8 +33,6 @@ const ChatCard = ({ chat, index, userId, handleSelectChat, currentUser, chats,  
     if (!otherMember) {
         return null; // or a loading indicator
     }
-
-    console.log("set chats type: ", typeof setChats);
 
     useEffect(() => {
         if(currentUser){

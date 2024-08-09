@@ -2,22 +2,26 @@ import React from 'react';
 import { currentUser } from '@clerk/nextjs/server';
 import { fetchAllBooks } from '@/lib/actions/book.actions';
 import { IBook } from '@/lib/mongodb/database/models/book.model';
-import { getUserByClerkId, updateUserLocation } from '@/lib/actions/user.actions';
+import { getUserByClerkId, isUserOnline, updateUserLocation } from '@/lib/actions/user.actions';
 import Profile from '@/components/shared/Profile';
 import { daysSincePosted } from '@/lib/actions/datePosted';
-import { fetchAllOrders } from '@/lib/actions/order.actions';
+import { fetchAllOrders } from '@/lib/actions/order.actions'; // Assuming this action exists
 
 const ProfilePage = async ({ params }: { params: { id: string } }) => {
   const { id } = params;
+  const isOnline = await isUserOnline(id);
 
   try {
-    const user = await currentUser();
+    const currentUserProf = await currentUser();
 
-    if (!user) {
+    if (!currentUserProf) {
       return <p>Error loading user details. Please try again later.</p>;
     }
 
-    const targetClerkId = id || user.id;
+    const targetClerkId = id;
+    const currentUserClerkId = currentUserProf.id;
+    const currentUserDb = await getUserByClerkId(currentUserClerkId);
+    const currentUserDbId = currentUserDb?._id?.toString(); // Ensure currentUserDbId is a string
 
     if (!targetClerkId) {
       return <p>Error loading user details. Please try again later.</p>;
@@ -34,12 +38,11 @@ const ProfilePage = async ({ params }: { params: { id: string } }) => {
     }
 
     let userDetails = null;
-    let dbUserId: string | undefined = undefined;
+    let targetDbUserId: string | undefined = undefined;
 
     try {
       userDetails = await getUserByClerkId(targetClerkId);
-      dbUserId = userDetails?._id?.toString(); // Ensure dbUserId is a string
-      console.log('dbUserId:', dbUserId);
+      targetDbUserId = userDetails?._id?.toString(); // Ensure dbUserId is a string
     } catch (error) {
       console.error('Error fetching user details:', error);
     }
@@ -48,7 +51,7 @@ const ProfilePage = async ({ params }: { params: { id: string } }) => {
       return <p>Error loading user details. Please try again later.</p>;
     }
 
-    const userBooks = books.filter(book => String(book.bookOwner?._id) === String(dbUserId));
+    const userBooks = books.filter(book => String(book.bookOwner?._id) === String(targetDbUserId));
     const userFavorites = books.filter(book => userDetails.favorites.includes(book._id));
     const modalBooks = userBooks.filter(book => {
       const daysPosted = daysSincePosted(new Date(book.postedAt));
@@ -58,7 +61,7 @@ const ProfilePage = async ({ params }: { params: { id: string } }) => {
     let completedListingsCount = 0;
     try {
       const orders = await fetchAllOrders();
-      completedListingsCount = orders.filter((order: { seller: { _id: any; }; }) => String(order.seller._id) === String(dbUserId)).length;
+      completedListingsCount = orders.filter((order: { seller: { _id: any; }; }) => String(order.seller._id) === String(targetDbUserId)).length;
     } catch (error) {
       console.error('Error fetching orders:', error);
     }
@@ -78,12 +81,13 @@ const ProfilePage = async ({ params }: { params: { id: string } }) => {
       userBooks,
       userFavorites,
       userId: targetClerkId,
-      dbUserId: dbUserId || "", // Ensure dbUserId is always a string
+      modalBooks,
+      dbUserId: targetDbUserId || "", // Ensure dbUserId is always a string
       bookCount: userBooks.length,
       completedListingsCount,
     };
 
-    return <Profile clerkId={user.id} {...userProps} />;
+    return <Profile clerkId={targetClerkId} currentUserClerkId={currentUserClerkId} currentUserDbId={currentUserDbId} isOnline={isOnline} {...userProps} />;
   } catch (error) {
     console.error('Error in ProfilePage component:', error);
     return <p>Error loading user details. Please try again later.</p>;

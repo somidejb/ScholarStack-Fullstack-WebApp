@@ -30,7 +30,6 @@ interface DashboardProps {
 
 const Dashboard = ({ books, path, totalSubs } : DashboardProps) => {
   const [bookList, setBookList] = useState(books.map(book => ({ ...book})));
-  console.log("Book List: ", bookList);
   const [removingBook, setRemovingBook] = useState<number | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
 
@@ -47,7 +46,6 @@ const Dashboard = ({ books, path, totalSubs } : DashboardProps) => {
     salePrice: book.salePrice,
     location: book.location,
   }));
-  console.log("Transformed Book List: ", transformedBookList);
   
   const handleApprove = async(index: number) => {
     const newBook = await createBook({
@@ -74,7 +72,6 @@ const Dashboard = ({ books, path, totalSubs } : DashboardProps) => {
       path,
       page: 'admin'
     });
-    console.log("Deleted Book: ", deletedBook);
     setRemovingBook(index);
     setBookList(prevBooks => {
       const newBooks = [...prevBooks];

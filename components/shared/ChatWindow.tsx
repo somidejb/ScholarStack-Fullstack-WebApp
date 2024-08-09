@@ -26,10 +26,10 @@ const ChatWindow = ({
   className,
   messages,
 }: ChatWindowProps) => {
-  console.log("messages from the chat window: ", messages);
   const [chatMessages, setChatMessages] = useState<IMessage[]>(messages || []);
   const bottomRef = useRef<HTMLDivElement>(null);
   const chatContainerRef = useRef<HTMLDivElement>(null);
+  const otherMember = selectedChat?.members.find((member) => member._id !== userId);
 
   useEffect(() => {
     if (selectedChat) {
@@ -72,7 +72,6 @@ const ChatWindow = ({
     }
   }, [chatMessages]);
 
-  console.log("Chat Messages:", chatMessages);
   return (
     <div className={`flex flex-col h-full ${className}`}>
       <div className="border-b p-4 flex items-center">
@@ -86,14 +85,14 @@ const ChatWindow = ({
             />
           </button>
         )}
-        <Link href={`/profile/${selectedChat?.members[1]?.clerkId}`}>
+        <Link href={`/profile/${otherMember?.clerkId}`}>
           <img
-            src={selectedChat?.members[1]?.photo}
-            alt={`${selectedChat?.members[1]?.username}'s avatar`}
+            src={otherMember?.photo}
+            alt={`${otherMember?.username}'s avatar`}
             className="w-10 h-10 rounded-full mr-2"
           />
         </Link>
-        <h3 className="text-lg font-semibold">{selectedChat?.members[1]?.username}</h3>
+        <h3 className="text-lg font-semibold">{otherMember?.username}</h3>
         <FontAwesomeIcon
           icon={faEllipsis}
           height={15}

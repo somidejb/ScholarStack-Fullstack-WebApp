@@ -28,7 +28,6 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, books, userId, handleNot
   }, [isOpen]);
 
   const handleSold = async (bookId: string, sellerId: string, price: string) => {
-    console.log('handleSold called'); // Log to verify function call
     try {
       const order = {
         order: `ORD-${Date.now()}`,
@@ -38,8 +37,6 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, books, userId, handleNot
         price: parseFloat(price),
         orderDate: new Date(),
       };
-
-      console.log('Order details:', order); // Log order details
 
       const newOrder = await createOrder({ userId, order, path: '/path-to-revalidate' });
 
@@ -57,8 +54,8 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, books, userId, handleNot
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center">
-      <div className="fixed inset-0 bg-gray-600 opacity-50" onClick={onClose}></div>
+    <div className="fixed inset-0 z-50 flex items-center justify-center overflow-auto">
+      <div className="fixed inset-0 bg-gray-600 opacity-50 mt-3" onClick={onClose}></div>
       <div className="bg-white p-6 rounded-xl shadow-lg z-10 transform hover:shadow-xl transition duration-200 ease-in-out">
         {books.map((book) => {
           const daysPosted = book.postedAt ? daysSincePosted(book.postedAt) : 0;

@@ -30,7 +30,6 @@ const ChatList = ({ className, userId, currentUser }: ChatListProps) => {
       const chats = await getChatsById(userId);
       setChats(chats);
       setFilteredChats(chats);
-      console.log("Chats:", chats);
     } catch (error) {
       console.error("Error fetching chats:", error);
     }
@@ -82,7 +81,6 @@ const ChatList = ({ className, userId, currentUser }: ChatListProps) => {
         ...prevMessages,
         [chat._id]: chat.messages,
       }));
-      console.log("Messages in the handle select chat:", messages);
     }
   };
   useEffect(() => {

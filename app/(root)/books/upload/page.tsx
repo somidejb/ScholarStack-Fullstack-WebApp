@@ -7,7 +7,6 @@ const UploadBook = async () => {
   const {sessionClaims} = auth();
   const userId = sessionClaims?.userId as string;
   const currentUser = await getUserById(userId);
-  console.log("current User: ", currentUser);
   return (
     <>
       <section>

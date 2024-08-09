@@ -12,7 +12,6 @@ type NavItemsProp = {
 
 const NavItems = ({ pathname, userId }: NavItemsProp) => {
   const { user } = useUser();
-  console.log("user: ", userId);
   const [profileLink, setProfileLink] = useState('/profile');
 
   // Define allowed admin user IDs

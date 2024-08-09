@@ -47,7 +47,6 @@ type BookFormProps = {
 
 const BookForm = ({userId, type, book, bookId, currentUser} : BookFormProps) => {
     const [showAlert, setShowAlert] = useState(false);
-    console.log("user Id uploading", userId)
     const [files, setFiles] = useState<File[]>([]);
     const initialValues = book && type === 'Edit' 
     ? {...book}
