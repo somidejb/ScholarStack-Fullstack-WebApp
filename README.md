@@ -1,53 +1,78 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+📚 Scholar Stack
+Scholar Stack is a full-stack platform designed to help students buy and sell books effortlessly! Whether you're looking for textbooks, novels, or study materials, Scholar Stack connects buyers and sellers in a seamless, user-friendly way.
 
-## Getting Started
+🌟 Key Features
 
-First, run the development server:
+Homepage: Browse through popular books and discover new finds.
+Books Page: Search and filter books by price, category, and language. 🎯
+Upload Book Page: Sell your own books with a simple upload process. 📤
+Chats Page: Message sellers directly for quick and easy transactions. 💬
+Profile Page: Manage your account, see your listings, and more! 🧑‍💼
+Admin Page: Admins can accept or reject book uploads to maintain platform quality. 🛠️
 
-```bash
+🚀 Technologies Used
+
+Frontend: Next.js – for a fast, scalable, and dynamic UI.
+Backend: Node.js – powering the server-side logic.
+Database: MongoDB – a flexible NoSQL database.
+UI Components: Shadcn – for a smooth and accessible user interface.
+Authentication: Clerk – handling secure and user-friendly authentication.
+Real-time Communication: Pusher – enabling instant messaging between users.
+File Uploads: UploadThing – making file uploads a breeze.
+
+📖 How It Works
+Browse Books: Explore the extensive collection of books through the intuitive search and filter system.
+Upload Books: List your books for sale with just a few clicks, and they’ll be visible to potential buyers after admin approval.
+Chat with Sellers: Have questions or want to negotiate? Start a conversation directly on the platform.
+Admin Control: Maintain the quality of listings through the admin dashboard where books can be accepted or rejected.
+
+🛠️ Installation & Setup
+Follow these steps to get Scholar Stack up and running on your local machine:
+
+1. Clone the Repository
+bash
+Copy code
+git clone https://github.com/yourusername/scholar-stack.git
+cd scholar-stack
+2. Install Dependencies
+bash
+Copy code
+npm install
+3. Set Up Environment Variables
+Create a .env.local file and add the following environment variables:
+
+bash
+Copy code
+MONGODB_URI=<your-mongodb-uri>
+CLERK_SECRET_KEY=<your-clerk-secret-key>
+PUSHER_APP_ID=<your-pusher-app-id>
+PUSHER_KEY=<your-pusher-key>
+PUSHER_SECRET=<your-pusher-secret>
+4. Run the Application
+bash
+Copy code
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+The app will now be running at http://localhost:3000.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+🛡️ Security
+Authentication is powered by Clerk, ensuring safe and secure login for all users.
+Real-time messages are encrypted and sent using Pusher, ensuring secure communication.
+Admin moderation keeps the platform's quality high.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+📷 Screenshots
+✨ Homepage
+Browse top books and discover new ones!
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+✨ Books Page
+Find your desired books using our powerful search and filters.
 
-## Learn More
+✨ Upload Book
+Selling a book? Upload it easily with our intuitive form.
 
-To learn more about Next.js, take a look at the following resources:
+✨ Chats
+Message the sellers directly through the platform.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+🤝 Contribution
+Contributions are welcome! If you have any ideas or find a bug, feel free to submit an issue or a pull request.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
-
-
-
-
-
-
-
-
-Documentation:
- Completed low fidelity of design - Monday May 20
-- [ ] Finalize design of different screen sizes
-
-## Due Friday May 24, 2024
-- [x] Design different screen sizes for figma (Diya, Kruti, Ekom)
-- [x] Coding Navigation Bar (Daniel)
-- [x] Project Requirement Documentation (Ekom)
-- [x] Explanation of file structure (Jubril)
+⚡ Scholar Stack – Empowering students with affordable learning materials!
