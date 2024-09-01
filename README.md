@@ -21,6 +21,7 @@ Real-time Communication: Pusher – enabling instant messaging between users.
 File Uploads: UploadThing – making file uploads a breeze.
 
 📖 How It Works
+
 Browse Books: Explore the extensive collection of books through the intuitive search and filter system.
 Upload Books: List your books for sale with just a few clicks, and they’ll be visible to potential buyers after admin approval.
 Chat with Sellers: Have questions or want to negotiate? Start a conversation directly on the platform.
