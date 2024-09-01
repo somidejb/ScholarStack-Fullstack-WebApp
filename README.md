@@ -33,7 +33,7 @@ Follow these steps to get Scholar Stack up and running on your local machine:
 1. Clone the Repository
 bash
 Copy code
-git clone https://github.com/yourusername/scholar-stack.git
+git clone https://github.com/yourusername/scholar-stack.git](https://github.com/somidejb/ScholarStack-Fullstack-WebApp.git
 cd scholar-stack
 2. Install Dependencies
 bash
